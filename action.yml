@@ -26,10 +26,6 @@ inputs:
       Options: `pdf`, `html`, `word`, `odt`, `markdown`
     required: false
     default: pdf
-  report_dir:
-    description: Directory path where the report will be written to.
-    required: false
-    default: "."
 
 # Run as a Docker action
 runs:

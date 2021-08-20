@@ -42,15 +42,6 @@ Roche
 
   _Default_: `"pdf"`
 
-
-* `report_dir`:
-
-  _Description_: Directory path where the report will be written to.
-
-  _Required_: `false`
-
-  _Default_: `"."`
-
 ### Outputs
 None
 
@@ -89,6 +80,4 @@ jobs:
           template_path: ".github/validation_template.rmd"
           # Report format
           report_format: "pdf"
-          # Report dir
-          report_dir: ".github"
 ```
