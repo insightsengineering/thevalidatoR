@@ -1,0 +1,13 @@
+Package: aragog
+Version: 0.1.0
+Title: Hagrid's giant spider
+Description: Aragog was an Acromantula owned by Rubeus Hagrid.
+    Aragog was able to communicate with humans with speech.
+Author: JK Rowling <jrowling@scholastic.com>
+Maintainer: Insights Engineering <ie@example.com>
+License: Wizarding World
+Type: Package
+Encoding: UTF-8
+RoxygenNote: 7.0.2
+Suggests: testthat
+Depends: graph

@@ -1,0 +1,54 @@
+---
+name: Test This Action
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  aragog:
+    runs-on: ubuntu-latest
+    name: Aragog
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Generate Validation Report for Aragog
+        uses: ./
+        with:
+          pkg_root: ./tests/packages/aragog
+          template_path: ./template.Rmd
+          report_format: pdf
+
+      - name: Upload Validation Report
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: Validation Report
+          path: tests/packages/aragog/validation-report.pdf
+          if-no-files-found: error
+
+  buckbeak:
+    runs-on: ubuntu-latest
+    name: Buckbeak
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name:  Generate Validation Report for Buckbeak
+        uses: ./
+        with:
+          pkg_root: ./tests/packages/buckbeak
+          template_path: ./tests/packages/buckbeak/validation-template.Rmd
+          report_format: html
+
+      - name: Upload Validation Report
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: Validation Report
+          path: tests/packages/buckbeak/validation-report.html
+          if-no-files-found: error

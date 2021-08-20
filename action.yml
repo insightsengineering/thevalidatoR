@@ -1,0 +1,37 @@
+name: R Package Validation Report
+author: Roche
+description: |
+  A Github Action that generates a validation report for an R package.
+  The four main steps are:
+  - Run `R CMD check`
+  - Run `covr::package_coverage()`
+  - Run `covtracer` (when open sourced - leave out for now)
+  - Place results into report
+  - Attach report as object to release
+
+inputs:
+  pkg_root:
+    description: Path to package's root.
+    required: false
+    default: "."
+  template_path:
+    description: |
+      File path of the R markdown template to use for the report.
+      The default template is available [here.](./template.Rmd)
+    required: false
+    default: "template.Rmd"
+  report_format:
+    description: |
+      The file format of the validation report.
+      Options: `pdf`, `html`, `word`, `odt`, `markdown`
+    required: false
+    default: pdf
+
+# Run as a Docker action
+runs:
+  using: 'docker'
+  image: './Dockerfile'
+
+branding: # https://feathericons.com/
+  icon: 'award'  
+  color: 'blue'
