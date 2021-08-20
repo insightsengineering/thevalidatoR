@@ -15,4 +15,5 @@ setwd(pkg_root)
 # TODO: Implement additional logic
 
 # Placeholder till TODO above is complete
+if (!dir.exists(report_dir)) dir.create(report_dir, showWarnings = TRUE, recursive = TRUE, mode = "0777")
 file.create(report_file_path)

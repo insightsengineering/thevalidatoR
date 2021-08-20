@@ -28,6 +28,7 @@ jobs:
         with:
           name: Validation Report
           path: ./tests/packages/buckbeak/validation-reports/validation-report.pdf
+          if-no-files-found: error
 
   buckbeak:
     runs-on: ubuntu-latest
@@ -50,3 +51,4 @@ jobs:
         with:
           name: Validation Report
           path: ./tests/packages/buckbeak/validation-reports/validation-report.html
+          if-no-files-found: error
