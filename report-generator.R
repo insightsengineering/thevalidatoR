@@ -14,4 +14,4 @@ report_file_path <- file.path(getwd(), paste0("validation-report.", report_type)
 # TODO: Implement additional logic
 
 # Placeholder till TODO above is complete
-file.create(report_file_path)
+if (file.create(report_file_path)) cat(paste0("Created report at: ", report_file_path))
