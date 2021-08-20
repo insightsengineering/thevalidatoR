@@ -1,0 +1,11 @@
+---
+title: "Validation Report"
+---
+
+<!-- TODO: Add actual validation report template -->
+
+# Validation Report
+
+```{r example}
+print("This is a validation report!")
+```

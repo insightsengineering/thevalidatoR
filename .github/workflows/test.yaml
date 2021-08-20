@@ -1,0 +1,52 @@
+---
+name: Test This Action
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  aragog:
+    runs-on: ubuntu-latest
+    name: Aragog
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: License report for Aragog
+        uses: ./
+        with:
+          pkg_root: ./tests/packages/aragog
+          template_path: ./template.Rmd
+          report_format: pdf
+          report_dir: ./tests/packages/buckbeak/validation-reports
+
+      - name: Upload Validation Report
+        uses: actions/upload-artifact@v2
+          with:
+            name: Validation Report
+            path: ./tests/packages/buckbeak/validation-reports/validation-report.pdf
+
+  buckbeak:
+    runs-on: ubuntu-latest
+    name: Buckbeak
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: License report for Buckbeak
+        uses: ./
+        with:
+          pkg_root: ./tests/packages/buckbeak
+          template_path: ./tests/packages/buckbeak/validation-template.Rmd
+          report_format: html
+          report_dir: ./tests/packages/buckbeak/validation-reports
+
+      - name: Upload Validation Report
+        uses: actions/upload-artifact@v2
+          with:
+            name: Validation Report
+            path: ./tests/packages/buckbeak/validation-reports/validation-report.html

@@ -1,5 +1,5 @@
 <!-- BEGIN_ACTION_DOC -->
-# R Package Validation report
+# R Package Validation Report
 
 ### Description
 
@@ -18,7 +18,7 @@ Docker
 Roche
 
 ### Inputs
-* `path`:
+* `pkg_root`:
 
   _Description_: Path to package's root
 
@@ -28,22 +28,32 @@ Roche
 
 * `template_path`:
 
-  _Description_: Template used by the action to generate a report. Defaults to .github/validation_template.rmd
+  _Description_: File path of the R markdown template to use for the report. The default template is available [here.](./template.Rmd)
 
   _Required_: `false`
 
-  _Default_: `""`
+  _Default_: `"template.Rmd"`
   
-* `output_type`:
+* `report_format`:
 
-  _Description_: What file type to output. Currently only generating a pdf.
+  _Description_: The file format of the validation report. Options: `pdf`, `html`, `word`, `odt`, `markdown`
 
   _Required_: `false`
 
   _Default_: `"pdf"`
 
+
+* `report_dir`:
+
+  _Description_: Directory path where the report will be written to.
+
+  _Required_: `false`
+
+  _Default_: `"."`
+
 ### Outputs
 None
+
 <!-- END_ACTION_DOC -->
 
 ## How to use
@@ -68,16 +78,17 @@ on:
 jobs:
   r-pkg-validation:
     runs-on: ubuntu-latest
-    container: rocker/verse:4.1.0 # also versions packages installed via install.packages()
     steps:
       - uses: actions/checkout@v2
       - name: Build report
         uses: insightsengineering/r-pkg-validation@main
         with:
           # R package root path, in case your R package is within a subdirectory of the repo
-          path: "."
+          pkg_root: "."
           # Template location
           template_path: ".github/validation_template.rmd"
-          # Output type
-          output_type: "pdf"
+          # Report format
+          report_format: "pdf"
+          # Report dir
+          report_dir: ".github"
 ```
