@@ -21,13 +21,13 @@ jobs:
           pkg_root: ./tests/packages/aragog
           template_path: ./template.Rmd
           report_format: pdf
-          report_dir: ./tests/packages/buckbeak/validation-reports
+          report_dir: ./tests/packages/aragog/validation-reports
 
       - name: Upload Validation Report
         uses: actions/upload-artifact@v2
         with:
           name: Validation Report
-          path: ./tests/packages/buckbeak/validation-reports/validation-report.pdf
+          path: ./tests/packages/aragog/validation-reports/validation-report.pdf
           if-no-files-found: error
 
   buckbeak:
