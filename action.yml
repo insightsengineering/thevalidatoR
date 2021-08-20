@@ -1,13 +1,13 @@
 name: R Package Validation Report
 author: Roche
 description: |
-  A Github Action that generates a validation report for an R package. The four main steps are:
-
-- Run `R CMD check`
-- Run `covr::package_coverage()`
-- Run `covtracer` (when open sourced - leave out for now)
-- Place results into report
-- Attach report as object to release
+  A Github Action that generates a validation report for an R package.
+  The four main steps are:
+  - Run `R CMD check`
+  - Run `covr::package_coverage()`
+  - Run `covtracer` (when open sourced - leave out for now)
+  - Place results into report
+  - Attach report as object to release
 
 inputs:
   pkg_root:
