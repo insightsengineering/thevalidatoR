@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: License report for Aragog
+      - name: Generate Validation Report for Aragog
         uses: ./
         with:
           pkg_root: ./tests/packages/aragog
@@ -38,7 +38,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: License report for Buckbeak
+      - name:  Generate Validation Report for Buckbeak
         uses: ./
         with:
           pkg_root: ./tests/packages/buckbeak
