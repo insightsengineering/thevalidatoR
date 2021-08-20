@@ -21,13 +21,14 @@ jobs:
           pkg_root: ./tests/packages/aragog
           template_path: ./template.Rmd
           report_format: pdf
-          report_dir: /github/workspace/
+          report_dir: ${{ env.GITHUB_WORKSPACE }}
 
       - name: Upload Validation Report
         uses: actions/upload-artifact@v2
+        if: success()
         with:
           name: Validation Report
-          path: /github/workspace/validation-report.pdf
+          path: ${{ env.GITHUB_WORKSPACE }}/validation-report.pdf
           if-no-files-found: error
 
   buckbeak:
@@ -44,11 +45,12 @@ jobs:
           pkg_root: ./tests/packages/buckbeak
           template_path: ./tests/packages/buckbeak/validation-template.Rmd
           report_format: html
-          report_dir: /github/workspace/
+          report_dir: ${{ env.GITHUB_WORKSPACE }}
 
       - name: Upload Validation Report
         uses: actions/upload-artifact@v2
+        if: success()
         with:
           name: Validation Report
-          path: /github/workspace/validation-report.html
+          path: ${{ env.GITHUB_WORKSPACE }}/validation-report.html
           if-no-files-found: error
