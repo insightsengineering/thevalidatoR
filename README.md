@@ -9,6 +9,7 @@ A Github Action that generates a validation report for an R package. The four ma
 - Run `covr::package_coverage()`
 - Run `covtracer` (when open sourced - leave out for now)
 - Place results into report
+- Attach report as object to release
 
 ### Action Type
 Docker
