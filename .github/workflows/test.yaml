@@ -27,7 +27,7 @@ jobs:
         if: success()
         with:
           name: Validation Report
-          path: validation-report.pdf
+          path: tests/packages/aragog/validation-report.pdf
           if-no-files-found: error
 
   buckbeak:
@@ -50,5 +50,5 @@ jobs:
         if: success()
         with:
           name: Validation Report
-          path: validation-report.html
+          path: tests/packages/bucbeak/validation-report.html
           if-no-files-found: error
