@@ -50,5 +50,5 @@ jobs:
         if: success()
         with:
           name: Validation Report
-          path: tests/packages/bucbeak/validation-report.html
+          path: tests/packages/buckbeak/validation-report.html
           if-no-files-found: error
