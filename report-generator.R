@@ -15,4 +15,4 @@ report_file_path <- file.path(getwd(), paste0("validation-report.", report_type)
 rmarkdown::render(template_path, output_file = report_file_path)
 
 # Placeholder till TODO above is complete
-if (file.create(report_file_path)) cat(paste0("Created report at: ", report_file_path))
+if (file.exists(report_file_path)) cat(paste0("Created report at: ", report_file_path))
