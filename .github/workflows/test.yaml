@@ -7,48 +7,39 @@ on:
       - main
 
 jobs:
-  aragog:
-    runs-on: ubuntu-latest
-    name: Aragog
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Generate Validation Report for Aragog
-        uses: ./
-        with:
+  strategy:
+    fail-fast: false
+    max-parallel: 2
+    matrix:
+      package:
+        - name: aragog
           pkg_root: ./tests/packages/aragog
           template_path: ./template.Rmd
           report_format: pdf
-
-      - name: Upload Validation Report
-        uses: actions/upload-artifact@v2
-        if: success()
-        with:
-          name: Validation Report
-          path: tests/packages/aragog/validation-report.pdf
-          if-no-files-found: error
-
-  buckbeak:
-    runs-on: ubuntu-latest
-    name: Buckbeak
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name:  Generate Validation Report for Buckbeak
-        uses: ./
-        with:
+        - name: buckbeak
           pkg_root: ./tests/packages/buckbeak
           template_path: ./tests/packages/buckbeak/validation-template.Rmd
           report_format: html
 
-      - name: Upload Validation Report
+  test:
+    runs-on: ubuntu-latest
+    name: ${{ matrix.package.name }}
+
+    steps:
+      - name: Checkout ${{ matrix.package.name }}
+        uses: actions/checkout@v2
+
+      - name: Generate validation report for ${{ matrix.package.name }}
+        uses: ./
+        with:
+          pkg_root: ${{ matrix.package.pkg_root }}
+          template_path: ${{ matrix.package.template_path }}
+          report_format: ${{ matrix.package.report_format }}
+
+      - name: Upload ${{ matrix.package.name }} validation report
         uses: actions/upload-artifact@v2
         if: success()
         with:
-          name: Validation Report
-          path: tests/packages/buckbeak/validation-report.html
+          name: ${{ matrix.package.name }} validation report
+          path: ${{ matrix.package.pkg_root }}/validation-report.${{ matrix.package.report_format }}
           if-no-files-found: error
