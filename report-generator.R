@@ -11,7 +11,8 @@ setwd(pkg_root)
 # Set report file path
 report_file_path <- file.path(getwd(), paste0("validation-report.", report_type))
 
-# TODO: Implement additional logic
+# Build report
+rmarkdown::render(template_path, output_file = report_file_path)
 
 # Placeholder till TODO above is complete
 if (file.create(report_file_path)) cat(paste0("Created report at: ", report_file_path))
