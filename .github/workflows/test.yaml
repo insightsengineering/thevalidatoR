@@ -7,23 +7,23 @@ on:
       - main
 
 jobs:
-  strategy:
-    fail-fast: false
-    max-parallel: 2
-    matrix:
-      package:
-        - name: aragog
-          pkg_root: ./tests/packages/aragog
-          template_path: ./template.Rmd
-          report_format: pdf
-        - name: buckbeak
-          pkg_root: ./tests/packages/buckbeak
-          template_path: ./tests/packages/buckbeak/validation-template.Rmd
-          report_format: html
-
   test:
     runs-on: ubuntu-latest
     name: ${{ matrix.package.name }}
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        package:
+          - name: aragog
+            pkg_root: ./tests/packages/aragog
+            template_path: ./template.Rmd
+            report_format: pdf
+          - name: buckbeak
+            pkg_root: ./tests/packages/buckbeak
+            template_path: ./tests/packages/buckbeak/validation-template.Rmd
+            report_format: html
+
 
     steps:
       - name: Checkout ${{ matrix.package.name }}
