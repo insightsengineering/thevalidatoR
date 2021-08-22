@@ -12,7 +12,11 @@ setwd(pkg_root)
 report_file_path <- file.path(getwd(), paste0("validation-report.", report_type))
 
 # Build report
-rmarkdown::render(template_path, output_file = report_file_path)
+rmarkdown::render(
+  template_path, 
+  output_file = report_file_path,
+  envir = list2env(list(pkg_root = pkg_root), envir = parent.frame())
+  )
 
 # Placeholder till TODO above is complete
 if (file.exists(report_file_path)) cat(paste0("Created report at: ", report_file_path))
