@@ -15,7 +15,7 @@ report_file_path <- file.path(getwd(), paste0("validation-report.", report_type)
 rmarkdown::render(
   template_path, 
   output_file = report_file_path,
-  envir = list2env(list(pkg_root = pkg_root), envir = parent.frame())
+  envir = list2env(list(pkg_root = paste0(".",pkg_root), envir = parent.frame())
   )
 
 # Placeholder till TODO above is complete
