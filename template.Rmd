@@ -1,11 +1,93 @@
 ---
 title: "Validation Report"
+subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
+params:
+  pkg_dir: "."
 ---
 
-<!-- TODO: Add actual validation report template -->
+```{r, include = FALSE}
+options(
+  width = 80L,
+  covr.record_tests = TRUE,
+  keep.source = TRUE,
+  keep.source.pkg = TRUE
+)
 
-# Validation Report
+remotes::install_local(
+  params$pkg_dir,
+  force = TRUE,
+  quiet = TRUE
+)
 
-```{r example}
-print("This is a validation report!")
+library(knitr)
+knitr::opts_chunk$set(
+  width = 80L,
+  comment = ""
+)
 ```
+
+# Execution Info
+
+## System Info
+
+```{r execution_info, echo = FALSE}
+kable(data.frame(
+  Field = c("OS", "Platform", "System", "Execution Time"),
+  Value = c(
+    sessionInfo()$running,
+    R.version$platform,
+    R.version$system,
+    format(Sys.time(), tz = "UTC", usetz = TRUE)
+  )))
+```
+
+## Version Control
+
+```{r version_control, echo = FALSE}
+# assumes working dir is target repo or $GIT_DIR and $GIT_WORK_TREE are set 
+kable(data.frame(
+  Field = c("branch", "commit `SHA1`", "commit date"),
+  Value = c(
+    system2("git", list("rev-parse", "--abbrev-ref", "HEAD"), stdout = TRUE),
+    system2("git", list("rev-parse", "HEAD"), stdout = TRUE),
+    system2("git", list("show", "-s", "--format=%ci", "HEAD"), stdout = TRUE)
+  )))
+```
+
+## Session Info
+
+```{r session_info, echo = TRUE}
+sessionInfo()
+capabilities()
+```
+
+# Testing
+
+## `R CMD check`
+
+```{r r_cmd_check, echo = FALSE}
+rcmdcheck_results <- rcmdcheck::rcmdcheck(params$pkg_dir, quiet = TRUE)
+cat(rcmdcheck_results$stdout)
+cat(rcmdcheck_results$stderr)
+```
+
+## Testing Coverage
+
+```{r coverage, echo = FALSE}
+covr_results <- covr::package_coverage(params$pkg_dir)
+covr_results
+```
+
+## Traceability
+
+```{r traceability, echo = FALSE}
+if (require("covtracer", quietly = TRUE)) {
+  covtracer_df <- test_trace_df(covr_results)
+  covtracer_df$filename <- basename(covtracer_df$filepath)
+  kable(covtracer_df[,c("test_name", "alias", "filename")])  
+} else {
+  cat("{covtracer} not available to produce a traceability matrix")
+}
+```
+
+
