@@ -8,6 +8,9 @@ report_type <- Sys.getenv("INPUT_REPORT_FORMAT")
 # Navigate to package root
 setwd(pkg_root)
 
+# Install dependencies
+devtools::install_dev_deps()
+
 # Set report file path
 report_file_path <- file.path(getwd(), paste0("validation-report.", report_type))
 
