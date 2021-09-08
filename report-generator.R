@@ -23,7 +23,7 @@ if (!file.exists(file.path(pkg_dir, "DESCRIPTION"))) {
 report_file_path <- rmarkdown::render(
   template_path,
   output_dir = getwd(),  # create report wherever R script was called 
-  output_file = "validation_report"
+  output_file = "validation_report",
   output_format = report_format,
   params = list(pkg_dir = pkg_dir)
 )
