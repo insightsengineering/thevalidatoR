@@ -3,22 +3,22 @@ author: Roche
 description: A Github Action that generates a validation report for an R package.
 
 inputs:
-  pkg_root:
+  report_pkg_dir:
     description: Path to package's root.
     required: false
     default: "."
-  template_path:
+  report_template_path:
     description: |
       File path of the R markdown template to use for the report.
       The default template is available [here.](./template.Rmd)
     required: false
     default: "template.Rmd"
-  report_format:
+  report_rmarkdown_format:
     description: |
-      The file format of the validation report.
-      Options: `pdf`, `html`, `word`, `odt`, `markdown`
+      The file format of the validation report. See `rmarkdown::render`'s
+      `output_format` parameter for accepted values.
     required: false
-    default: pdf
+    default: "all"
 
 # Run as a Docker action
 runs:
@@ -26,5 +26,5 @@ runs:
   image: './Dockerfile'
 
 branding: # https://feathericons.com/
-  icon: 'award'  
+  icon: 'award'
   color: 'blue'
