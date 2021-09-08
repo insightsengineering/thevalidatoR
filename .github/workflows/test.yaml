@@ -16,13 +16,13 @@ jobs:
       matrix:
         package:
           - name: aragog
-            pkg_root: ./tests/packages/aragog
-            template_path: ./template.Rmd
-            report_format: pdf
+            report_pkg_dir: ./tests/packages/aragog
+            report_template_path: ./template.Rmd
+            report_format: pdf_document
           - name: buckbeak
-            pkg_root: ./tests/packages/buckbeak
-            template_path: ./tests/packages/buckbeak/validation-template.Rmd
-            report_format: html
+            report_pkg_dir: ./tests/packages/buckbeak
+            report_template_path: ./tests/packages/buckbeak/validation-template.Rmd
+            report_format: html_document
 
 
     steps:
@@ -32,8 +32,8 @@ jobs:
       - name: Generate validation report for ${{ matrix.package.name }}
         uses: ./
         with:
-          pkg_root: ${{ matrix.package.pkg_root }}
-          template_path: ${{ matrix.package.template_path }}
+          report_pkg_dir: ${{ matrix.package.report_pkg_dir }}
+          report_template_path: ${{ matrix.package.report_template_path }}
           report_format: ${{ matrix.package.report_format }}
 
       - name: Upload ${{ matrix.package.name }} validation report
@@ -41,5 +41,5 @@ jobs:
         if: success()
         with:
           name: ${{ matrix.package.name }} validation report
-          path: ${{ matrix.package.pkg_root }}/validation-report.${{ matrix.package.report_format }}
+          path: validation-report.*
           if-no-files-found: error
