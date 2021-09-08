@@ -10,7 +10,7 @@ setwd(pkg_root)
 
 # Install dependencies
 devtools::install_dev_deps()
-remotes::install_github("Genentech/covtracer")
+#remotes::install_github("Genentech/covtracer")
 
 # Set report file path
 report_file_path <- file.path(getwd(), paste0("validation-report.", report_type))
