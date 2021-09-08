@@ -20,18 +20,12 @@ if (!file.exists(file.path(pkg_dir, "DESCRIPTION"))) {
 }
 
 # allow rmarkdown to choose appropriate file extension for output format
-rendered_report <- rmarkdown::render(
+report_file_path <- rmarkdown::render(
   template_path,
+  output_dir = getwd(),  # create report wherever R script was called 
+  output_file = "validation_report"
   output_format = report_format,
   params = list(pkg_dir = pkg_dir)
 )
 
-# create a new file path, using extension preferred by report_format
-report_ext <- gsub("^[^.]*", "", basename(rendered_report))  # for multi-part exts
-report_file_path <- normalizePath(mustWork = FALSE, file.path(
-  gsub("/+$", "", dirname(rendered_report)),
-  paste0("validation_report", report_ext)
-))
-
-file.rename(rendered_report, report_file_path)
 cat(sprintf("Created report at: '%s'", report_file_path))
