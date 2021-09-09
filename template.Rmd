@@ -8,17 +8,13 @@ params:
 ---
 
 ```{r, include = FALSE}
-options(
-  width = 80L,
-  covr.record_tests = TRUE,
-  keep.source = TRUE,
-  keep.source.pkg = TRUE
-)
+options(width = 80L, covr.record_tests = TRUE)
 
 remotes::install_local(
   params$pkg_dir,
   force = TRUE,
-  quiet = TRUE
+  quiet = TRUE,
+  INSTALL_opts = "--with-keep.source"
 )
 
 library(knitr)
