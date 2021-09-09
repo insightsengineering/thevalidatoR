@@ -20,7 +20,7 @@ if (!file.exists(file.path(pkg_dir, "DESCRIPTION"))) {
 }
 
 # Install package dependencies
-remotes::install_dev_deps(pkg_dir)
+devtools::install_dev_deps(pkg_dir)
 
 # allow rmarkdown to choose appropriate file extension for output format
 report_file_path <- rmarkdown::render(
