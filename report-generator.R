@@ -1,17 +1,34 @@
 #!/usr/bin/env Rscript
 
 # Get the action inputs from preset env vars
-pkg_root <- Sys.getenv("INPUT_PKG_ROOT")
-template_path <- Sys.getenv("INPUT_TEMPLATE_PATH")
-report_type <- Sys.getenv("INPUT_REPORT_FORMAT")
+pkg_dir <- Sys.getenv("INPUT_REPORT_PKG_DIR", ".")
+template_path <- Sys.getenv("INPUT_REPORT_TEMPLATE_PATH", "template.Rmd")
+report_format <- Sys.getenv("INPUT_REPORT_RMARKDOWN_FORMAT", "all")
 
-# Navigate to package root
-setwd(pkg_root)
+# fail with meaningful message if REPORT_PKG_DIR does not appear to be a package
+if (!file.exists(file.path(pkg_dir, "DESCRIPTION"))) {
+  stop(sprintf(
+    paste(sep = "\n",
+      "Could not find package at '%s'",
+      "    ",
+      "    Specify a directory by definining environment variable:",
+      "        REPORT_PKG_DIR=<repository subdirectory>",
+      "    "
+    ),
+    pkg_dir
+  ))
+}
 
-# Set report file path
-report_file_path <- file.path(getwd(), paste0("validation-report.", report_type))
+# Install package dependencies
+devtools::install_dev_deps(pkg_dir)
 
-# TODO: Implement additional logic
+# allow rmarkdown to choose appropriate file extension for output format
+report_file_path <- rmarkdown::render(
+  template_path,
+  output_dir = getwd(),  # create report wherever R script was called 
+  output_file = "validation_report",
+  output_format = report_format,
+  params = list(pkg_dir = pkg_dir)
+)
 
-# Placeholder till TODO above is complete
-if (file.create(report_file_path)) cat(paste0("Created report at: ", report_file_path))
+cat(sprintf("Created report at: '%s'", report_file_path))
