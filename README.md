@@ -18,29 +18,30 @@ Docker
 Roche
 
 ### Inputs
-* `pkg_root`:
+
+* `report_pkg_dir`:
 
   _Description_: Path to package's root
-
+  
   _Required_: `false`
-
+  
   _Default_: `.`
 
-* `template_path`:
+* `report_template_path`:
 
   _Description_: File path of the R markdown template to use for the report. The default template is available [here.](./template.Rmd)
 
   _Required_: `false`
 
-  _Default_: `"template.Rmd"`
+  _Default_: `template.Rmd`
   
-* `report_format`:
+* `report_rmarkdown_format`:
 
-  _Description_: The file format of the validation report. Options: `pdf`, `html`, `word`, `odt`, `markdown`
+  _Description_: The output format to use when rendering the report. Value is used by `rmarkdown::render`'s `output_format` parameter.
 
   _Required_: `false`
 
-  _Default_: `"pdf"`
+  _Default_: `md_document`
 
 ### Outputs
 None
@@ -75,9 +76,9 @@ jobs:
         uses: insightsengineering/r-pkg-validation@main
         with:
           # R package root path, in case your R package is within a subdirectory of the repo
-          pkg_root: "."
+          report_pkg_dir: "."
           # Template location
-          template_path: ".github/validation_template.rmd"
-          # Report format
-          report_format: "pdf"
+          report_template_path: ".github/validation_template.rmd"
+          # Report format - provided to `rmarkdown::render` `output_format`
+          report_rmarkdown_format: "pdf_document"
 ```
