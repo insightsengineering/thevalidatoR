@@ -5,10 +5,11 @@
 
 A Github Action that generates a validation report for an R package. The four main steps are:
 
-- Run `R CMD check`
-- Run `covr::package_coverage()`
-- Run `covtracer` (when open sourced - leave out for now)
+- Run `R CMD check` (check installation)
+- Run `covr::package_coverage()` (check unit test coverage)
+- Run `covtracer` (link documentation to unit tests)
 - Place results into report
+- _If valtools present - run valtools and also publish report?_ (to discuss)
 - Attach report as object to release
 
 ### Action Type
@@ -57,7 +58,7 @@ To use this GitHub Action you will need to complete the following:
 
 ### Quickstart
 
-In your repository you should have a `.github/workflows/r-license-report.yml` folder with GitHub Action similar to below:
+In your repository you should have a `.github/workflows/validatoR.yml` folder with GitHub Action similar to below:
 
 ```yaml
 ---
