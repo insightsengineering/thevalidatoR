@@ -69,6 +69,27 @@ sessionInfo()
 capabilities()
 ```
 
+# Metric based assessment
+
+```{r}
+params$pkg_dir %>%
+  riskmetric::pkg_ref() %>%
+  riskmetric::pkg_assess() %>%
+  purrr::map(1)  %>% 
+  lapply(as.character) %>%
+  tibble::enframe() %>% 
+  tidyr::unnest(cols = dplyr::everything()) %>%
+  dplyr::rename(Metric = name, Status = value) %>%
+  dplyr::filter(Metric != "r_cmd_check") %>%
+  kable(
+    caption = "Metrics assessed by the R package riskmetric"
+  )
+```
+
+
+
+
+
 # Testing
 
 ## `R CMD check`
