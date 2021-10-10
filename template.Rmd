@@ -79,8 +79,15 @@ params$pkg_dir %>%
   lapply(as.character) %>%
   tibble::enframe() %>% 
   tidyr::unnest(cols = dplyr::everything()) %>%
-  dplyr::rename(Metric = name, Status = value) %>%
-  dplyr::filter(Metric != "r_cmd_check") %>%
+  dplyr::filter(name != "r_cmd_check") %>%
+  # add labels
+  dplyr::left_join(
+    lapply(riskmetric::all_assessments(), attributes) %>%
+      purrr::map_df(tibble::as_tibble),
+    by = c("name" = "column_name")
+  ) %>%
+  dplyr::select(Metric = label, Status = value) %>%
+  #table
   kable(
     caption = "Metrics assessed by the R package riskmetric"
   )
