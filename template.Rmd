@@ -17,6 +17,7 @@ remotes::install_local(
   INSTALL_opts = "--with-keep.source"
 )
 
+library(magrittr)
 library(knitr)
 knitr::opts_chunk$set(
   width = 80L,
