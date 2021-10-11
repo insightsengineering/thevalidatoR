@@ -8,7 +8,7 @@ RUN R -e "remotes::install_github('r-lib/covr')" \
 
 # Copy validator and template
 COPY report-generator.R /main.R
-COPY template.Rmd /github/workspace/template.Rmd
+COPY template.Rmd /template.Rmd
 
 # Set exec permissions on entrypoint script
 RUN chmod +x /main.R
