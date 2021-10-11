@@ -19,6 +19,9 @@ if (!file.exists(file.path(pkg_dir, "DESCRIPTION"))) {
   ))
 }
 
+# Location
+cat(sprintf("Current dir is: '%s'", getwd()))
+
 # Install package dependencies
 devtools::install_dev_deps(pkg_dir)
 
