@@ -41,28 +41,6 @@ kable(data.frame(
   )))
 ```
 
-## Version Control
-
-```{r version_control, echo = FALSE}
-# find .git dir containing the package directory
-gd <- system(
-  sprintf("cd '%s' && git rev-parse --absolute-git-dir", params$pkg_dir),
-  intern = TRUE
-)
-
-# define reused git args to be sure we're picking up the right git info
-gd <- sprintf("--git-dir='%s'", gd)
-wt <- sprintf("--work-tree='%s'", params$pkg_dir)
-
-kable(data.frame(
-  Field = c("branch", "commit `SHA1`", "commit date"),
-  Value = c(
-    system2("git", list(gd, wt, "rev-parse", "--abbrev-ref", "HEAD"), stdout = TRUE),
-    system2("git", list(gd, wt, "rev-parse", "HEAD"), stdout = TRUE),
-    system2("git", list(gd, wt, "show", "-s", "--format=%ci", "HEAD"), stdout = TRUE)
-  )))
-```
-
 ## Session Info
 
 ```{r session_info, echo = TRUE}
