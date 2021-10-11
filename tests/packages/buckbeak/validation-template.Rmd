@@ -2,6 +2,26 @@
 title: "Buckbeak Validation Report"
 ---
 
+
+```{r, include = FALSE}
+options(width = 80L, covr.record_tests = TRUE)
+
+remotes::install_local(
+  params$pkg_dir,
+  force = TRUE,
+  quiet = TRUE,
+  INSTALL_opts = "--with-keep.source"
+)
+
+library(magrittr)
+library(knitr)
+knitr::opts_chunk$set(
+  width = 80L,
+  comment = ""
+)
+```
+
+
 # Execution Info
 
 ## System Info
