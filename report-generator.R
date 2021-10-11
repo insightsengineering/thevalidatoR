@@ -28,7 +28,7 @@ devtools::install_dev_deps(pkg_dir)
 # allow rmarkdown to choose appropriate file extension for output format
 report_file_path <- rmarkdown::render(
   template_path,
-  output_dir = getwd(),  # create report wherever R script was called 
+  output_dir = getwd(),  # create report wherever R script was called
   output_file = "validation_report",
   output_format = report_format,
   params = list(pkg_dir = pkg_dir)
