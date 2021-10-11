@@ -1,8 +1,49 @@
 ---
 title: "Buckbeak Validation Report"
+output:
+  - "md_document"
+params:
+  pkg_dir: "."
 ---
 
-# This is the Buckbeak Validation Report
 
-And it's amazing.
-Health authorities, please approve this.
+```{r, include = FALSE}
+options(width = 80L, covr.record_tests = TRUE)
+
+remotes::install_local(
+  params$pkg_dir,
+  force = TRUE,
+  quiet = TRUE,
+  INSTALL_opts = "--with-keep.source"
+)
+
+library(magrittr)
+library(knitr)
+knitr::opts_chunk$set(
+  width = 80L,
+  comment = ""
+)
+```
+
+
+# Execution Info
+
+## System Info
+
+```{r execution_info, echo = FALSE}
+kable(data.frame(
+  Field = c("OS", "Platform", "System", "Execution Time"),
+  Value = c(
+    sessionInfo()$running,
+    R.version$platform,
+    R.version$system,
+    format(Sys.time(), tz = "UTC", usetz = TRUE)
+  )))
+```
+
+## Session Info
+
+```{r session_info, echo = TRUE}
+sessionInfo()
+capabilities()
+```
