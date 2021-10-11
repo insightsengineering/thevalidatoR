@@ -64,16 +64,24 @@ In your repository you should have a `.github/workflows/validatoR.yml` folder wi
 ---
 name: R Package Validation report
 
-on:
+on: # Run this action when a release is published
   release:
     types: [published]
 
 jobs:
   r-pkg-validation:
+    name: Create report 📃
     runs-on: ubuntu-latest
+    # Set Github token permissions
+    permissions:
+      contents: write
+      packages: write
+      deployments: write
     steps:
-      - uses: actions/checkout@v2
-      - name: Build report
+      - name: Checkout repo 🛎
+        uses: actions/checkout@v2
+
+      - name: Build report 🏗
         uses: insightsengineering/r-pkg-validation@main
         with:
           # R package root path, in case your R package is within a subdirectory of the repo
@@ -82,4 +90,15 @@ jobs:
           report_template_path: ".github/validation_template.rmd"
           # Report format - provided to `rmarkdown::render` `output_format`
           report_rmarkdown_format: "pdf_document"
+
+      # Upload the validation report to the release
+      - name: Upload report to release 🔼
+        if: success()
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: ./validation-report.pdf
+          asset_name: validation-report.pdf
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          overwrite: false
 ```
