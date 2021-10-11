@@ -71,7 +71,7 @@ on: # Run this action when a release is published
 jobs:
   r-pkg-validation:
     name: Create report 📃
-    runs-on: ubuntu-
+    runs-on: ubuntu-latest
     # Set Github token permissions
     permissions:
       contents: write
