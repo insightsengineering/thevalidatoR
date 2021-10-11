@@ -1,5 +1,10 @@
 ---
 title: "Buckbeak Validation Report"
+subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
+output:
+  - "md_document"
+params:
+  pkg_dir: "."
 ---
 
 
