@@ -17,6 +17,7 @@ remotes::install_local(
   INSTALL_opts = "--with-keep.source"
 )
 
+library(magrittr)
 library(knitr)
 knitr::opts_chunk$set(
   width = 80L,
@@ -67,6 +68,34 @@ kable(data.frame(
 sessionInfo()
 capabilities()
 ```
+
+# Metric based assessment
+
+```{r}
+params$pkg_dir %>%
+  riskmetric::pkg_ref() %>%
+  riskmetric::pkg_assess() %>%
+  purrr::map(1)  %>% 
+  lapply(as.character) %>%
+  tibble::enframe() %>% 
+  tidyr::unnest(cols = dplyr::everything()) %>%
+  dplyr::filter(name != "r_cmd_check") %>%
+  # add labels
+  dplyr::left_join(
+    lapply(riskmetric::all_assessments(), attributes) %>%
+      purrr::map_df(tibble::as_tibble),
+    by = c("name" = "column_name")
+  ) %>%
+  dplyr::select(Metric = label, Status = value) %>%
+  #table
+  kable(
+    caption = "Metrics assessed by the R package riskmetric"
+  )
+```
+
+
+
+
 
 # Testing
 
