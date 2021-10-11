@@ -2,7 +2,7 @@
 
 # Get the action inputs from preset env vars
 pkg_dir <- Sys.getenv("INPUT_REPORT_PKG_DIR", ".")
-template_path <- Sys.getenv("INPUT_REPORT_TEMPLATE_PATH", "template.Rmd")
+template_path <- Sys.getenv("INPUT_REPORT_TEMPLATE_PATH", "/template.Rmd")
 report_format <- Sys.getenv("INPUT_REPORT_RMARKDOWN_FORMAT", "all")
 
 # fail with meaningful message if REPORT_PKG_DIR does not appear to be a package
