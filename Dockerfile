@@ -1,4 +1,4 @@
-FROM docker.io/rocker/verse:4.1.0
+FROM docker.io/rocker/tidyverse:4.1.0
 
 # requires dev version of covr (>= 3.5.1.9003)
 # also install package dependencies (for tests)
