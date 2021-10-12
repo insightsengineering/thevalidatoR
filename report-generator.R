@@ -1,5 +1,8 @@
 #!/usr/bin/env Rscript
 
+# Location
+cat(sprintf("Current dir is: '%s'", getwd()))
+
 # Get the action inputs from preset env vars
 pkg_dir <- Sys.getenv("INPUT_REPORT_PKG_DIR", ".")
 template_path <- Sys.getenv("INPUT_REPORT_TEMPLATE_PATH", "/template.Rmd")
@@ -18,9 +21,6 @@ if (!file.exists(file.path(pkg_dir, "DESCRIPTION"))) {
     pkg_dir
   ))
 }
-
-# Location
-cat(sprintf("Current dir is: '%s'", getwd()))
 
 # Install package dependencies
 devtools::install_dev_deps(pkg_dir)
