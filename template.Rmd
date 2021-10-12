@@ -2,20 +2,21 @@
 title: "Validation Report"
 subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
 output:
-  - "pdf_document"
+  - "md_document"
 params:
-  pkg_dir: "`r normalizePath(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))`"
+  pkg_dir: "."
 ---
 
 ```{r, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
+
 remotes::install_local(
   params$pkg_dir,
   force = TRUE,
   quiet = TRUE,
   INSTALL_opts = "--with-keep.source"
 )
-library(magrittr)
+
 library(knitr)
 knitr::opts_chunk$set(
   width = 80L,
@@ -46,9 +47,11 @@ gd <- system(
   sprintf("cd '%s' && git rev-parse --absolute-git-dir", params$pkg_dir),
   intern = TRUE
 )
+
 # define reused git args to be sure we're picking up the right git info
 gd <- sprintf("--git-dir='%s'", gd)
 wt <- sprintf("--work-tree='%s'", params$pkg_dir)
+
 kable(data.frame(
   Field = c("branch", "commit `SHA1`", "commit date"),
   Value = c(
@@ -60,59 +63,40 @@ kable(data.frame(
 
 ## Session Info
 
-```{r session_info, echo = TRUE, eval = TRUE}
+```{r session_info, echo = TRUE}
 sessionInfo()
 capabilities()
 ```
-
-# Metric based assessment
-
-```{r riskmetric, echo = FALSE, eval = TRUE}
-params$pkg_dir %>%
-  riskmetric::pkg_ref() %>%
-  riskmetric::pkg_assess() %>%
-  purrr::map(1)  %>% 
-  lapply(as.character) %>%
-  tibble::enframe() %>% 
-  tidyr::unnest(cols = dplyr::everything()) %>%
-  dplyr::filter(name != "r_cmd_check") %>%
-  # add labels
-  dplyr::left_join(
-    lapply(riskmetric::all_assessments(), attributes) %>%
-      purrr::map_df(tibble::as_tibble),
-    by = c("name" = "column_name")
-  ) %>%
-  dplyr::select(Metric = label, Status = value) %>%
-  #table
-  kable(
-    caption = "Metrics assessed by the R package riskmetric"
-  )
-```
-
-
-
-
 
 # Testing
 
 ## `R CMD check`
 
-```{r r_cmd_check, echo = FALSE, eval = TRUE}
-rcmdcheck_results <- rcmdcheck::rcmdcheck(params$pkg_dir, quiet = TRUE)
+```{r r_cmd_check, echo = FALSE}
+rcmdcheck_results <- rcmdcheck::rcmdcheck(
+  params$pkg_dir,
+  args = c(
+    "--timings",             # include execution times in output
+    "--no-build-vignettes",  # run vignette code, but disable pdf rendering
+    "--no-manual"            # disable pdf manual rendering
+  ),
+  quiet = TRUE
+)
+
 cat(rcmdcheck_results$stdout)
 cat(rcmdcheck_results$stderr)
 ```
 
 ## Testing Coverage
 
-```{r coverage, echo = FALSE, eval = FALSE}
+```{r coverage, echo = FALSE}
 covr_results <- covr::package_coverage(params$pkg_dir)
 covr_results
 ```
 
 ## Traceability
 
-```{r traceability, echo = FALSE, eval = FALSE}
+```{r traceability, echo = FALSE}
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
   covtracer_df$filename <- basename(covtracer_df$filepath)
@@ -121,3 +105,5 @@ if (require("covtracer", quietly = TRUE)) {
   cat("{covtracer} not available to produce a traceability matrix")
 }
 ```
+
+
