@@ -10,7 +10,5 @@ github_packages <- c(
 )
 lapply(github_packages, remotes::install_github)
 
-# Install TinyTex globally
-tinytex::install_tinytex()
-system("mv $HOME/bin/* /usr/local/bin")
+# Install missing fonts
 system("tlmgr install courier ec")
