@@ -1,22 +1,20 @@
 ---
 title: "Validation Report"
 subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
-#output:
-#  - "md_document"
+output:
+  - "pdf_document"
 params:
   pkg_dir: "."
 ---
 
 ```{r, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
-
 remotes::install_local(
   params$pkg_dir,
   force = TRUE,
   quiet = TRUE,
   INSTALL_opts = "--with-keep.source"
 )
-
 library(magrittr)
 library(knitr)
 knitr::opts_chunk$set(
@@ -48,11 +46,9 @@ gd <- system(
   sprintf("cd '%s' && git rev-parse --absolute-git-dir", params$pkg_dir),
   intern = TRUE
 )
-
 # define reused git args to be sure we're picking up the right git info
 gd <- sprintf("--git-dir='%s'", gd)
 wt <- sprintf("--work-tree='%s'", params$pkg_dir)
-
 kable(data.frame(
   Field = c("branch", "commit `SHA1`", "commit date"),
   Value = c(
@@ -64,14 +60,14 @@ kable(data.frame(
 
 ## Session Info
 
-```{r session_info, echo = TRUE}
+```{r session_info, echo = TRUE, eval = TRUE}
 sessionInfo()
 capabilities()
 ```
 
 # Metric based assessment
 
-```{r}
+```{r riskmetric, echo = FALSE, eval = TRUE}
 params$pkg_dir %>%
   riskmetric::pkg_ref() %>%
   riskmetric::pkg_assess() %>%
@@ -101,7 +97,7 @@ params$pkg_dir %>%
 
 ## `R CMD check`
 
-```{r r_cmd_check, echo = FALSE}
+```{r r_cmd_check, echo = FALSE, eval = TRUE}
 rcmdcheck_results <- rcmdcheck::rcmdcheck(params$pkg_dir, quiet = TRUE)
 cat(rcmdcheck_results$stdout)
 cat(rcmdcheck_results$stderr)
@@ -109,14 +105,14 @@ cat(rcmdcheck_results$stderr)
 
 ## Testing Coverage
 
-```{r coverage, echo = FALSE}
+```{r coverage, echo = FALSE, eval = FALSE}
 covr_results <- covr::package_coverage(params$pkg_dir)
 covr_results
 ```
 
 ## Traceability
 
-```{r traceability, echo = FALSE}
+```{r traceability, echo = FALSE, eval = FALSE}
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
   covtracer_df$filename <- basename(covtracer_df$filepath)
@@ -125,5 +121,3 @@ if (require("covtracer", quietly = TRUE)) {
   cat("{covtracer} not available to produce a traceability matrix")
 }
 ```
-
-
