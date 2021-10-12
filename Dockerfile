@@ -1,9 +1,4 @@
-FROM docker.io/rocker/tidyverse:4.1.1
-
-# Add missing library to fix "unable to load shared object '/usr/local/lib/R/modules//R_X11.so'"
-RUN apt-get update && apt-get install -y \
-      libxt6 \
-       && rm -rf /var/lib/apt/lists/*
+FROM docker.io/rocker/verse:4.1.1
 
 # Copy validator and template
 COPY report-generator.R /main.R
