@@ -4,7 +4,7 @@ subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DE
 output:
   - "pdf_document"
 params:
-  pkg_dir: "."
+  pkg_dir: "`r normalizePath(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))`"
 ---
 
 ```{r, include = FALSE}
