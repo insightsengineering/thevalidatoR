@@ -114,14 +114,14 @@ cat(rcmdcheck_results$stderr)
 
 ## Testing Coverage
 
-```{r coverage, echo = FALSE, eval = FALSE}
+```{r coverage, echo = FALSE, eval = TRUE}
 covr_results <- covr::package_coverage(params$pkg_dir)
 covr_results
 ```
 
 ## Traceability
 
-```{r traceability, echo = FALSE, eval = FALSE}
+```{r traceability, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
   covtracer_df$filename <- basename(covtracer_df$filepath)
