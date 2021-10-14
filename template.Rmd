@@ -125,7 +125,35 @@ covr_results
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
   covtracer_df$filename <- basename(covtracer_df$filepath)
-  kable(covtracer_df[,c("test_name", "alias", "filename")])  
+  
+  covtracer_df %>%
+    dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
+    dplyr::select(test_name, file) %>%
+    dplyr::filter(!duplicated(.)) %>%
+    dplyr::arrange(file) %>%
+    kable(
+        caption = "Tracebility matrix mapping unit tests to documented behaviours."
+    )
+
+  covtracer_df %>%
+    dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
+    dplyr::select(test_name, count, alias, file) %>%
+    dplyr::filter(is.na(count)) %>%
+    dplyr::arrange(alias) %>%
+    kable(
+        caption = "Untested behaviours: documentation that is not covered by any test."
+    )
+
+  covtracer_df %>%
+    dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
+    dplyr::select(direct, alias) %>%
+    dplyr::group_by(alias) %>%
+    dplyr::summarize(any_direct_tests = any(direct, na.rm = TRUE)) %>%
+    dplyr::arrange(alias)
+    kable(
+        caption = "Granularity of unit tests: directly tested functions."
+    )
+
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
