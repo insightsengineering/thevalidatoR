@@ -83,6 +83,7 @@ params$pkg_dir %>%
     by = c("name" = "column_name")
   ) %>%
   dplyr::select(Metric = label, Status = value) %>%
+  dplyr::filter(name != "Package unit test coverage") %>% # assessed later
   #table
   kable(
     caption = "Metrics assessed by the R package riskmetric"
