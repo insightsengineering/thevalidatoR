@@ -138,6 +138,14 @@ if (require("covtracer", quietly = TRUE)) {
         caption = "Tracebility matrix mapping unit tests to documented behaviours."
     )
 
+} else {
+  cat("{covtracer} not available to produce a traceability matrix")
+}
+```
+
+```{r traceability, echo = FALSE, eval = TRUE}
+if (require("covtracer", quietly = TRUE)) {
+
   covtracer_df %>%
     dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
     dplyr::select(test_name, count, alias, file) %>%
@@ -147,6 +155,15 @@ if (require("covtracer", quietly = TRUE)) {
         caption = "Untested behaviours: documentation that is not covered by any test."
     )
 
+
+
+} else {
+  cat("{covtracer} not available to produce a traceability matrix")
+}
+```
+
+```{r traceability, echo = FALSE, eval = TRUE}
+if (require("covtracer", quietly = TRUE)) {
   covtracer_df %>%
     dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
     dplyr::select(direct, alias) %>%
