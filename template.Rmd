@@ -143,7 +143,7 @@ if (require("covtracer", quietly = TRUE)) {
 }
 ```
 
-```{r traceability, echo = FALSE, eval = TRUE}
+```{r traceability2, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
 
   covtracer_df %>%
@@ -162,7 +162,7 @@ if (require("covtracer", quietly = TRUE)) {
 }
 ```
 
-```{r traceability, echo = FALSE, eval = TRUE}
+```{r traceability3, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df %>%
     dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
