@@ -1,12 +1,12 @@
 ---
 title: "Validation Report"
 subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
-date: "`r Sys.time()`"
+date: "`r format(Sys.time(), "%a %b %d %X %Y")`"
 author: 
-  - "`r paste0('Repo server: ',Sys.getenv('GITHUB_SERVER_URL'))`"
+  - "`r paste0('Server: ',Sys.getenv('GITHUB_SERVER_URL'))`"
   - "`r paste0('Repositary: ',Sys.getenv('GITHUB_REPOSITORY'))`"
   - "`r paste0('Reference: ',Sys.getenv('GITHUB_REF'))`"
-
+  - "`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`"
 params:
   pkg_dir: "`r normalizePath(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))`"
 output:
@@ -19,14 +19,8 @@ header-includes:
 - \fancyfoot[RE,RO]{\thepage}
 ---
 
-\fancyhead[CO,CE]{`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`}
-\fancyhead[LO,LE]{Report created from SHA: `r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`}
-\fancyfoot[CO,CE]{Report created: `r format(Sys.time(), "%a %b %d %X %Y")`}
-
-
-  - "`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`"
-  - "`r paste0('gh-action ID: ',Sys.getenv('GITHUB_ACTION'))`"
-  - "`r paste0('Executed at: ',format(Sys.time(), "%a %b %d %X %Y"))`"
+\fancyhead[LO,LE]{`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`}
+\fancyfoot[CO,CE]{`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`}  
 
 ```{r setup, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
@@ -46,17 +40,17 @@ knitr::opts_chunk$set(
 
 ```
 
-# add to front page
+# Context
 
-URL: `r Sys.getenv("GITHUB_SERVER_URL")`
+This report was generated via the GH-action insightsengineering/validatoR (gh-action ID: `r Sys.getenv("GITHUB_ACTION")`). It produces automated
+documentation of the installation of this package on an open source R environment, focussing on:
 
-GITHUB_SERVER_URL
-GITHUB_ACTION
-GITHUB_REPOSITORY
-GITHUB_SHA - triggered by
-GITHUB_REF
+- Installation environment description
+- Testing coverage
+- Traceability matrix of specifications (documented behaviours) and testing
+- Risk assessment benchmarks
 
-# Execution Info
+# Installation environment and package
 
 ## System Info
 
@@ -71,7 +65,7 @@ kable(data.frame(
   )))
 ```
 
-## Version Control
+## Package installed
 
 ```{r version_control, echo = FALSE}
 # find .git dir containing the package directory
@@ -91,14 +85,16 @@ kable(data.frame(
   )))
 ```
 
-## Session Info
+## R Session Info
 
 ```{r session_info, echo = TRUE, eval = TRUE}
 sessionInfo()
 capabilities()
 ```
 
-# Metric based assessment
+# Metric based risk assessment
+
+The following metrics are derived from the `riskmetric` R package. Metrics overlapping with `covr` and `R CMD Check` are removed.
 
 ```{r riskmetric, echo = FALSE, eval = FALSE}
 params$pkg_dir %>%
@@ -122,7 +118,7 @@ params$pkg_dir %>%
   )
 ```
 
-# Testing
+# Installation documentation
 
 ## `R CMD check`
 
