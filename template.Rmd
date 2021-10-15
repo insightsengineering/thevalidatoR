@@ -19,7 +19,7 @@ header-includes:
   - \fancyfoot[LE,RO]{\thepage}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
 remotes::install_local(
   params$pkg_dir,
