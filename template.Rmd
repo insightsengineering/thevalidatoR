@@ -1,10 +1,12 @@
 ---
 title: "Validation Report"
 subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
-date: "`r format(Sys.time(), "%a %b %d %X %Y")`"
+date: "`r format(Sys.time(), '%a %b %d %X %Y')`"
 author: 
   - "`r paste0('Server: ',Sys.getenv('GITHUB_SERVER_URL'))`"
   - "`r paste0('Repositary: ',Sys.getenv('GITHUB_REPOSITORY'))`"
+  - "`r paste0('Reference: ',Sys.getenv('GITHUB_REF'))`"
+  - "`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`"
 params:
   pkg_dir: "`r normalizePath(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))`"
 output:
