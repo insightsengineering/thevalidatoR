@@ -14,8 +14,8 @@ output:
 header-includes:
   - \usepackage{fancyhdr}
   - \pagestyle{fancy}
-  - \fancyhead[CO,CE]{`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`}
-  - \fancyfoot[CO,CE]{`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`}
+  - \fancyhead[CO,CE]{"`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"}
+  - \fancyfoot[CO,CE]{"`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`"}
   - \fancyfoot[LE,RO]{\thepage}
 ---
 
