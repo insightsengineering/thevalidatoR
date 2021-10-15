@@ -1,10 +1,22 @@
 ---
 title: "Validation Report"
 subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
-output:
-  - "pdf_document"
+date: "`r paste0(Sys.getenv('GITHUB_SERVER_URL'),Sys.getenv('GITHUB_REPOSITORY'),'/tree/',Sys.getenv('GITHUB_REF'))`"
+author: 
+  - "`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`"
+  - "`r paste0('gh-action ID: ',Sys.getenv('GITHUB_ACTION'))`"
 params:
   pkg_dir: "`r normalizePath(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))`"
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
+header-includes:
+  - \usepackage{fancyhdr}
+  - \pagestyle{fancy}
+  - \fancyhead[CO,CE]{`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`}
+  - \fancyfoot[CO,CE]{`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`}
+  - \fancyfoot[LE,RO]{\thepage}
 ---
 
 ```{r, include = FALSE}
