@@ -21,7 +21,19 @@ knitr::opts_chunk$set(
   width = 80L,
   comment = ""
 )
+
+
 ```
+
+# add to front page
+
+URL: `r Sys.getenv(GITHUB_SERVER_URL)`
+
+GITHUB_SERVER_URL
+GITHUB_ACTION
+GITHUB_REPOSITORY
+GITHUB_SHA - triggered by
+GITHUB_REF
 
 # Execution Info
 
@@ -67,7 +79,7 @@ capabilities()
 
 # Metric based assessment
 
-```{r riskmetric, echo = FALSE, eval = TRUE}
+```{r riskmetric, echo = FALSE, eval = FALSE}
 params$pkg_dir %>%
   riskmetric::pkg_ref() %>%
   riskmetric::pkg_assess() %>%
@@ -89,15 +101,11 @@ params$pkg_dir %>%
   )
 ```
 
-
-
-
-
 # Testing
 
 ## `R CMD check`
 
-```{r r_cmd_check, echo = FALSE, eval = TRUE}
+```{r r_cmd_check, echo = FALSE, eval = FALSE}
 rcmdcheck_results <- rcmdcheck::rcmdcheck(
   params$pkg_dir,
   args = c(
@@ -114,14 +122,14 @@ cat(rcmdcheck_results$stderr)
 
 ## Testing Coverage
 
-```{r coverage, echo = FALSE, eval = TRUE}
+```{r coverage, echo = FALSE, eval = FALSE}
 covr_results <- covr::package_coverage(params$pkg_dir)
 covr_results
 ```
 
 ## Traceability
 
-```{r traceability, echo = FALSE, eval = TRUE}
+```{r traceability, echo = FALSE, eval = FALSE}
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
   covtracer_df$filename <- basename(covtracer_df$filepath)
