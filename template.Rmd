@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 
 # add to front page
 
-URL: `r Sys.getenv(GITHUB_SERVER_URL)`
+URL: `r Sys.getenv("GITHUB_SERVER_URL")`
 
 GITHUB_SERVER_URL
 GITHUB_ACTION
