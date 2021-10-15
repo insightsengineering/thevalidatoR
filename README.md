@@ -42,7 +42,7 @@ Roche
 
   _Required_: `false`
 
-  _Default_: `md_document`
+  _Default_: `pdf_document`
 
 ### Outputs
 None
@@ -58,7 +58,7 @@ To use this GitHub Action you will need to complete the following:
 
 ### Quickstart
 
-In your repository you should have a `.github/workflows/validatoR.yml` folder with GitHub Action similar to below:
+In your repository you should have a `.github/workflows/validatoR.yml` file with GitHub Action similar to below:
 
 ```yaml
 ---
@@ -82,21 +82,14 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build report 🏗
-        uses: insightsengineering/r-pkg-validation@main
-        with:
-          # R package root path, in case your R package is within a subdirectory of the repo
-          report_pkg_dir: "."
-          # Template location
-          report_template_path: ".github/validation_template.rmd"
-          # Report format - provided to `rmarkdown::render` `output_format`
-          report_rmarkdown_format: "pdf_document"
+        uses: insightsengineering/thevalidatoR@main
 
       # Upload the validation report to the release
       - name: Upload report to release 🔼
         if: success()
         uses: svenstaro/upload-release-action@v2
         with:
-          file: ./validation-report.pdf
+          file: ./validation_report.pdf
           asset_name: validation-report.pdf
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
