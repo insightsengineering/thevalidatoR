@@ -98,7 +98,7 @@ capabilities()
 
 The following metrics are derived from the `riskmetric` R package. Metrics overlapping with `covr` and `R CMD Check` are removed.
 
-```{r riskmetric, echo = FALSE, eval = FALSE}
+```{r riskmetric, echo = FALSE, eval = TRUE}
 params$pkg_dir %>%
   riskmetric::pkg_ref() %>%
   riskmetric::pkg_assess() %>%
@@ -125,7 +125,7 @@ params$pkg_dir %>%
 
 ## `R CMD check`
 
-```{r r_cmd_check, echo = FALSE, eval = FALSE}
+```{r r_cmd_check, echo = FALSE, eval = TRUE}
 rcmdcheck_results <- rcmdcheck::rcmdcheck(
   params$pkg_dir,
   args = c(
@@ -142,7 +142,7 @@ cat(rcmdcheck_results$stderr)
 
 ## Testing Coverage
 
-```{r coverage, echo = FALSE, eval = FALSE}
+```{r coverage, echo = FALSE, eval = TRUE}
 covr_results <- covr::package_coverage(params$pkg_dir)
 covr_results
 ```
@@ -154,7 +154,7 @@ between intended use and testing.
 
 ### Testing matrix
 
-```{r traceability, echo = FALSE, eval = FALSE}
+```{r traceability, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
   covtracer_df$filename <- basename(covtracer_df$filepath)
