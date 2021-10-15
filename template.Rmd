@@ -1,13 +1,28 @@
 ---
 title: "Validation Report"
 subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
-output:
-  - "pdf_document"
+date: "`r format(Sys.time(), '%a %b %d %X %Y')`"
+author: 
+  - "`r paste0('**Server**: ',Sys.getenv('GITHUB_SERVER_URL'))`"
+  - "`r paste0('**Repositary**: ',Sys.getenv('GITHUB_REPOSITORY'))`"
+  - "`r paste0('**Reference**: ',Sys.getenv('GITHUB_REF'))`"
+  - "`r paste0('**Commit SHA**: ',Sys.getenv('GITHUB_SHA'))`"
 params:
   pkg_dir: "`r normalizePath(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))`"
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
+header-includes:
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+- \fancyfoot[RE,RO]{\thepage}
 ---
 
-```{r, include = FALSE}
+\fancyhead[LO,LE]{`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`}
+\fancyfoot[CO,CE]{`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`}  
+
+```{r setup, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
 remotes::install_local(
   params$pkg_dir,
@@ -21,9 +36,21 @@ knitr::opts_chunk$set(
   width = 80L,
   comment = ""
 )
+
+
 ```
 
-# Execution Info
+# Context
+
+This report was generated via the GH-action insightsengineering/validatoR (gh-action ID: `r Sys.getenv("GITHUB_ACTION")`). It produces automated
+documentation of the installation of this package on an open source R environment, focussing on:
+
+- Installation environment description
+- Testing coverage
+- Traceability matrix of specifications (documented behaviours) and testing
+- Risk assessment benchmarks
+
+# Installation environment and package
 
 ## System Info
 
@@ -38,7 +65,7 @@ kable(data.frame(
   )))
 ```
 
-## Version Control
+## Package installed
 
 ```{r version_control, echo = FALSE}
 # find .git dir containing the package directory
@@ -58,16 +85,18 @@ kable(data.frame(
   )))
 ```
 
-## Session Info
+## R Session Info
 
 ```{r session_info, echo = TRUE, eval = TRUE}
 sessionInfo()
 capabilities()
 ```
 
-# Metric based assessment
+# Metric based risk assessment
 
-```{r riskmetric, echo = FALSE, eval = TRUE}
+The following metrics are derived from the `riskmetric` R package. Metrics overlapping with `covr` and `R CMD Check` are removed.
+
+```{r riskmetric, echo = FALSE, eval = FALSE}
 params$pkg_dir %>%
   riskmetric::pkg_ref() %>%
   riskmetric::pkg_assess() %>%
@@ -90,15 +119,11 @@ params$pkg_dir %>%
   )
 ```
 
-
-
-
-
-# Testing
+# Installation documentation
 
 ## `R CMD check`
 
-```{r r_cmd_check, echo = FALSE, eval = TRUE}
+```{r r_cmd_check, echo = FALSE, eval = FALSE}
 rcmdcheck_results <- rcmdcheck::rcmdcheck(
   params$pkg_dir,
   args = c(
@@ -115,14 +140,14 @@ cat(rcmdcheck_results$stderr)
 
 ## Testing Coverage
 
-```{r coverage, echo = FALSE, eval = TRUE}
+```{r coverage, echo = FALSE, eval = FALSE}
 covr_results <- covr::package_coverage(params$pkg_dir)
 covr_results
 ```
 
 ## Traceability
 
-```{r traceability, echo = FALSE, eval = TRUE}
+```{r traceability, echo = FALSE, eval = FALSE}
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
   covtracer_df$filename <- basename(covtracer_df$filepath)
