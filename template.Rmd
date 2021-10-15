@@ -50,6 +50,8 @@ documentation of the installation of this package on an open source R environmen
 - Traceability matrix of specifications (documented behaviours) and testing
 - Risk assessment benchmarks
 
+This report is fully automated, so can only assess whether unit tests and documentation present and can execute. 
+
 # Installation environment and package
 
 ## System Info
@@ -112,6 +114,7 @@ params$pkg_dir %>%
     by = c("name" = "column_name")
   ) %>%
   dplyr::select(Metric = label, Status = value) %>%
+  dplyr::filter(Metric != "Package unit test coverage") %>% # assessed later
   #table
   kable(
     caption = "Metrics assessed by the R package riskmetric"
@@ -146,11 +149,69 @@ covr_results
 
 ## Traceability
 
+Tracebility matrix that maps each unit test to the corresponding documentation, creating a link 
+between intended use and testing.
+
+### Testing matrix
+
 ```{r traceability, echo = FALSE, eval = FALSE}
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
   covtracer_df$filename <- basename(covtracer_df$filepath)
-  kable(covtracer_df[,c("test_name", "alias", "filename")])  
+    
+  covtracer_df %>%
+    dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
+    dplyr::select(test_name, file) %>%
+    dplyr::filter(!duplicated(.)) %>%
+    dplyr::filter(!is.na(test_name)) %>%
+    dplyr::filter(!is.na(file)) %>% # unexported?
+    dplyr::arrange(file) %>%
+    kable(
+        caption = "Tracebility matrix mapping unit tests to documented behaviours."
+    )
+
+} else {
+  cat("{covtracer} not available to produce a traceability matrix")
+}
+```
+
+### Untested
+
+```{r traceability2, echo = FALSE, eval = TRUE}
+if (require("covtracer", quietly = TRUE)) {
+
+  covtracer_df %>%
+    dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
+    dplyr::select(test_name, count, alias, file) %>%
+    dplyr::filter(is.na(count)) %>%
+    dplyr::arrange(alias) %>%
+    kable(
+        caption = "Untested behaviours: documentation that is not covered by any test."
+    )
+
+
+
+} else {
+  cat("{covtracer} not available to produce a traceability matrix")
+}
+```
+
+### Testing granularity
+
+An indicator of test granularity by whether the function is directly tested.
+
+```{r traceability3, echo = FALSE, eval = TRUE}
+if (require("covtracer", quietly = TRUE)) {
+  covtracer_df %>%
+    dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
+    dplyr::select(direct, alias) %>%
+    dplyr::group_by(alias) %>%
+    dplyr::summarize(any_direct_tests = any(direct, na.rm = TRUE)) %>%
+    dplyr::arrange(alias) %>%
+    kable(
+        caption = "Granularity of unit tests: directly tested functions."
+    )
+
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
