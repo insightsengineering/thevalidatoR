@@ -6,9 +6,7 @@ author:
   - "`r paste0('Repo server: ',Sys.getenv('GITHUB_SERVER_URL'))`"
   - "`r paste0('Repositary: ',Sys.getenv('GITHUB_REPOSITORY'))`"
   - "`r paste0('Reference: ',Sys.getenv('GITHUB_REF'))`"
-  - "`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`"
-  - "`r paste0('gh-action ID: ',Sys.getenv('GITHUB_ACTION'))`"
-  - "`r paste0('Executed at: ',format(Sys.time(), "%a %b %d %X %Y"))`"
+
 params:
   pkg_dir: "`r normalizePath(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))`"
 output:
@@ -25,6 +23,10 @@ header-includes:
 \fancyhead[LO,LE]{Report created from SHA: `r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`}
 \fancyfoot[CO,CE]{Report created: `r format(Sys.time(), "%a %b %d %X %Y")`}
 
+
+  - "`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`"
+  - "`r paste0('gh-action ID: ',Sys.getenv('GITHUB_ACTION'))`"
+  - "`r paste0('Executed at: ',format(Sys.time(), "%a %b %d %X %Y"))`"
 
 ```{r setup, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
