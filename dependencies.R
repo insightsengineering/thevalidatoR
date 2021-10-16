@@ -10,5 +10,8 @@ github_packages <- c(
 )
 lapply(github_packages, remotes::install_github)
 
+# CRAN
+install.packages("pander")
+
 # Install missing fonts
 system("tlmgr install courier ec")

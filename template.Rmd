@@ -31,11 +31,14 @@ remotes::install_local(
   INSTALL_opts = "--with-keep.source"
 )
 library(magrittr)
-library(knitr)
-knitr::opts_chunk$set(
-  width = 80L,
-  comment = ""
-)
+
+library(pander)
+helper_tabulate <- function(x, caption = ""){
+  x %>%
+    pander(x, caption = caption)
+}
+
+
 
 
 ```
@@ -57,14 +60,14 @@ This report is fully automated, so is limited to assess whether unit tests and d
 ## System Info
 
 ```{r execution_info, echo = FALSE}
-kable(data.frame(
+data.frame(
   Field = c("OS", "Platform", "System", "Execution Time"),
   Value = c(
     sessionInfo()$running,
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  )))
+  )) %>% helper_tabulate("System info")
 ```
 
 ## Package installed
@@ -78,13 +81,13 @@ gd <- system(
 # define reused git args to be sure we're picking up the right git info
 gd <- sprintf("--git-dir='%s'", gd)
 wt <- sprintf("--work-tree='%s'", params$pkg_dir)
-kable(data.frame(
+data.frame(
   Field = c("branch", "commit `SHA1`", "commit date"),
   Value = c(
     system2("git", list(gd, wt, "rev-parse", "--abbrev-ref", "HEAD"), stdout = TRUE),
     system2("git", list(gd, wt, "rev-parse", "HEAD"), stdout = TRUE),
     system2("git", list(gd, wt, "show", "-s", "--format=%ci", "HEAD"), stdout = TRUE)
-  )))
+  )) %>% helper_tabulate("Git information")
 ```
 
 ## R Session Info
@@ -116,7 +119,7 @@ params$pkg_dir %>%
   dplyr::select(Metric = label, Status = value) %>%
   dplyr::filter(Metric != "Package unit test coverage") %>% # assessed later
   #table
-  kable(
+  helper_tabulate(
     caption = "Metrics assessed by the R package riskmetric"
   )
 ```
@@ -166,7 +169,7 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::filter(!is.na(test_name)) %>%
     dplyr::filter(!is.na(file)) %>% # unexported?
     dplyr::arrange(file) %>%
-    kable(
+    helper_tabulate(
         caption = "Tracebility matrix mapping unit tests to documented behaviours."
     )
 
@@ -185,7 +188,7 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::select(test_name, count, alias, file) %>%
     dplyr::filter(is.na(count)) %>%
     dplyr::arrange(alias) %>%
-    kable(
+    helper_tabulate(
         caption = "Untested behaviours: documentation that is not covered by any test."
     )
 
@@ -208,7 +211,7 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::group_by(alias) %>%
     dplyr::summarize(any_direct_tests = any(direct, na.rm = TRUE)) %>%
     dplyr::arrange(alias) %>%
-    kable(
+    helper_tabulate(
         caption = "Granularity of unit tests: directly tested functions."
     )
 
