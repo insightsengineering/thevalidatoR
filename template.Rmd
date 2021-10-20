@@ -187,7 +187,6 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::filter(!duplicated(.)) %>%
     dplyr::mutate(alias == paste0(alias,"()"))
 
-  covtracer_df %>%
   covtracer_df_clean %>%
     dplyr::select(alias, test_name) %>%
     dplyr::filter(!duplicated(.)) %>%
