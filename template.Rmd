@@ -32,12 +32,28 @@ remotes::install_local(
 )
 library(magrittr)
 library(knitr)
+library(kableExtra)
 knitr::opts_chunk$set(
   width = 80L,
   comment = ""
 )
 
-
+helper_tabulate <- function(x, caption = "", col_widths = c("10cm","5cm")){
+  x %>%
+    kbl(
+      caption = caption,
+      booktabs = TRUE, longtable = TRUE
+    ) %>%
+    kable_styling(
+      latex_options = c("striped","repeat_header")
+    ) %>%
+    column_spec(
+      1, width = col_widths[1]
+    ) %>%
+    column_spec(
+      2, width = col_widths[2]
+    )
+}
 ```
 
 # Context
@@ -57,14 +73,14 @@ This report is fully automated, so is limited to assess whether unit tests and d
 ## System Info
 
 ```{r execution_info, echo = FALSE}
-kable(data.frame(
+data.frame(
   Field = c("OS", "Platform", "System", "Execution Time"),
   Value = c(
     sessionInfo()$running,
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  )))
+  )) %>% helper_tabulate("System info",col_widths = c("6cm","6cm"))
 ```
 
 ## Package installed
@@ -78,13 +94,13 @@ gd <- system(
 # define reused git args to be sure we're picking up the right git info
 gd <- sprintf("--git-dir='%s'", gd)
 wt <- sprintf("--work-tree='%s'", params$pkg_dir)
-kable(data.frame(
+data.frame(
   Field = c("branch", "commit `SHA1`", "commit date"),
   Value = c(
     system2("git", list(gd, wt, "rev-parse", "--abbrev-ref", "HEAD"), stdout = TRUE),
     system2("git", list(gd, wt, "rev-parse", "HEAD"), stdout = TRUE),
     system2("git", list(gd, wt, "show", "-s", "--format=%ci", "HEAD"), stdout = TRUE)
-  )))
+  )) %>% helper_tabulate("Git information",col_widths = c("5cm","8cm"))
 ```
 
 ## R Session Info
@@ -116,7 +132,7 @@ params$pkg_dir %>%
   dplyr::select(Metric = label, Status = value) %>%
   dplyr::filter(Metric != "Package unit test coverage") %>% # assessed later
   #table
-  kable(
+  helper_tabulate(
     caption = "Metrics assessed by the R package riskmetric"
   )
 ```
@@ -158,18 +174,18 @@ between intended use and testing.
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
   covtracer_df$filename <- basename(covtracer_df$filepath)
-    
+
   covtracer_df %>%
     dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
+    dplyr::filter(is_exported = TRUE) %>%
     dplyr::select(test_name, file) %>%
     dplyr::filter(!duplicated(.)) %>%
     dplyr::filter(!is.na(test_name)) %>%
     dplyr::filter(!is.na(file)) %>% # unexported?
     dplyr::arrange(file) %>%
-    kable(
-        caption = "Tracebility matrix mapping unit tests to documented behaviours."
+    helper_tabulate(
+      caption = "Tracebility matrix mapping unit tests to documented behaviours."
     )
-
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
@@ -179,18 +195,15 @@ if (require("covtracer", quietly = TRUE)) {
 
 ```{r traceability2, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
-
   covtracer_df %>%
     dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
-    dplyr::select(test_name, count, alias, file) %>%
+    dplyr::filter(is_exported = TRUE) %>%
     dplyr::filter(is.na(count)) %>%
+    dplyr::select(alias, file) %>%
     dplyr::arrange(alias) %>%
-    kable(
-        caption = "Untested behaviours: documentation that is not covered by any test."
+    helper_tabulate(
+      caption = "Untested behaviours: documentation that is not covered by any test."
     )
-
-
-
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
@@ -204,14 +217,14 @@ An indicator of test granularity by whether the function is directly tested.
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df %>%
     dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
+    dplyr::filter(is_exported = TRUE) %>%
     dplyr::select(direct, alias) %>%
     dplyr::group_by(alias) %>%
     dplyr::summarize(any_direct_tests = any(direct, na.rm = TRUE)) %>%
     dplyr::arrange(alias) %>%
-    kable(
+    helper_tabulate(
         caption = "Granularity of unit tests: directly tested functions."
     )
-
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
