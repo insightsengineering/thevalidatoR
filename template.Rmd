@@ -38,7 +38,7 @@ knitr::opts_chunk$set(
   comment = ""
 )
 
-helper_tabulate <- function(x, caption = ""){
+helper_tabulate <- function(x, caption = "", col_widths = c("10cm","5cm")){
   x %>%
     kbl(
       caption = caption,
@@ -48,10 +48,10 @@ helper_tabulate <- function(x, caption = ""){
       latex_options = c("striped","repeat_header")
     ) %>%
     column_spec(
-      1, width = "10cm"
+      1, width = col_widths[1]
     ) %>%
     column_spec(
-      2, width = "5cm"
+      2, width = col_widths[2]
     )
 }
 ```
@@ -80,7 +80,7 @@ data.frame(
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  )) %>% helper_tabulate("System info")
+  )) %>% helper_tabulate("System info",col_widths = c("6cm","6cm"))
 ```
 
 ## Package installed
@@ -100,7 +100,7 @@ data.frame(
     system2("git", list(gd, wt, "rev-parse", "--abbrev-ref", "HEAD"), stdout = TRUE),
     system2("git", list(gd, wt, "rev-parse", "HEAD"), stdout = TRUE),
     system2("git", list(gd, wt, "show", "-s", "--format=%ci", "HEAD"), stdout = TRUE)
-  )) %>% helper_tabulate("Git information")
+  )) %>% helper_tabulate("Git information",col_widths = c("5cm","8cm"))
 ```
 
 ## R Session Info
