@@ -175,16 +175,28 @@ if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
   covtracer_df$filename <- basename(covtracer_df$filepath)
 
+  covtracer_df_clean <-  covtracer_df %>%
+    dplyr::select(
+      alias,
+      test_name,
+      file,
+      is_exported,doctype,direct
+    ) %>%
+    dplyr::filter(!doctype %in% c("data", "class"))  %>%  # ignore objects without testable code
+    dplyr::filter(is_exported == TRUE) %>% # Only exported
+    dplyr::filter(!duplicated(.)) %>%
+    dplyr::mutate(alias == paste0(alias,"()"))
+
   covtracer_df %>%
-    dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
-    dplyr::filter(is_exported = TRUE) %>%
-    dplyr::select(test_name, file) %>%
+  covtracer_df_clean %>%
+    dplyr::select(alias, test_name) %>%
     dplyr::filter(!duplicated(.)) %>%
     dplyr::filter(!is.na(test_name)) %>%
-    dplyr::filter(!is.na(file)) %>% # unexported?
-    dplyr::arrange(file) %>%
+    dplyr::filter(!is.na(alias)) %>% # unexported?
+    dplyr::arrange(alias) %>%
     helper_tabulate(
-      caption = "Tracebility matrix mapping unit tests to documented behaviours."
+      caption = "Tracebility matrix mapping unit tests to documented behaviours.",
+      col_widths = c("5cm","10cm")
     )
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
@@ -195,10 +207,8 @@ if (require("covtracer", quietly = TRUE)) {
 
 ```{r traceability2, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
-  covtracer_df %>%
-    dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
-    dplyr::filter(is_exported = TRUE) %>%
-    dplyr::filter(is.na(count)) %>%
+  covtracer_df_clean %>%
+    dplyr::filter(is.na(test_name)) %>%
     dplyr::select(alias, file) %>%
     dplyr::arrange(alias) %>%
     helper_tabulate(
@@ -215,9 +225,7 @@ An indicator of test granularity by whether the function is directly tested.
 
 ```{r traceability3, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
-  covtracer_df %>%
-    dplyr::filter(!doctype %in% c("data", "class")) %>%  # ignore objects without testable code
-    dplyr::filter(is_exported = TRUE) %>%
+  covtracer_df_clean %>%
     dplyr::select(direct, alias) %>%
     dplyr::group_by(alias) %>%
     dplyr::summarize(any_direct_tests = any(direct, na.rm = TRUE)) %>%
