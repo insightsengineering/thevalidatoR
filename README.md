@@ -73,6 +73,8 @@ jobs:
     name: Create report 📃
     runs-on: ubuntu-latest
     # Set Github token permissions
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
       packages: write
