@@ -115,25 +115,31 @@ capabilities()
 The following metrics are derived from the `riskmetric` R package. Metrics overlapping with `covr` and `R CMD Check` are removed.
 
 ```{r riskmetric, echo = FALSE, eval = TRUE}
-params$pkg_dir %>%
+d_riskmetric <- params$pkg_dir %>%
   riskmetric::pkg_ref() %>%
   riskmetric::pkg_assess() %>%
   purrr::map(1)  %>% 
   lapply(as.character) %>%
   tibble::enframe() %>% 
   tidyr::unnest(cols = dplyr::everything()) %>%
-  dplyr::filter(name != "r_cmd_check") %>%
   # add labels
   dplyr::left_join(
     lapply(riskmetric::all_assessments(), attributes) %>%
       purrr::map_df(tibble::as_tibble),
     by = c("name" = "column_name")
+  ) 
+
+d_riskmetric %>%
+  dplyr::filter(
+    name %in% c(
+      "news_current","has_vignettes",
+      "license","downloads_1yr"
+    )
   ) %>%
   dplyr::select(Metric = label, Status = value) %>%
-  dplyr::filter(Metric != "Package unit test coverage") %>% # assessed later
   #table
   helper_tabulate(
-    caption = "Metrics assessed by the R package riskmetric"
+    caption = "Package info assessed by the R package riskmetric"
   )
 ```
 
