@@ -8,8 +8,7 @@ author:
   - "`r paste0('**Reference**: ',Sys.getenv('GITHUB_REF'))`"
   - "`r paste0('**Commit SHA**: ',Sys.getenv('GITHUB_SHA'))`"
 params:
-  pkg_dir: "~/git/GithubMetrics"
-  #pkg_dir: "`r normalizePath(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))`"
+  pkg_dir: "`r normalizePath(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))`"
 output:
   pdf_document:
     toc: true
