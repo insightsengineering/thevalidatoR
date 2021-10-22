@@ -194,9 +194,9 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::filter(!is.na(file)) %>% # unexported?
     dplyr::arrange(file) %>%
     dplyr::select(`Test Description` = test_name, Documentation = file) %>% 
-    # helper_tabulate(
-    #   caption = "Tracebility matrix mapping unit tests to documented behaviours."
-    # )
+    helper_tabulate(
+      caption = "Tracebility matrix mapping unit tests to documented behaviours."
+    )
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
