@@ -191,17 +191,17 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::filter(!doctype %in% c("data", "class"))  %>%  # ignore objects without testable code
     dplyr::filter(is_exported == TRUE) %>% # Only exported
     dplyr::filter(!duplicated(.)) %>%
-    dplyr::mutate(alias == paste0(alias,"()"))
+    dplyr::mutate(alias = paste0(alias,"()")) %>%
+    dplyr::mutate(file = paste0("man/",file))
 
   covtracer_df_clean %>%
-    dplyr::select(alias, test_name) %>%
     dplyr::filter(!duplicated(.)) %>%
     dplyr::filter(!is.na(test_name)) %>%
-    dplyr::filter(!is.na(alias)) %>% # unexported?
-    dplyr::arrange(alias) %>%
+    dplyr::filter(!is.na(file)) %>% # unexported?
+    dplyr::arrange(file) %>%
+    dplyr::select(`Test Description` = test_name, Documentation = file) %>% 
     helper_tabulate(
-      caption = "Tracebility matrix mapping unit tests to documented behaviours.",
-      col_widths = c("5cm","10cm")
+      caption = "Tracebility matrix mapping unit tests to documented behaviours."
     )
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
@@ -214,8 +214,8 @@ if (require("covtracer", quietly = TRUE)) {
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df_clean %>%
     dplyr::filter(is.na(test_name)) %>%
-    dplyr::select(alias, file) %>%
     dplyr::arrange(alias) %>%
+    dplyr::select(`Exported package object` = alias,  Documentation = file) %>%
     helper_tabulate(
       caption = "Untested behaviours: documentation that is not covered by any test."
     )
@@ -231,12 +231,12 @@ An indicator of test granularity by whether the function is directly tested.
 ```{r traceability3, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df_clean %>%
-    dplyr::select(direct, alias) %>%
     dplyr::group_by(alias) %>%
     dplyr::summarize(any_direct_tests = any(direct, na.rm = TRUE)) %>%
     dplyr::arrange(alias) %>%
+    dplyr::select(`Exported package object` = alias,  `Tested Directly` = any_direct_tests) %>%
     helper_tabulate(
-        caption = "Granularity of unit tests: directly tested functions."
+        caption = "Granularity of unit tests: directly tested exported functions."
     )
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
