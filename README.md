@@ -1,4 +1,16 @@
-# thevalidatoR <img src='https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/thevalidatoR.png' align="right" height="131.5" />
+**thevalidatoR** <img src='https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/thevalidatoR.png' align="right" height="131.5" />
+
+- [An R Package Validation Report](#an-r-package-validation-report)
+    - [Description](#description)
+    - [Action Type](#action-type)
+    - [Author](#author)
+    - [Inputs](#inputs)
+    - [Outputs](#outputs)
+  - [How to use](#how-to-use)
+    - [Quickstart](#quickstart)
+    - [V1.0 Examples](#v10-examples)
+      - [rbmi](#rbmi)
+      - [admiral](#admiral)
 
 <!-- BEGIN_ACTION_DOC -->
 # An R Package Validation Report
