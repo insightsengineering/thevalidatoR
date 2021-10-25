@@ -130,4 +130,4 @@ construct the metrics needed by cov-tracer and covr, which in the case of `rbmi`
 
 #### admiral
 
-You can see an example report from [admiral](https://github.com/insightsengineering/rbmi), using the first version of this gh-action, [here](readme_files/report-0.1-admiral.pdf).
+You can see an example report from [admiral](https://github.com/Roche-GSK/admiral), using the first version of this gh-action, [here](readme_files/report-0.1-admiral.pdf).
