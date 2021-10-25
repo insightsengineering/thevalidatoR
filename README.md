@@ -121,7 +121,7 @@ You can see an example report from [rbmi](https://github.com/insightsengineering
 
 This was built as a test on a fork of the original rbmi package. When we created a release in that fork, this PDF was automatically built and added to the release as can be seen below.
 
-![](readme_files/rbmi_release.png)
+![](readme_files/rbmi_action.png)
 
 And you can see the gh-action action that was triggered by the release being published. Note that it must install the package, run tests and 
 construct the metrics needed by cov-tracer and covr, which in the case of `rbmi` a computationally heavy package - took quite a while!
