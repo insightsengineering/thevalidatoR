@@ -117,7 +117,7 @@ jobs:
 
 #### rbmi
 
-You can see an example report from [rbmi]([https://github.com/insightsengineering/rbmi), using the first version of this gh-action, [here](readme_files/report-1.0.1-rbmi.pdf).
+You can see an example report from [rbmi](https://github.com/insightsengineering/rbmi), using the first version of this gh-action, [here](readme_files/report-1.0.1-rbmi.pdf).
 
 This was built as a test on a fork of the original rbmi package. When we created a release in that fork, this PDF was automatically built and added to the release as can be seen below.
 
@@ -130,4 +130,4 @@ construct the metrics needed by cov-tracer and covr, which in the case of `rbmi`
 
 #### admiral
 
-You can see an example report from [rbmi](https://github.com/insightsengineering/rbmi), using the first version of this gh-action, [here](readme_files/report-0.1-admiral.pdf).
+You can see an example report from [admiral](https://github.com/insightsengineering/rbmi), using the first version of this gh-action, [here](readme_files/report-0.1-admiral.pdf).
