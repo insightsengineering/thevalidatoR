@@ -6,7 +6,7 @@ All discussions are open and inclusive on this repo. If you have an idea, or but
 
 ## Code of conduct
 
-This project follows the [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](.github/CODE_OF_CONDUCT.md).
+This project follows the [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md).
 
 ## Contributions
 
