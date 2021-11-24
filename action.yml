@@ -90,8 +90,8 @@ runs:
       run: ${GITHUB_ACTION_PATH}/report-generator.R
       shell: bash
       env:
-        # Composite action doesn't set inputs as env vars
-        # we need to do this manually...
+        # Composite action doesn't set inputs as env vars.
+        # We need to do this manually...
         INPUT_REPORT_PKG_DIR: ${{ inputs.report_pkg_dir }}
         INPUT_REPORT_TEMPLATE_PATH: ${{ inputs.report_template_path }}
         INPUT_REPORT_RMARKDOWN_FORMAT: ${{ inputs.report_rmarkdown_format }}
