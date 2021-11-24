@@ -40,15 +40,21 @@ runs:
       shell: bash
 
     - name: Set R Library home on Linux
+      
       run: |
         mkdir -p /__w/_temp/Library
         echo ".libPaths(c('/__w/_temp/Library', .libPaths()))" > ~/.Rprofile
       shell: bash
 
     - name: Set tlmgr cache folder
+      if: "contains(inputs.no_cache, 'false')"
       id: texlive_version
       run: |
-        echo "TEXMFSYSVAR=/__w/_temp/texmf" >> $GITHUB_ENV
+        echo "TEXMFHOME=/__w/_temp/texlive/texmf-home" >> $GITHUB_ENV
+        echo "TEXMFVAR=/__w/_temp/texlive/texmf-var" >> $GITHUB_ENV
+        export TEXMFHOME=/__w/_temp/texlive/texmf-home
+        export TEXMFVAR=/__w/_temp/texlive/texmf-var
+        tlmgr init-usertree
         echo "::set-output name=TEX_LIVE_VERSION::$(tlmgr --version |tail -1 |awk '{print $NF}')"
       shell: bash
 
@@ -64,7 +70,7 @@ runs:
       if: "contains(inputs.no_cache, 'false')"
       uses: actions/cache@v2
       with:
-        path: /home/runner/work/_temp/texmf
+        path: /home/runner/work/_temp/texlive
         key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
         restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
 
