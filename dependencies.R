@@ -17,15 +17,15 @@ if (!require("kableExtra")) install.packages("kableExtra", upgrade = "never", Nc
 if (!require("tinytex")) install.packages("tinytex", upgrade = "never", Ncpus = ncores)
 
 # Conditionally install TinyTex
-if(!dir.exists("/__w/_temp/TinyTeX")) {
+if(!dir.exists(paste(Sys.getenv("RUNNER_TEMP"), "TinyTeX", sep="/"))) {
 # nolint start
   tinytex_installer <- '
-export TINYTEX_DIR=/__w/_temp/TinyTeX
+export TINYTEX_DIR=${RUNNER_TEMP}/TinyTeX
 wget -qO- "https://raw.githubusercontent.com/yihui/tinytex/master/tools/install-unx.sh" | sh -s - --admin --no-path
-mkdir -p /__w/_temp/TinyTeX
-cp -r ~/.TinyTeX/. /__w/_temp/TinyTeX
+mkdir -p ${RUNNER_TEMP}/TinyTeX
+cp -r ~/.TinyTeX/. ${RUNNER_TEMP}/TinyTeX
 rm -rf ~/.TinyTeX
-/__w/_temp/TinyTeX/bin/*/tlmgr path add
+${RUNNER_TEMP}/TinyTeX/bin/*/tlmgr path add
 tlmgr install latex-bin luatex xetex ae bibtex context inconsolata listings makeindex metafont mfware parskip pdfcrop tex tools url xkeyval courier ec
 tlmgr path add
 '
@@ -33,10 +33,10 @@ tlmgr path add
   system(tinytex_installer)
   tinytex::r_texmf()
   permission_update <- '
-chown -R root:staff /__w/_temp/TinyTeX
-chmod -R g+w /__w/_temp/TinyTeX
-chmod -R g+wx /__w/_temp/TinyTeX/bin
-export PATH=/__w/_temp/TinyTeX/bin:${PATH}
+chown -R root:staff ${RUNNER_TEMP}/TinyTeX
+chmod -R g+w ${RUNNER_TEMP}/TinyTeX
+chmod -R g+wx ${RUNNER_TEMP}/TinyTeX/bin
+export PATH=${RUNNER_TEMP}/TinyTeX/bin:${PATH}
 echo "PATH=${PATH}" >> $GITHUB_ENV
 '
   system(permission_update)
