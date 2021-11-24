@@ -55,7 +55,6 @@ runs:
 
       - name: Install dependencies
         run: |
-          export GITHUB_PAT=${GITHUB_TOKEN}
           ${GITHUB_ACTION_PATH}/dependencies.R
         shell: bash
 

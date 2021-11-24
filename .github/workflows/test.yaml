@@ -12,6 +12,8 @@ jobs:
     name: ${{ matrix.package.name }}
     container:
       image: rocker/verse:4.1.1
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -25,7 +27,6 @@ jobs:
             report_pkg_dir: ./tests/packages/buckbeak
             report_template_path: ./tests/packages/buckbeak/validation-template.Rmd
             report_rmarkdown_format: html_document
-
 
     steps:
       - name: Checkout ${{ matrix.package.name }}

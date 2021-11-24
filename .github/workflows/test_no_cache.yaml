@@ -12,6 +12,8 @@ jobs:
     name: ${{ matrix.package.name }}
     container:
       image: rocker/verse:4.1.1
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -21,7 +23,6 @@ jobs:
             report_pkg_dir: ./tests/packages/aragog
             report_template_path: ./template.Rmd
             report_rmarkdown_format: pdf_document
-
 
     steps:
       - name: Checkout ${{ matrix.package.name }}
