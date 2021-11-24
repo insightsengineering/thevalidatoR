@@ -58,6 +58,22 @@ Roche
 
   _Default_: `pdf_document`
 
+* `no_cache`:
+
+  _Description_: Disable github action R dependency caching
+
+  _Required_: `false`
+
+  _Default_: `false`
+  
+* `cache_version`:
+
+  _Description_: Version of the cache. To clean cache bump this version.
+
+  _Required_: `false`
+
+  _Default_: `cache-v1"`
+
 ### Outputs
 None
 
@@ -86,6 +102,8 @@ jobs:
   r-pkg-validation:
     name: Create report 📃
     runs-on: ubuntu-latest
+    container:
+      image: rocker/verse:4.1.1
     # Set Github token permissions
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

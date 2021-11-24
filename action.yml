@@ -20,11 +20,11 @@ inputs:
     required: false
     default: "all"
   no_cache:
-    description: "disable github action R dependency caching"
+    description: "Disable github action R dependency caching"
     required: false
     default: "false"
   cache_version:
-    description: "version of cache. To clean cache bump this version."
+    description: "Version of the cache. To clean cache bump this version."
     required: false
     default: "cache-v1"
 branding: # https://feathericons.com/
@@ -54,13 +54,11 @@ runs:
           restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}
 
       - name: Install dependencies
-        run: |
-          ${GITHUB_ACTION_PATH}/dependencies.R
+        run: ${GITHUB_ACTION_PATH}/dependencies.R
         shell: bash
 
       - name: Run report generator
-        run: |
-          ${GITHUB_ACTION_PATH}/report-generator.R
+        run: ${GITHUB_ACTION_PATH}/report-generator.R
         shell: bash
         env:
           # Composite action doesn't set inputs as env vars

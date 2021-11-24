@@ -19,10 +19,10 @@ jobs:
       max-parallel: 2
       matrix:
         package:
-          - name: aragog
-            report_pkg_dir: ./tests/packages/aragog
-            report_template_path: ./template.Rmd
-            report_rmarkdown_format: pdf_document
+          - name: buckbeak
+            report_pkg_dir: ./tests/packages/buckbeak
+            report_template_path: ./tests/packages/buckbeak/validation-template.Rmd
+            report_rmarkdown_format: html_document
 
     steps:
       - name: Checkout ${{ matrix.package.name }}
