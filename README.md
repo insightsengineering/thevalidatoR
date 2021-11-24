@@ -27,7 +27,7 @@ A Github Action that generates a validation report for an R package. The four ma
 - Attach report as object to release
 
 ### Action Type
-Docker
+Composite
 
 ### Author
 Roche
