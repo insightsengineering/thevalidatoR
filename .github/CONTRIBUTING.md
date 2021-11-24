@@ -21,7 +21,7 @@ PRs are welcome.
 The core purpose of this gh-action is to provide a common template, that can be applied 
 to packages to generate automated documentation detailing the installation, assessment 
 of unit tests, and cross referencing what defined features from the documentation are 
-tested (buy building the tracibility matrix).
+tested (by building the traceability matrix).
 
 The intended aim is that the gh-action can be used to provide 'shared' 
 validation documentation between companies. The expectation is that validation 
@@ -35,7 +35,9 @@ focussed on the 'automated' documentation.
 
 ### Position in R Validation Hub
 
-The R Validation Hub is a PSI and R Consortium Working Group. Currently within 
+The R Validation Hub is a PSI and R Consortium Working Group, with a strong member overlap with Phuse validation efforts. 
+Thus we feel the best way forward forward is to fold this in as an contribution based subset of the 
+efforts under the wider R Validation Hub umbrella.
 
 ### Governance
 
@@ -47,10 +49,14 @@ The R Validation Hub is a PSI and R Consortium Working Group. Currently within
 
 In addition to the org admins having access, adding an individual to the repository  
 will be based on meritocracy, based on contributions made as an external contributor and 
-no disagreement from the current maintainers. `org [currently insightsengineering, proposal is pharmar]` admins retain the right to remove 
-individuals if the code of conduct is breached.
+where there is no disagreement from the current maintainers. 
+`org [currently insightsengineering, proposal is pharmar]` admins retain the right to remove 
+individuals with admin/maintainer rights if the code of conduct is breached.
 
-* James Black (@epijim)
+Current maintainers (while R packages have a specific definition of maintainer, this is not an R package
+and we are following the Github definition):
+
+* James Black (@epijim) 
 * Doug Kelhkoff (@dgkf-roche)
 * Andy Nicholls (@andyofsmeg)
 * Ellis Hughes (@thebioengineer)
