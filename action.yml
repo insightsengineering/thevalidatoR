@@ -19,6 +19,11 @@ inputs:
       `output_format` parameter for accepted values.
     required: false
     default: "all"
+  additional_tlmgr_packages:
+    description: |
+      Additional tex packages to install with tlmgr.
+    required: false
+    default: "courier ec"
   no_cache:
     description: "Disable github action R dependency caching"
     required: false
@@ -70,7 +75,14 @@ runs:
         restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
 
     - name: Install dependencies
-      run: ${GITHUB_ACTION_PATH}/dependencies.R
+      run: |
+        ${GITHUB_ACTION_PATH}/dependencies.R
+        export PATH=${RUNNER_TEMP}/TinyTeX/bin/x86_64-linux:${PATH}
+        echo "PATH=${PATH}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Install additional tex packages
+      run: tlmgr install ${{ inputs.additional_tlmgr_packages }}
       shell: bash
 
     - name: Run report generator

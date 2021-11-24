@@ -26,7 +26,7 @@ mkdir -p ${RUNNER_TEMP}/TinyTeX
 cp -r ~/.TinyTeX/. ${RUNNER_TEMP}/TinyTeX
 rm -rf ~/.TinyTeX
 ${RUNNER_TEMP}/TinyTeX/bin/*/tlmgr path add
-tlmgr install latex-bin luatex xetex ae bibtex context inconsolata listings makeindex metafont mfware parskip pdfcrop tex tools url xkeyval courier ec
+tlmgr install latex-bin luatex xetex ae bibtex context inconsolata listings makeindex metafont mfware parskip pdfcrop tex tools url xkeyval
 tlmgr path add
 '
   # nolint end
@@ -36,8 +36,6 @@ tlmgr path add
 chown -R root:staff ${RUNNER_TEMP}/TinyTeX
 chmod -R g+w ${RUNNER_TEMP}/TinyTeX
 chmod -R g+wx ${RUNNER_TEMP}/TinyTeX/bin
-export PATH=${RUNNER_TEMP}/TinyTeX/bin:${PATH}
-echo "PATH=${PATH}" >> $GITHUB_ENV
 '
   system(permission_update)
 }

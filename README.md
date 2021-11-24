@@ -58,6 +58,14 @@ Roche
 
   _Default_: `pdf_document`
 
+* `additional_tlmgr_packages`:
+
+  _Description_: Additional tex packages to install with tlmgr.
+
+  _Required_: `false`
+
+  _Default_: `courier ec`
+
 * `no_cache`:
 
   _Description_: Disable github action R dependency caching
