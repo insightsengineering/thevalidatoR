@@ -28,41 +28,41 @@ inputs:
     required: false
     default: "cache-v1"
 branding: # https://feathericons.com/
-  icon: 'award'
-  color: 'blue'
+  icon: "award"
+  color: "blue"
 
 runs:
   using: "composite"
   steps:
-      - name: Get R version
-        id: r_version
-        run: echo "::set-output name=R_VERSION::$(R --version | head -1 | awk '{print $3}')"
-        shell: bash
+    - name: Get R version
+      id: r_version
+      run: echo "::set-output name=R_VERSION::$(R --version | head -1 | awk '{print $3}')"
+      shell: bash
 
-      - name: Set R Library home on Linux
-        run: |
-          mkdir -p /__w/_temp/Library
-          echo ".libPaths(c('/__w/_temp/Library', .libPaths()))" > ~/.Rprofile
-        shell: bash 
+    - name: Set R Library home on Linux
+      run: |
+        mkdir -p /__w/_temp/Library
+        echo ".libPaths(c('/__w/_temp/Library', .libPaths()))" > ~/.Rprofile
+      shell: bash
 
-      - name: Cache R packages
-        if: "contains(inputs.no_cache, 'false')"
-        uses: actions/cache@v2
-        with:
-          path: /home/runner/work/_temp/Library
-          key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}
+    - name: Cache R packages
+      if: "contains(inputs.no_cache, 'false')"
+      uses: actions/cache@v2
+      with:
+        path: /home/runner/work/_temp/Library
+        key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}-${{ hashFiles('.github/depends.Rds') }}
+        restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}
 
-      - name: Install dependencies
-        run: ${GITHUB_ACTION_PATH}/dependencies.R
-        shell: bash
+    - name: Install dependencies
+      run: ${GITHUB_ACTION_PATH}/dependencies.R
+      shell: bash
 
-      - name: Run report generator
-        run: ${GITHUB_ACTION_PATH}/report-generator.R
-        shell: bash
-        env:
-          # Composite action doesn't set inputs as env vars
-          # we need to do this manually...
-          INPUT_REPORT_PKG_DIR: ${{ inputs.report_pkg_dir }}
-          INPUT_REPORT_TEMPLATE_PATH: ${{ inputs.report_template_path }}
-          INPUT_REPORT_RMARKDOWN_FORMAT: ${{ inputs.report_rmarkdown_format }}
+    - name: Run report generator
+      run: ${GITHUB_ACTION_PATH}/report-generator.R
+      shell: bash
+      env:
+        # Composite action doesn't set inputs as env vars
+        # we need to do this manually...
+        INPUT_REPORT_PKG_DIR: ${{ inputs.report_pkg_dir }}
+        INPUT_REPORT_TEMPLATE_PATH: ${{ inputs.report_template_path }}
+        INPUT_REPORT_RMARKDOWN_FORMAT: ${{ inputs.report_rmarkdown_format }}
