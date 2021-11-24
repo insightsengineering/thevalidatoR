@@ -27,7 +27,6 @@ cp -r ~/.TinyTeX/. ${RUNNER_TEMP}/TinyTeX
 rm -rf ~/.TinyTeX
 ${RUNNER_TEMP}/TinyTeX/bin/*/tlmgr path add
 tlmgr install latex-bin luatex xetex ae bibtex context inconsolata listings makeindex metafont mfware parskip pdfcrop tex tools url xkeyval
-tlmgr path add
 '
   # nolint end
   system(tinytex_installer)

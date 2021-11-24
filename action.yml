@@ -12,7 +12,7 @@ inputs:
       File path of the R markdown template to use for the report.
       The default template is available [here.](./template.Rmd)
     required: false
-    default: "/template.Rmd"
+    default: "./template.Rmd"
   report_rmarkdown_format:
     description: |
       The file format of the validation report. See `rmarkdown::render`'s
@@ -31,7 +31,7 @@ inputs:
   cache_version:
     description: "Version of the cache. To clean cache bump this version."
     required: false
-    default: "cache-v1"
+    default: "v1"
 branding: # https://feathericons.com/
   icon: "award"
   color: "blue"
@@ -63,7 +63,7 @@ runs:
       uses: actions/cache@v2
       with:
         path: /home/runner/work/_temp/Library
-        key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}-${{ hashFiles('.github/depends.Rds') }}
+        key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}-${{ hashFiles('DESCRIPTION') }}
         restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}
 
     - name: Cache Tex packages
@@ -71,7 +71,7 @@ runs:
       uses: actions/cache@v2
       with:
         path: /home/runner/work/_temp/TinyTeX
-        key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
+        key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}-${{ hashFiles(inputs.report_template_path) }}
         restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
 
     - name: Install dependencies
@@ -79,6 +79,7 @@ runs:
         ${GITHUB_ACTION_PATH}/dependencies.R
         export PATH=${RUNNER_TEMP}/TinyTeX/bin/x86_64-linux:${PATH}
         echo "PATH=${PATH}" >> $GITHUB_ENV
+        tlmgr path add
       shell: bash
 
     - name: Install additional tex packages

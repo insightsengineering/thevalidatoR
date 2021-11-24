@@ -80,7 +80,7 @@ Roche
 
   _Required_: `false`
 
-  _Default_: `cache-v1"`
+  _Default_: `v1"`
 
 ### Outputs
 None
