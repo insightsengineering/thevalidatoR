@@ -57,7 +57,7 @@ runs:
       if: "contains(inputs.no_cache, 'false')"
       uses: actions/cache@v2
       with:
-        path: ${{ env.RUNNER_TEMP }}/Library
+        path: /home/runner/work/_temp/Library
         key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}-${{ hashFiles('.github/depends.Rds') }}
         restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}
 
@@ -65,7 +65,7 @@ runs:
       if: "contains(inputs.no_cache, 'false')"
       uses: actions/cache@v2
       with:
-        path: ${{ env.RUNNER_TEMP }}/TinyTeX
+        path: /home/runner/work/_temp/TinyTeX
         key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
         restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
 
