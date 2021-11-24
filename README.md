@@ -27,7 +27,7 @@ A Github Action that generates a validation report for an R package. The four ma
 - Attach report as object to release
 
 ### Action Type
-Docker
+Composite
 
 ### Author
 Roche
@@ -58,6 +58,30 @@ Roche
 
   _Default_: `pdf_document`
 
+* `additional_tlmgr_packages`:
+
+  _Description_: Additional tex packages to install with tlmgr.
+
+  _Required_: `false`
+
+  _Default_: `courier ec`
+
+* `no_cache`:
+
+  _Description_: Disable github action R dependency caching
+
+  _Required_: `false`
+
+  _Default_: `false`
+  
+* `cache_version`:
+
+  _Description_: Version of the cache. To clean cache bump this version.
+
+  _Required_: `false`
+
+  _Default_: `v1"`
+
 ### Outputs
 None
 
@@ -86,6 +110,8 @@ jobs:
   r-pkg-validation:
     name: Create report 📃
     runs-on: ubuntu-latest
+    container:
+      image: rocker/verse:4.1.1
     # Set Github token permissions
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

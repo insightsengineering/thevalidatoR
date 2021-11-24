@@ -1,5 +1,5 @@
 ---
-name: Test This Action
+name: Test This Action without cache
 
 on:
   pull_request:
@@ -19,16 +19,10 @@ jobs:
       max-parallel: 2
       matrix:
         package:
-          - name: aragog
-            report_pkg_dir: ./tests/packages/aragog
-            report_template_path: ./template.Rmd
-            report_rmarkdown_format: pdf_document
-            additional_tlmgr_packages: "courier ec fancyhdr"
           - name: buckbeak
             report_pkg_dir: ./tests/packages/buckbeak
             report_template_path: ./tests/packages/buckbeak/validation-template.Rmd
             report_rmarkdown_format: html_document
-            additional_tlmgr_packages: "courier ec"
 
     steps:
       - name: Checkout ${{ matrix.package.name }}
@@ -40,7 +34,7 @@ jobs:
           report_pkg_dir: ${{ matrix.package.report_pkg_dir }}
           report_template_path: ${{ matrix.package.report_template_path }}
           report_rmarkdown_format: ${{ matrix.package.report_rmarkdown_format }}
-          additional_tlmgr_packages: ${{ matrix.package.additional_tlmgr_packages }}
+          no_cache: true
 
       - name: Upload ${{ matrix.package.name }} validation report
         uses: actions/upload-artifact@v2

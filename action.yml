@@ -12,19 +12,86 @@ inputs:
       File path of the R markdown template to use for the report.
       The default template is available [here.](./template.Rmd)
     required: false
-    default: "/template.Rmd"
+    default: "./template.Rmd"
   report_rmarkdown_format:
     description: |
       The file format of the validation report. See `rmarkdown::render`'s
       `output_format` parameter for accepted values.
     required: false
     default: "all"
-
-# Run as a Docker action
-runs:
-  using: 'docker'
-  image: './Dockerfile'
-
+  additional_tlmgr_packages:
+    description: |
+      Additional tex packages to install with tlmgr.
+    required: false
+    default: "courier ec"
+  no_cache:
+    description: "Disable github action R dependency caching"
+    required: false
+    default: "false"
+  cache_version:
+    description: "Version of the cache. To clean cache bump this version."
+    required: false
+    default: "v1"
 branding: # https://feathericons.com/
-  icon: 'award'
-  color: 'blue'
+  icon: "award"
+  color: "blue"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get R version
+      id: r_version
+      run: echo "::set-output name=R_VERSION::$(R --version | head -1 | awk '{print $3}')"
+      shell: bash
+
+    - name: Set R Library home on Linux
+      run: |
+        mkdir -p ${RUNNER_TEMP}/Library
+        echo ".libPaths(c('${RUNNER_TEMP}/Library', .libPaths()))" > ~/.Rprofile
+        cat ~/.Rprofile
+      shell: bash
+
+    - name: Set tlmgr cache folder
+      if: "contains(inputs.no_cache, 'false')"
+      id: texlive_version
+      run: |
+        echo "::set-output name=TEX_LIVE_VERSION::$(tlmgr --version |tail -1 |awk '{print $NF}')"
+      shell: bash
+
+    - name: Cache R packages
+      if: "contains(inputs.no_cache, 'false')"
+      uses: actions/cache@v2
+      with:
+        path: /home/runner/work/_temp/Library
+        key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}-${{ hashFiles('DESCRIPTION') }}
+        restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}
+
+    - name: Cache Tex packages
+      if: "contains(inputs.no_cache, 'false')"
+      uses: actions/cache@v2
+      with:
+        path: /home/runner/work/_temp/TinyTeX
+        key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}-${{ hashFiles(inputs.report_template_path) }}
+        restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
+
+    - name: Install dependencies
+      run: |
+        ${GITHUB_ACTION_PATH}/dependencies.R
+        export PATH=${RUNNER_TEMP}/TinyTeX/bin/x86_64-linux:${PATH}
+        echo "PATH=${PATH}" >> $GITHUB_ENV
+        tlmgr path add
+      shell: bash
+
+    - name: Install additional tex packages
+      run: tlmgr install ${{ inputs.additional_tlmgr_packages }}
+      shell: bash
+
+    - name: Run report generator
+      run: ${GITHUB_ACTION_PATH}/report-generator.R
+      shell: bash
+      env:
+        # Composite action doesn't set inputs as env vars.
+        # We need to do this manually...
+        INPUT_REPORT_PKG_DIR: ${{ inputs.report_pkg_dir }}
+        INPUT_REPORT_TEMPLATE_PATH: ${{ inputs.report_template_path }}
+        INPUT_REPORT_RMARKDOWN_FORMAT: ${{ inputs.report_rmarkdown_format }}

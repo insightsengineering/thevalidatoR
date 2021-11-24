@@ -15,7 +15,7 @@ if (!file.exists(file.path(pkg_dir, "DESCRIPTION"))) {
       "Could not find package at '%s'",
       "    ",
       "    Specify a directory by definining environment variable:",
-      "        REPORT_PKG_DIR=<repository subdirectory>",
+      "        INPUT_REPORT_PKG_DIR=<repository subdirectory>",
       "    "
     ),
     pkg_dir
