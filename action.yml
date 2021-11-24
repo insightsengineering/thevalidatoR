@@ -45,6 +45,13 @@ runs:
         echo ".libPaths(c('/__w/_temp/Library', .libPaths()))" > ~/.Rprofile
       shell: bash
 
+    - name: Set tlmgr cache folder
+      id: texlive_version
+      run: |
+        echo "TEXMFSYSVAR=/__w/_temp/texmf" >> $GITHUB_ENV
+        echo "::set-output name=TEX_LIVE_VERSION::$(tlmgr --version |tail -1 |awk '{print $NF}')"
+      shell: bash
+
     - name: Cache R packages
       if: "contains(inputs.no_cache, 'false')"
       uses: actions/cache@v2
@@ -52,6 +59,14 @@ runs:
         path: /home/runner/work/_temp/Library
         key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}-${{ hashFiles('.github/depends.Rds') }}
         restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}
+
+    - name: Cache Tex packages
+      if: "contains(inputs.no_cache, 'false')"
+      uses: actions/cache@v2
+      with:
+        path: /home/runner/work/_temp/texmf
+        key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
+        restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
 
     - name: Install dependencies
       run: ${GITHUB_ACTION_PATH}/dependencies.R
