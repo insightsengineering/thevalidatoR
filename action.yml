@@ -80,6 +80,7 @@ runs:
         export PATH=${RUNNER_TEMP}/TinyTeX/bin/x86_64-linux:${PATH}
         echo "PATH=${PATH}" >> $GITHUB_ENV
         tlmgr path add
+        [ ! -f "./template.Rmd" ] && cp ${GITHUB_ACTION_PATH}/template.Rmd .
       shell: bash
 
     - name: Install additional tex packages
