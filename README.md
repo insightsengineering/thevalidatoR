@@ -1,4 +1,10 @@
-**thevalidatoR** <img src='https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/thevalidatoR.png' align="right" height="131.5" />
+# thevalidatoR
+ <img src='https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/thevalidatoR.png' align="right" height="131.5" />
+
+
+[<img src="http://pharmaverse.org/shields/thevalidatoR.png">](https://pharmaverse.org) 
+[![SuperLinter](https://github.com/insightsengineering/thevalidatoR/actions/workflows/lint.yaml/badge.svg)](https://github.com/insightsengineering/thevalidatoR/actions/workflows/lint.yaml)
+[![Test This Action](https://github.com/insightsengineering/thevalidatoR/actions/workflows/test.yaml/badge.svg)](https://github.com/insightsengineering/thevalidatoR/actions/workflows/test.yaml)
 
 - [An R Package Validation Report](#an-r-package-validation-report)
     - [Description](#description)
