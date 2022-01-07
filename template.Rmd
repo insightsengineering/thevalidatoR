@@ -66,7 +66,7 @@ documentation of the installation of this package on an open source R environmen
 - Traceability matrix of specifications (documented behaviours) and testing
 - Risk assessment benchmarks
 
-This report is fully automated, so is limited to assess whether unit tests and documentation are present and can execute without error. An assessment would be required that the tests and documentation are meaningful. Validation is system dependent, so specific to the validation environment environment used by this gh-action (see `https://github.com/insightsengineering/thevalidatoR/blob/main/Dockerfile` for the base dockerfile, and details in this document for the session info).
+This report is fully automated, so is limited to assess whether unit tests and documentation are present and can execute without error. An assessment would be required that the tests and documentation are meaningful. Validation is system dependent, so this report aims to reflect a 'common' system report that can be shared between companies, while acknowledging that each company would want to maintain installation / validation reports against the exact systems they deploy.
 
 # Installation environment and package
 
