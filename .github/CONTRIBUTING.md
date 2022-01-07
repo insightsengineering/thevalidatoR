@@ -60,6 +60,7 @@ and we are following the Github definition):
 * Doug Kelhkoff (@dgkf-roche)
 * Andy Nicholls (@andyofsmeg)
 * Ellis Hughes (@thebioengineer)
+* Tilo Black (@tlblnk)
 * Dawid Rycerz (@knightdave)
 
 #### Responsibilities to the R validation Hub
