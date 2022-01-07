@@ -103,12 +103,7 @@ data.frame(
   )) %>% helper_tabulate("Git information",col_widths = c("5cm","8cm"))
 ```
 
-## R Session Info
 
-```{r session_info, echo = TRUE, eval = TRUE}
-sessionInfo()
-capabilities()
-```
 
 # Metric based risk assessment
 
@@ -145,28 +140,21 @@ d_riskmetric %>%
 
 # Installation documentation
 
-## `R CMD check`
-
-```{r r_cmd_check, echo = FALSE, eval = TRUE}
-rcmdcheck_results <- rcmdcheck::rcmdcheck(
-  params$pkg_dir,
-  args = c(
-    "--timings",             # include execution times in output
-    "--no-build-vignettes",  # run vignette code, but disable pdf rendering
-    "--no-manual"            # disable pdf manual rendering
-  ),
-  quiet = TRUE
-)
-
-cat(rcmdcheck_results$stdout)
-cat(rcmdcheck_results$stderr)
-```
-
 ## Testing Coverage
 
 ```{r coverage, echo = FALSE, eval = TRUE}
 covr_results <- covr::package_coverage(params$pkg_dir)
 covr_results
+
+
+covr:::to_report_data(covr_results)$file_stats %>%
+  dplyr::mutate(File = gsub("<.*?>", "",File)) %>%
+  dplyr::arrange(dplyr::desc(File)) %>%
+  dplyr::select(Lines,Relevant,Missed,Coverage) %>%
+  helper_tabulate(
+    caption = "Coverage of each function in the package",
+    col_widths = c("6cm","3cm")
+  )
 ```
 
 ## Traceability
@@ -241,4 +229,30 @@ if (require("covtracer", quietly = TRUE)) {
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
+```
+
+# Appendix
+
+## `R CMD check`
+
+```{r r_cmd_check, echo = FALSE, eval = TRUE}
+rcmdcheck_results <- rcmdcheck::rcmdcheck(
+  params$pkg_dir,
+  args = c(
+    "--timings",             # include execution times in output
+    "--no-build-vignettes",  # run vignette code, but disable pdf rendering
+    "--no-manual"            # disable pdf manual rendering
+  ),
+  quiet = TRUE
+)
+
+cat(rcmdcheck_results$stdout)
+cat(rcmdcheck_results$stderr)
+```
+
+## R Session Info
+
+```{r session_info, echo = TRUE, eval = TRUE}
+sessionInfo()
+capabilities()
 ```
