@@ -74,7 +74,7 @@ Roche
 
 * `no_cache`:
 
-  _Description_: Disable github action R dependency caching
+  _Description_: Disable github action R dependency caching.
 
   _Required_: `false`
 
@@ -86,7 +86,15 @@ Roche
 
   _Required_: `false`
 
-  _Default_: `v1"`
+  _Default_: `v1`
+
+* `disable_install_dev_deps`:
+
+  _Description_: Disable installation of dev dependencies while building the report.
+
+  _Required_: `false`
+
+  _Default_: `false`
 
 ### Outputs
 None

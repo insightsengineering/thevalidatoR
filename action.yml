@@ -32,6 +32,12 @@ inputs:
     description: "Version of the cache. To clean cache bump this version."
     required: false
     default: "v1"
+  disable_install_dev_deps:
+    description: |
+      Disable installation of dev dependencies while
+      building the report.
+    required: false
+    default: "false"
 branding: # https://feathericons.com/
   icon: "award"
   color: "blue"
@@ -96,3 +102,4 @@ runs:
         INPUT_REPORT_PKG_DIR: ${{ inputs.report_pkg_dir }}
         INPUT_REPORT_TEMPLATE_PATH: ${{ inputs.report_template_path }}
         INPUT_REPORT_RMARKDOWN_FORMAT: ${{ inputs.report_rmarkdown_format }}
+        DISABLE_INSTALL_DEV_DEPS: ${{ inputs.disable_install_dev_deps }}

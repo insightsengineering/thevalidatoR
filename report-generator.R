@@ -7,6 +7,7 @@ cat(sprintf("Current dir is: '%s'", getwd()))
 pkg_dir <- normalizePath(Sys.getenv("INPUT_REPORT_PKG_DIR", "."))
 template_path <- Sys.getenv("INPUT_REPORT_TEMPLATE_PATH", "/template.Rmd")
 report_format <- Sys.getenv("INPUT_REPORT_RMARKDOWN_FORMAT", "all")
+disable_install_dev_deps <- tolower(Sys.getenv("DISABLE_INSTALL_DEV_DEPS")) %in% c('yes', 'y', 't', 'true')
 
 # fail with meaningful message if REPORT_PKG_DIR does not appear to be a package
 if (!file.exists(file.path(pkg_dir, "DESCRIPTION"))) {
@@ -23,7 +24,13 @@ if (!file.exists(file.path(pkg_dir, "DESCRIPTION"))) {
 }
 
 # Install package dependencies
-devtools::install_dev_deps(pkg_dir)
+if (!disable_install_dev_deps){
+    options("remotes.git_credentials" = git2r::cred_user_pass(
+        username = "token",
+        password = remotes:::github_pat()
+    ))
+    devtools::install_dev_deps(pkg_dir, upgrade = "never")
+}
 
 # allow rmarkdown to choose appropriate file extension for output format
 report_file_path <- rmarkdown::render(
