@@ -34,8 +34,8 @@ inputs:
     default: "v1"
   disable_install_dev_deps:
     description: |
-      Disable installation of dev dependencies during
-      running report.
+      Disable installation of dev dependencies while
+      building the report.
     required: false
     default: "false"
 branding: # https://feathericons.com/

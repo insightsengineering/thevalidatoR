@@ -90,7 +90,7 @@ Roche
 
 * `disable_install_dev_deps`:
 
-  _Description_: Disable installation of dev dependencies during running report.
+  _Description_: Disable installation of dev dependencies while building the report.
 
   _Required_: `false`
 
