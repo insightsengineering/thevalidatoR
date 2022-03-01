@@ -1,6 +1,6 @@
 # thevalidatoR
- <img src='https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/thevalidatoR.png' align="right" height="131.5" />
 
+ <img src='https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/thevalidatoR.png' align="right" height="131.5" />
 
 [<img src="http://pharmaverse.org/shields/thevalidatoR.png">](https://pharmaverse.org) 
 [![SuperLinter](https://github.com/insightsengineering/thevalidatoR/actions/workflows/lint.yaml/badge.svg)](https://github.com/insightsengineering/thevalidatoR/actions/workflows/lint.yaml)
@@ -33,14 +33,16 @@ A Github Action that generates a validation report for an R package. The four ma
 - Attach report as object to release
 
 ### Action Type
+
 Composite
 
 ### Author
+
 Roche
 
 ### Inputs
 
-* `report_pkg_dir`:
+- `report_pkg_dir`:
 
   _Description_: Path to package's root
   
@@ -48,7 +50,7 @@ Roche
   
   _Default_: `.`
 
-* `report_template_path`:
+- `report_template_path`:
 
   _Description_: File path of the R markdown template to use for the report. The default template is available [here.](./template.Rmd)
 
@@ -56,7 +58,7 @@ Roche
 
   _Default_: `template.Rmd`
   
-* `report_rmarkdown_format`:
+- `report_rmarkdown_format`:
 
   _Description_: The output format to use when rendering the report. Value is used by `rmarkdown::render`'s `output_format` parameter.
 
@@ -64,7 +66,15 @@ Roche
 
   _Default_: `pdf_document`
 
-* `additional_tlmgr_packages`:
+- `report_output_prefix`:
+
+  _Description_: The output filename prefix for the validation report. If left blank, it defaults to the following convention: `<package name>-<package version>-validation-report`.
+
+  _Required_: `false`
+
+  _Default_: `""`
+
+- `additional_tlmgr_packages`:
 
   _Description_: Additional tex packages to install with tlmgr.
 
@@ -72,7 +82,7 @@ Roche
 
   _Default_: `courier ec`
 
-* `no_cache`:
+- `no_cache`:
 
   _Description_: Disable github action R dependency caching.
 
@@ -80,7 +90,7 @@ Roche
 
   _Default_: `false`
   
-* `cache_version`:
+- `cache_version`:
 
   _Description_: Version of the cache. To clean cache bump this version.
 
@@ -88,7 +98,7 @@ Roche
 
   _Default_: `v1`
 
-* `disable_install_dev_deps`:
+- `disable_install_dev_deps`:
 
   _Description_: Disable installation of dev dependencies while building the report.
 
@@ -97,7 +107,10 @@ Roche
   _Default_: `false`
 
 ### Outputs
-None
+
+- `report_output_filename`:
+
+  _Description_: Filename of the generated report.
 
 <!-- END_ACTION_DOC -->
 
@@ -105,8 +118,8 @@ None
 
 To use this GitHub Action you will need to complete the following:
 
-* Create a new file in your repository called `.github/workflows/r-pkg-validation.yml`
-* Copy the template over (and edit if you wish to modify it)
+- Create a new file in your repository called `.github/workflows/r-pkg-validation.yml`
+- Copy the template over (and edit if you wish to modify it)
 
 ### Quickstart
 
@@ -138,6 +151,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build report 🏗
+        id: validation
         uses: insightsengineering/thevalidatoR@main
         # see parameters above for custom templates and other formats
 
@@ -146,14 +160,14 @@ jobs:
         if: success()
         uses: svenstaro/upload-release-action@v2
         with:
-          file: ./validation_report.pdf
-          asset_name: validation-report.pdf
+          file: ./${{ steps.branch-name.outputs.report_output_filename }}
+          asset_name: ${{ steps.branch-name.outputs.report_output_filename }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
           overwrite: false
 ```
 
-### V1.0 Examples 
+### V1.0 Examples
 
 #### rbmi
 

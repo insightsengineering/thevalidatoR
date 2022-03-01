@@ -1,4 +1,4 @@
-FROM docker.io/rocker/verse:4.1.1
+FROM docker.io/rocker/verse:4.1.2
 
 # Copy validator and template
 COPY report-generator.R /main.R

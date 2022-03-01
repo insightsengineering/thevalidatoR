@@ -19,6 +19,13 @@ inputs:
       `output_format` parameter for accepted values.
     required: false
     default: "all"
+  report_output_prefix:
+    description: >
+      The output filename prefix for the validation report. If left blank, 
+      it defaults to the following convention:  
+      `<package name>-<package version>-validation-report`. 
+    required: false
+    default: ""
   additional_tlmgr_packages:
     description: |
       Additional tex packages to install with tlmgr.
@@ -38,6 +45,10 @@ inputs:
       building the report.
     required: false
     default: "false"
+outputs:
+  report_output_filename:
+    description: Filename of the generated report.
+    value: ${{ steps.report-generator.outputs.output-filename }}
 branding: # https://feathericons.com/
   icon: "award"
   color: "blue"
@@ -95,7 +106,10 @@ runs:
       shell: bash
 
     - name: Run report generator
-      run: ${GITHUB_ACTION_PATH}/report-generator.R
+      id: report-generator
+      run: |
+        ${GITHUB_ACTION_PATH}/report-generator.R
+        echo "::set-output name=output-filename::$(cat /tmp/report_file_path.txt)"
       shell: bash
       env:
         # Composite action doesn't set inputs as env vars.
