@@ -109,7 +109,8 @@ runs:
       id: report-generator
       run: |
         ${GITHUB_ACTION_PATH}/report-generator.R
-        echo "::set-output name=output-filename::$(cat /tmp/report_file_path.txt)"
+        filename=$(basename $(cat /tmp/report_file_path.txt))
+        echo "::set-output name=output-filename::${filename}"
       shell: bash
       env:
         # Composite action doesn't set inputs as env vars.
