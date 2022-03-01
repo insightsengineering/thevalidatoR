@@ -41,7 +41,9 @@ if (report_output_prefix == "") {
   desc <- read.dcf(desc_file)
   pkg_name <- toString(desc[, "Package"])
   pkg_version <- toString(desc[, "Version"])
-  report_output_prefix <- paste0(pkg_name, "-", pkg_version, "-validation-report")
+  report_output_prefix <- paste0(
+    pkg_name, "-", pkg_version, "-validation-report"
+  )
 }
 
 # allow rmarkdown to choose appropriate file extension for output format

@@ -30,6 +30,7 @@ jobs:
 
       - name: Generate validation report for ${{ matrix.package.name }}
         uses: ./
+        id: validation
         with:
           report_pkg_dir: ${{ matrix.package.report_pkg_dir }}
           report_template_path: ${{ matrix.package.report_template_path }}
@@ -42,5 +43,5 @@ jobs:
         if: success()
         with:
           name: ${{ matrix.package.name }} validation report
-          path: validation_report.*
+          path: ${{ steps.validation.outputs.report_output_filename }}
           if-no-files-found: error

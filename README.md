@@ -160,8 +160,8 @@ jobs:
         if: success()
         uses: svenstaro/upload-release-action@v2
         with:
-          file: ./${{ steps.branch-name.outputs.report_output_filename }}
-          asset_name: ${{ steps.branch-name.outputs.report_output_filename }}
+          file: ${{ steps.validation.outputs.report_output_filename }}
+          asset_name: ${{ steps.validation.outputs.report_output_filename }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
           overwrite: false

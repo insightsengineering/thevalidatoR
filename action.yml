@@ -117,4 +117,5 @@ runs:
         INPUT_REPORT_PKG_DIR: ${{ inputs.report_pkg_dir }}
         INPUT_REPORT_TEMPLATE_PATH: ${{ inputs.report_template_path }}
         INPUT_REPORT_RMARKDOWN_FORMAT: ${{ inputs.report_rmarkdown_format }}
+        INPUT_REPORT_OUTPUT_PREFIX: ${{ inputs.report_output_prefix }}
         DISABLE_INSTALL_DEV_DEPS: ${{ inputs.disable_install_dev_deps }}
