@@ -33,6 +33,7 @@ jobs:
         with:
           report_pkg_dir: ${{ matrix.package.report_pkg_dir }}
           report_template_path: ${{ matrix.package.report_template_path }}
+          report_output_prefix: validation_report
           report_rmarkdown_format: ${{ matrix.package.report_rmarkdown_format }}
           no_cache: true
 

@@ -41,7 +41,7 @@ if (report_output_prefix == "") {
   desc <- read.dcf(desc_file)
   pkg_name <- toString(desc[, "Package"])
   pkg_version <- toString(desc[, "Version"])
-  report_output_prefix <- paste0(pkg_name, "-", pkg_name, "-validation-report")
+  report_output_prefix <- paste0(pkg_name, "-", pkg_version, "-validation-report")
 }
 
 # allow rmarkdown to choose appropriate file extension for output format
@@ -56,4 +56,4 @@ report_file_path <- rmarkdown::render(
 # Create a tmp file which contains the final report filename
 writeLines(report_file_path, "/tmp/report_file_path.txt")
 
-cat(sprintf("Created report at: '%s'", report_file_path))
+cat(sprintf("Created report at: '%s'\n\n", report_file_path))
