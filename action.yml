@@ -86,6 +86,7 @@ runs:
         export PATH=${RUNNER_TEMP}/TinyTeX/bin/x86_64-linux:${PATH}
         echo "PATH=${PATH}" >> $GITHUB_ENV
         tlmgr path add
+        tlmgr update --self
         [ ! -f "./template.Rmd" ] && cp ${GITHUB_ACTION_PATH}/template.Rmd . || echo "./template.Rmd Already exists"
       shell: bash
 
