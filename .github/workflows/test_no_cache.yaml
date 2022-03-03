@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     name: ${{ matrix.package.name }}
     container:
-      image: rocker/verse:4.1.1
+      image: rocker/verse:4.1.2
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     strategy:
@@ -30,9 +30,11 @@ jobs:
 
       - name: Generate validation report for ${{ matrix.package.name }}
         uses: ./
+        id: validation
         with:
           report_pkg_dir: ${{ matrix.package.report_pkg_dir }}
           report_template_path: ${{ matrix.package.report_template_path }}
+          report_output_prefix: validation_report
           report_rmarkdown_format: ${{ matrix.package.report_rmarkdown_format }}
           no_cache: true
 
@@ -41,5 +43,5 @@ jobs:
         if: success()
         with:
           name: ${{ matrix.package.name }} validation report
-          path: validation_report.*
+          path: ${{ steps.validation.outputs.report_output_filename }}
           if-no-files-found: error

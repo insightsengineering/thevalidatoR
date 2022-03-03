@@ -19,6 +19,13 @@ inputs:
       `output_format` parameter for accepted values.
     required: false
     default: "all"
+  report_output_prefix:
+    description: >
+      The output filename prefix for the validation report. If left blank, 
+      it defaults to the following convention:  
+      `<package name>-<package version>-validation-report`. 
+    required: false
+    default: ""
   additional_tlmgr_packages:
     description: |
       Additional tex packages to install with tlmgr.
@@ -38,6 +45,10 @@ inputs:
       building the report.
     required: false
     default: "false"
+outputs:
+  report_output_filename:
+    description: Filename of the generated report.
+    value: ${{ steps.report-generator.outputs.output-filename }}
 branding: # https://feathericons.com/
   icon: "award"
   color: "blue"
@@ -86,6 +97,7 @@ runs:
         export PATH=${RUNNER_TEMP}/TinyTeX/bin/x86_64-linux:${PATH}
         echo "PATH=${PATH}" >> $GITHUB_ENV
         tlmgr path add
+        tlmgr update --self
         [ ! -f "./template.Rmd" ] && cp ${GITHUB_ACTION_PATH}/template.Rmd . || echo "./template.Rmd Already exists"
       shell: bash
 
@@ -94,7 +106,11 @@ runs:
       shell: bash
 
     - name: Run report generator
-      run: ${GITHUB_ACTION_PATH}/report-generator.R
+      id: report-generator
+      run: |
+        ${GITHUB_ACTION_PATH}/report-generator.R
+        filename=$(basename $(cat /tmp/report_file_path.txt))
+        echo "::set-output name=output-filename::${filename}"
       shell: bash
       env:
         # Composite action doesn't set inputs as env vars.
@@ -102,4 +118,5 @@ runs:
         INPUT_REPORT_PKG_DIR: ${{ inputs.report_pkg_dir }}
         INPUT_REPORT_TEMPLATE_PATH: ${{ inputs.report_template_path }}
         INPUT_REPORT_RMARKDOWN_FORMAT: ${{ inputs.report_rmarkdown_format }}
+        INPUT_REPORT_OUTPUT_PREFIX: ${{ inputs.report_output_prefix }}
         DISABLE_INSTALL_DEV_DEPS: ${{ inputs.disable_install_dev_deps }}
