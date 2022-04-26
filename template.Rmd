@@ -87,9 +87,7 @@ data.frame(
 
 ```{r version_control, echo = FALSE}
 # CVE-2022-24765 exception
-gde <- system(
-  sprintf("git config --global --add safe.directory %s", params$pkg_dir)
-)
+gde <- system("git config --global --add safe.directory *")
 # find .git dir containing the package directory
 gd <- system(
   sprintf("cd '%s' && git rev-parse --absolute-git-dir", params$pkg_dir),
