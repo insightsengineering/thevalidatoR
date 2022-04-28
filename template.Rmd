@@ -87,7 +87,9 @@ data.frame(
 
 ```{r version_control, echo = FALSE}
 # CVE-2022-24765 exception
-git_safe_dir <- system("git config --global --add safe.directory *")
+git_safe_dir <- system(
+  sprintf("git config --global --add safe.directory %s", params$pkg_dir)
+)
 # find .git dir containing the package directory
 gd <- system(
   sprintf("cd '%s' && git rev-parse --absolute-git-dir", params$pkg_dir),
@@ -142,8 +144,8 @@ d_riskmetric <- params$pkg_dir %>%
 d_riskmetric %>%
   dplyr::filter(
     name %in% c(
-      "news_current","has_vignettes",
-      "license","downloads_1yr"
+      "news_current", "has_vignettes",
+      "license", "downloads_1yr"
     )
   ) %>%
   dplyr::select(Metric = label, Status = value) %>%
@@ -196,20 +198,22 @@ if (require("covtracer", quietly = TRUE)) {
       alias,
       test_name,
       file,
-      is_exported,doctype,direct
+      is_exported,
+      doctype,
+      direct
     ) %>%
     dplyr::filter(!doctype %in% c("data", "class"))  %>%  # ignore objects without testable code
     dplyr::filter(is_exported == TRUE) %>% # Only exported
     dplyr::filter(!duplicated(.)) %>%
-    dplyr::mutate(alias = paste0(alias,"()")) %>%
-    dplyr::mutate(file = paste0("man/",file))
+    dplyr::mutate(alias = paste0(alias, "()")) %>%
+    dplyr::mutate(file = paste0("man/", file))
 
   covtracer_df_clean %>%
     dplyr::filter(!duplicated(.)) %>%
     dplyr::filter(!is.na(test_name)) %>%
     dplyr::filter(!is.na(file)) %>% # unexported?
     dplyr::arrange(file) %>%
-    dplyr::select(`Test Description` = test_name, Documentation = file) %>% 
+    dplyr::select(`Test Description` = test_name, Documentation = file) %>%
     helper_tabulate(
       caption = "Tracebility matrix mapping unit tests to documented behaviours."
     )
