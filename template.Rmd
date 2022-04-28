@@ -38,14 +38,14 @@ knitr::opts_chunk$set(
   comment = ""
 )
 
-helper_tabulate <- function(x, caption = "", col_widths = c("10cm","5cm")){
+helper_tabulate <- function(x, caption = "", col_widths = c("10cm", "5cm")) {
   x %>%
     kbl(
       caption = caption,
       booktabs = TRUE, longtable = TRUE
     ) %>%
     kable_styling(
-      latex_options = c("striped","repeat_header")
+      latex_options = c("striped", "repeat_header")
     ) %>%
     column_spec(
       1, width = col_widths[1]
@@ -80,7 +80,7 @@ data.frame(
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  )) %>% helper_tabulate("System info",col_widths = c("6cm","6cm"))
+  )) %>% helper_tabulate("System info", col_widths = c("6cm", "6cm"))
 ```
 
 ## Package installed
@@ -97,10 +97,18 @@ wt <- sprintf("--work-tree='%s'", params$pkg_dir)
 data.frame(
   Field = c("branch", "commit `SHA1`", "commit date"),
   Value = c(
-    system2("git", list(gd, wt, "rev-parse", "--abbrev-ref", "HEAD"), stdout = TRUE),
+    system2(
+      "git",
+      list(gd, wt, "rev-parse", "--abbrev-ref", "HEAD"),
+      stdout = TRUE
+    ),
     system2("git", list(gd, wt, "rev-parse", "HEAD"), stdout = TRUE),
-    system2("git", list(gd, wt, "show", "-s", "--format=%ci", "HEAD"), stdout = TRUE)
-  )) %>% helper_tabulate("Git information",col_widths = c("5cm","8cm"))
+    system2(
+      "git",
+      list(gd, wt, "show", "-s", "--format=%ci", "HEAD"),
+      stdout = TRUE
+    )
+  )) %>% helper_tabulate("Git information", col_widths = c("5cm", "8cm"))
 ```
 
 ## R Session Info
@@ -118,22 +126,22 @@ The following metrics are derived from the `riskmetric` R package. Metrics overl
 d_riskmetric <- params$pkg_dir %>%
   riskmetric::pkg_ref() %>%
   riskmetric::pkg_assess() %>%
-  purrr::map(1)  %>% 
+  purrr::map(1) %>%
   lapply(as.character) %>%
-  tibble::enframe() %>% 
+  tibble::enframe() %>%
   tidyr::unnest(cols = dplyr::everything()) %>%
   # add labels
   dplyr::left_join(
     lapply(riskmetric::all_assessments(), attributes) %>%
       purrr::map_df(tibble::as_tibble),
     by = c("name" = "column_name")
-  ) 
+  )
 
 d_riskmetric %>%
   dplyr::filter(
     name %in% c(
-      "news_current","has_vignettes",
-      "license","downloads_1yr"
+      "news_current", "has_vignettes",
+      "license", "downloads_1yr"
     )
   ) %>%
   dplyr::select(Metric = label, Status = value) %>%
@@ -186,20 +194,22 @@ if (require("covtracer", quietly = TRUE)) {
       alias,
       test_name,
       file,
-      is_exported,doctype,direct
+      is_exported,
+      doctype,
+      direct
     ) %>%
     dplyr::filter(!doctype %in% c("data", "class"))  %>%  # ignore objects without testable code
     dplyr::filter(is_exported == TRUE) %>% # Only exported
     dplyr::filter(!duplicated(.)) %>%
-    dplyr::mutate(alias = paste0(alias,"()")) %>%
-    dplyr::mutate(file = paste0("man/",file))
+    dplyr::mutate(alias = paste0(alias, "()")) %>%
+    dplyr::mutate(file = paste0("man/", file))
 
   covtracer_df_clean %>%
     dplyr::filter(!duplicated(.)) %>%
     dplyr::filter(!is.na(test_name)) %>%
     dplyr::filter(!is.na(file)) %>% # unexported?
     dplyr::arrange(file) %>%
-    dplyr::select(`Test Description` = test_name, Documentation = file) %>% 
+    dplyr::select(`Test Description` = test_name, Documentation = file) %>%
     helper_tabulate(
       caption = "Tracebility matrix mapping unit tests to documented behaviours."
     )

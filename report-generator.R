@@ -3,6 +3,11 @@
 # Location
 cat(sprintf("Current dir is: '%s'", getwd()))
 
+# CVE-2022-24765 exception
+git_safe_dir <- system(
+  sprintf("git config --global --add safe.directory '%s'", getwd())
+)
+
 # Get the action inputs from preset env vars
 pkg_dir <- normalizePath(Sys.getenv("INPUT_REPORT_PKG_DIR", "."))
 template_path <- Sys.getenv("INPUT_REPORT_TEMPLATE_PATH", "/template.Rmd")
