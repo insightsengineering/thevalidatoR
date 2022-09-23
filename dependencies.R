@@ -6,7 +6,7 @@
 github_packages <- c(
     "r-lib/covr",
     "pharmaR/riskmetric",
-    "genentech/covtracer"
+    "Genentech/covtracer"
 )
 lapply(github_packages, remotes::install_github)
 
