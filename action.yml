@@ -110,7 +110,6 @@ runs:
       run: |
         ${GITHUB_ACTION_PATH}/report-generator.R
         filename=$(basename $(cat /tmp/report_file_path.txt))
-        echo "::set-output name=output-filename::${filename}"
         echo "output-filename=${filename}" >> $GITHUB_OUTPUT
       shell: bash
       env:
