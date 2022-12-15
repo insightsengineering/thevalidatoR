@@ -21,9 +21,9 @@ inputs:
     default: "all"
   report_output_prefix:
     description: >
-      The output filename prefix for the validation report. If left blank, 
-      it defaults to the following convention:  
-      `<package name>-<package version>-validation-report`. 
+      The output filename prefix for the validation report. If left blank,
+      it defaults to the following convention:
+      `<package name>-<package version>-validation-report`.
     required: false
     default: ""
   additional_tlmgr_packages:
@@ -58,7 +58,7 @@ runs:
   steps:
     - name: Get R version
       id: r_version
-      run: echo "::set-output name=R_VERSION::$(R --version | head -1 | awk '{print $3}')"
+      run: echo "R_VERSION=$(R --version | head -1 | awk '{print $3}')" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Set R Library home on Linux
@@ -72,7 +72,7 @@ runs:
       if: "contains(inputs.no_cache, 'false')"
       id: texlive_version
       run: |
-        echo "::set-output name=TEX_LIVE_VERSION::$(tlmgr --version |tail -1 |awk '{print $NF}')"
+        echo "TEX_LIVE_VERSION=$(tlmgr --version |tail -1 |awk '{print $NF}')" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Cache R packages
@@ -111,6 +111,7 @@ runs:
         ${GITHUB_ACTION_PATH}/report-generator.R
         filename=$(basename $(cat /tmp/report_file_path.txt))
         echo "::set-output name=output-filename::${filename}"
+        echo "output-filename=${filename}" >> $GITHUB_OUTPUT
       shell: bash
       env:
         # Composite action doesn't set inputs as env vars.
