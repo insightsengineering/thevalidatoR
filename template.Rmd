@@ -155,7 +155,7 @@ d_riskmetric %>%
 
 ## `R CMD check`
 
-```{r r_cmd_check, echo = FALSE, eval = TRUE}
+```{r r_cmd_check, echo = TRUE, eval = TRUE}
 print("params$pkg_dir")
 print(params$pkg_dir)
 rcmdcheck_results <- rcmdcheck::rcmdcheck(
