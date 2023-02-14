@@ -104,6 +104,12 @@ runs:
     - name: Install additional tex packages
       run: tlmgr install ${{ inputs.additional_tlmgr_packages }}
       shell: bash
+    
+    - name: Debug report generator
+    - run: |
+        echo "${{ inputs.report_pkg_dir }}"
+        R CMD check --timings --no-build-vignettes --no-manual "${{ inputs.report_pkg_dir }}"
+      shell: bash
 
     - name: Run report generator
       id: report-generator
