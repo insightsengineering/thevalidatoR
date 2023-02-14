@@ -163,7 +163,7 @@ rcmdcheck_results <- rcmdcheck::rcmdcheck(
     "--no-build-vignettes",  # run vignette code, but disable pdf rendering
     "--no-manual"            # disable pdf manual rendering
   ),
-  quiet = TRUE
+  quiet = FALSE
 )
 
 print("DEBUG rcmdcheck:")
