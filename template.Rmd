@@ -166,6 +166,11 @@ rcmdcheck_results <- rcmdcheck::rcmdcheck(
   quiet = TRUE
 )
 
+print("DEBUG rcmdcheck:")
+print(rcmdcheck_results$stdout)
+print(rcmdcheck_results$stderr)
+print(rcmdcheck_results)
+
 cat(rcmdcheck_results$stdout)
 cat(rcmdcheck_results$stderr)
 ```
