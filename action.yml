@@ -106,7 +106,7 @@ runs:
       shell: bash
     
     - name: Debug report generator
-    - run: |
+      run: |
         echo "${{ inputs.report_pkg_dir }}"
         R CMD check --timings --no-build-vignettes --no-manual "${{ inputs.report_pkg_dir }}"
       shell: bash
