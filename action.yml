@@ -108,7 +108,7 @@ runs:
     - name: Debug report generator
       run: |
         echo "${{ inputs.report_pkg_dir }}"
-        cat ./DESCRIPTION
+        R CMD build "${{ inputs.report_pkg_dir }}"
         R CMD check --timings --no-build-vignettes --no-manual "${{ inputs.report_pkg_dir }}"
         echo "display logs check"
         cat /home/runner/work/admiral/admiral/..Rcheck/00check.log
