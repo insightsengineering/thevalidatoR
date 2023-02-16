@@ -132,8 +132,7 @@ runs:
               2, width = col_widths[2]
             )}
 
-        rcmdcheck_results <- rcmdcheck::rcmdcheck(
-        params$pkg_dir, args = c("--timings", "--no-build-vignettes", "--no-manual"), quiet = FALSE)
+        rcmdcheck_results <- rcmdcheck::rcmdcheck(".", args = c("--timings", "--no-build-vignettes", "--no-manual"), quiet = FALSE)
       shell: Rscript {0}
 
     - name: Run report generator
