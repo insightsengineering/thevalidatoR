@@ -109,6 +109,7 @@ runs:
       run: |
         echo "remotes:install_local"
         R -e 'remotes::install_local(".", force = TRUE, quiet = TRUE, INSTALL_opts = "--with-keep.source")'
+        R CMD build "${{ inputs.report_pkg_dir }}"
         echo "check package ${{ inputs.report_pkg_dir }}"
         R CMD check --timings --no-build-vignettes --no-manual "${{ inputs.report_pkg_dir }}"
         echo "display logs check"
