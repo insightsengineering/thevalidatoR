@@ -104,41 +104,10 @@ runs:
     - name: Install additional tex packages
       run: tlmgr install ${{ inputs.additional_tlmgr_packages }}
       shell: bash
-    
-    - name: Debug report generator
-      run: |
-        remotes::install_local(".", force = TRUE, quiet = TRUE, INSTALL_opts = "--with-keep.source")
-        library(magrittr)
-        library(knitr)
-        library(kableExtra)
-        knitr::opts_chunk$set(
-          width = 80L,
-          comment = ""
-        )
-
-        helper_tabulate <- function(x, caption = "", col_widths = c("10cm", "5cm")) {
-          x %>%
-            kbl(
-              caption = caption,
-              booktabs = TRUE, longtable = TRUE
-            ) %>%
-            kable_styling(
-              latex_options = c("striped", "repeat_header")
-            ) %>%
-            column_spec(
-              1, width = col_widths[1]
-            ) %>%
-            column_spec(
-              2, width = col_widths[2]
-            )}
-
-        rcmdcheck_results <- rcmdcheck::rcmdcheck(".", args = c("--timings", "--no-build-vignettes", "--no-manual"), quiet = FALSE)
-      shell: Rscript {0}
 
     - name: Run report generator
       id: report-generator
       run: |
-        export DISABLE_INSTALL_DEV_DEPS=true
         ${GITHUB_ACTION_PATH}/report-generator.R
         filename=$(basename $(cat /tmp/report_file_path.txt))
         echo "output-filename=${filename}" >> $GITHUB_OUTPUT
