@@ -107,8 +107,7 @@ runs:
       
     - name: Debug report generator
       run: |
-        export R_REMOTES_UPGRADE=never
-        export DISABLE_INSTALL_DEV_DEPS=true
+        Sys.setenv(R_REMOTES_UPGRADE = "never", "DISABLE_INSTALL_DEV_DEPS" = "true")
         remotes::install_local(".", force = TRUE, quiet = TRUE, INSTALL_opts = "--with-keep.source")
         library(magrittr)
         library(knitr)
