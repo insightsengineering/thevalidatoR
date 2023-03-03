@@ -28,7 +28,8 @@ remotes::install_local(
   params$pkg_dir,
   force = TRUE,
   quiet = TRUE,
-  INSTALL_opts = "--with-keep.source"
+  INSTALL_opts = "--with-keep.source",
+  upgrade = "never"
 )
 library(magrittr)
 library(knitr)
