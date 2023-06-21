@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: Checkout ${{ matrix.package.name }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Generate validation report for ${{ matrix.package.name }}
         uses: ./
