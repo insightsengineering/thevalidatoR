@@ -2,7 +2,7 @@
 
  <img src='https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/thevalidatoR.png' align="right" height="131.5" />
 
-[<img src="http://pharmaverse.org/shields/thevalidatoR.png">](https://pharmaverse.org) 
+[<img src="http://pharmaverse.org/shields/thevalidatoR.png">](https://pharmaverse.org)
 [![SuperLinter](https://github.com/insightsengineering/thevalidatoR/actions/workflows/lint.yaml/badge.svg)](https://github.com/insightsengineering/thevalidatoR/actions/workflows/lint.yaml)
 [![Test This Action](https://github.com/insightsengineering/thevalidatoR/actions/workflows/test.yaml/badge.svg)](https://github.com/insightsengineering/thevalidatoR/actions/workflows/test.yaml)
 
@@ -45,9 +45,9 @@ Roche
 - `report_pkg_dir`:
 
   _Description_: Path to package's root
-  
+
   _Required_: `false`
-  
+
   _Default_: `.`
 
 - `report_template_path`:
@@ -57,7 +57,7 @@ Roche
   _Required_: `false`
 
   _Default_: `template.Rmd`
-  
+
 - `report_rmarkdown_format`:
 
   _Description_: The output format to use when rendering the report. Value is used by `rmarkdown::render`'s `output_format` parameter.
@@ -89,7 +89,7 @@ Roche
   _Required_: `false`
 
   _Default_: `false`
-  
+
 - `cache_version`:
 
   _Description_: Version of the cache. To clean cache bump this version.
@@ -148,7 +148,7 @@ jobs:
       deployments: write
     steps:
       - name: Checkout repo 🛎
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Build report 🏗
         id: validation
@@ -177,7 +177,7 @@ This was built as a test on a fork of the original rbmi package. When we created
 
 ![](readme_files/rbmi_action.png)
 
-And you can see the gh-action action that was triggered by the release being published. Note that it must install the package, run tests and 
+And you can see the gh-action action that was triggered by the release being published. Note that it must install the package, run tests and
 construct the metrics needed by cov-tracer and covr, which in the case of `rbmi` a computationally heavy package - took quite a while!
 
 ![](readme_files/rbmi_release.png)
