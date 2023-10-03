@@ -35,6 +35,7 @@ library(magrittr)
 library(knitr)
 library(kableExtra)
 knitr::opts_chunk$set(
+  error = TRUE,
   width = 80L,
   comment = ""
 )
