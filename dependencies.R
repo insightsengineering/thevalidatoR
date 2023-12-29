@@ -1,5 +1,8 @@
 #!/usr/bin/env Rscript
 
+# Install remotes
+if (!require("remotes")) install.packages("remotes", upgrade = "never")
+
 # Install latest ackages from Github
 # Requires dev version of covr (>= 3.5.1.9003)
 # Also install other package dependencies (for tests)
