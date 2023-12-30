@@ -19,7 +19,6 @@ ncores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
 if (!require("git2r")) install.packages("git2r", upgrade = "never", Ncpus = ncores)
 if (!require("kableExtra")) install.packages("kableExtra", upgrade = "never", Ncpus = ncores)
 if (!require("tinytex")) install.packages("tinytex", upgrade = "never", Ncpus = ncores)
-if (!require("devtools")) install.packages("devtools", upgrade = "never", Ncpus = ncores)
 
 # Conditionally install TinyTex
 if(!dir.exists(paste(Sys.getenv("RUNNER_TEMP"), "TinyTeX", sep="/"))) {
