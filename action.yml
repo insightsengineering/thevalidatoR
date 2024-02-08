@@ -77,7 +77,7 @@ runs:
 
     - name: Cache R packages
       if: "contains(inputs.no_cache, 'false')"
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: /home/runner/work/_temp/Library
         key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}-${{ hashFiles('DESCRIPTION') }}
@@ -85,7 +85,7 @@ runs:
 
     - name: Cache Tex packages
       if: "contains(inputs.no_cache, 'false')"
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: /home/runner/work/_temp/TinyTeX
         key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}-${{ hashFiles(inputs.report_template_path) }}
