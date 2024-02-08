@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: Checkout ${{ matrix.package.name }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Generate validation report for ${{ matrix.package.name }}
         uses: ./
@@ -39,7 +39,7 @@ jobs:
           no_cache: true
 
       - name: Upload ${{ matrix.package.name }} validation report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           name: ${{ matrix.package.name }} validation report
