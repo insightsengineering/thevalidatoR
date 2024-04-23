@@ -56,53 +56,26 @@ branding: # https://feathericons.com/
 runs:
   using: "composite"
   steps:
-    - name: Get R version
-      id: r_version
-      run: echo "R_VERSION=$(R --version | head -1 | awk '{print $3}')" >> $GITHUB_OUTPUT
-      shell: bash
 
-    - name: Set R Library home on Linux
-      run: |
-        mkdir -p ${RUNNER_TEMP}/Library
-        echo ".libPaths(c('${RUNNER_TEMP}/Library', .libPaths()))" > ~/.Rprofile
-        cat ~/.Rprofile
-      shell: bash
+    # - name: Cache R packages
+    #   if: "contains(inputs.no_cache, 'false')"
+    #   uses: actions/cache@v4
+    #   with:
+    #     path: /home/runner/work/_temp/Library
+    #     key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}-${{ hashFiles('DESCRIPTION') }}
+    #     restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}
 
-    - name: Set tlmgr cache folder
-      if: "contains(inputs.no_cache, 'false')"
-      id: texlive_version
-      run: |
-        echo "TEX_LIVE_VERSION=$(tlmgr --version |tail -1 |awk '{print $NF}')" >> $GITHUB_OUTPUT
-      shell: bash
-
-    - name: Cache R packages
-      if: "contains(inputs.no_cache, 'false')"
-      uses: actions/cache@v4
-      with:
-        path: /home/runner/work/_temp/Library
-        key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}-${{ hashFiles('DESCRIPTION') }}
-        restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}
-
-    - name: Cache Tex packages
-      if: "contains(inputs.no_cache, 'false')"
-      uses: actions/cache@v4
-      with:
-        path: /home/runner/work/_temp/TinyTeX
-        key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}-${{ hashFiles(inputs.report_template_path) }}
-        restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
+    # - name: Cache Tex packages
+    #   if: "contains(inputs.no_cache, 'false')"
+    #   uses: actions/cache@v4
+    #   with:
+    #     path: /home/runner/work/_temp/TinyTeX
+    #     key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}-${{ hashFiles(inputs.report_template_path) }}
+    #     restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
 
     - name: Install dependencies
       run: |
         ${GITHUB_ACTION_PATH}/dependencies.R
-        export PATH=${RUNNER_TEMP}/TinyTeX/bin/x86_64-linux:${PATH}
-        echo "PATH=${PATH}" >> $GITHUB_ENV
-        tlmgr path add
-        tlmgr update --self
-        [ ! -f "./template.Rmd" ] && cp ${GITHUB_ACTION_PATH}/template.Rmd . || echo "./template.Rmd Already exists"
-      shell: bash
-
-    - name: Install additional tex packages
-      run: tlmgr install ${{ inputs.additional_tlmgr_packages }}
       shell: bash
 
     - name: Run report generator
