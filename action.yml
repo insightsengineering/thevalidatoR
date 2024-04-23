@@ -1,6 +1,7 @@
 name: R Package Validation Report
 author: Roche
-description: A Github Action that generates a validation report for an R package.
+description: |
+  A Github Action that generates a validation report for an R package.
 
 inputs:
   report_pkg_dir:
@@ -10,27 +11,9 @@ inputs:
   report_template_path:
     description: |
       File path of the R markdown template to use for the report.
-      The default template is available [here.](./template.Rmd)
+      The default template is available [here.](./template.qmd)
     required: false
-    default: "./template.Rmd"
-  report_rmarkdown_format:
-    description: |
-      The file format of the validation report. See `rmarkdown::render`'s
-      `output_format` parameter for accepted values.
-    required: false
-    default: "all"
-  report_output_prefix:
-    description: >
-      The output filename prefix for the validation report. If left blank,
-      it defaults to the following convention:
-      `<package name>-<package version>-validation-report`.
-    required: false
-    default: ""
-  additional_tlmgr_packages:
-    description: |
-      Additional tex packages to install with tlmgr.
-    required: false
-    default: "courier ec"
+    default: "./template.qmd"
   no_cache:
     description: "Disable github action R dependency caching"
     required: false
@@ -45,10 +28,6 @@ inputs:
       building the report.
     required: false
     default: "false"
-outputs:
-  report_output_filename:
-    description: Filename of the generated report.
-    value: ${{ steps.report-generator.outputs.output-filename }}
 branding: # https://feathericons.com/
   icon: "award"
   color: "blue"
@@ -68,13 +47,6 @@ runs:
         cat ~/.Rprofile
       shell: bash
 
-    - name: Set tlmgr cache folder
-      if: "contains(inputs.no_cache, 'false')"
-      id: texlive_version
-      run: |
-        echo "TEX_LIVE_VERSION=$(tlmgr --version |tail -1 |awk '{print $NF}')" >> $GITHUB_OUTPUT
-      shell: bash
-
     - name: Cache R packages
       if: "contains(inputs.no_cache, 'false')"
       uses: actions/cache@v4
@@ -83,40 +55,34 @@ runs:
         key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}-${{ hashFiles('DESCRIPTION') }}
         restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.r_version.outputs.R_VERSION }}
 
-    - name: Cache Tex packages
-      if: "contains(inputs.no_cache, 'false')"
-      uses: actions/cache@v4
-      with:
-        path: /home/runner/work/_temp/TinyTeX
-        key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}-${{ hashFiles(inputs.report_template_path) }}
-        restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
-
     - name: Install dependencies
       run: |
         ${GITHUB_ACTION_PATH}/dependencies.R
-        export PATH=${RUNNER_TEMP}/TinyTeX/bin/x86_64-linux:${PATH}
-        echo "PATH=${PATH}" >> $GITHUB_ENV
-        tlmgr path add
-        tlmgr update --self
-        [ ! -f "./template.Rmd" ] && cp ${GITHUB_ACTION_PATH}/template.Rmd . || echo "./template.Rmd Already exists"
-      shell: bash
-
-    - name: Install additional tex packages
-      run: tlmgr install ${{ inputs.additional_tlmgr_packages }}
+        [ ! -f "./template.qmd" ] && cp ${GITHUB_ACTION_PATH}/template.qmd . || echo "./template.qmd already exists"
+        if [[ "$(echo -e "$(quarto --version)\n1.4.0" | sort -V | head -1)" == "1.4.0" ]]; then
+          echo "✅ Quarto CLI version sufficient (>= 1.4.0)"
+          echo "Quarto CLI version: $(quarto --version)"
+        else
+          echo "❌ Quarto CLI version insufficient (< 1.4.0)"
+          echo "Downloading Quarto CLI..."
+          # Install newer version of Quarto CLI.
+          export QUARTO_VERSION="1.4.554"
+          apt-get update
+          apt-get install -qy wget
+          wget https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.deb
+          dpkg -i quarto-${QUARTO_VERSION}-linux-amd64.deb
+          echo "New Quarto CLI version: $(quarto --version)"
+        fi
       shell: bash
 
     - name: Run report generator
       id: report-generator
       run: |
         ${GITHUB_ACTION_PATH}/report-generator.R
-        filename=$(basename $(cat /tmp/report_file_path.txt))
-        echo "output-filename=${filename}" >> $GITHUB_OUTPUT
       shell: bash
       env:
         # Composite action doesn't set inputs as env vars.
         # We need to do this manually...
         INPUT_REPORT_PKG_DIR: ${{ inputs.report_pkg_dir }}
         INPUT_REPORT_TEMPLATE_PATH: ${{ inputs.report_template_path }}
-        INPUT_REPORT_RMARKDOWN_FORMAT: ${{ inputs.report_rmarkdown_format }}
-        INPUT_REPORT_OUTPUT_PREFIX: ${{ inputs.report_output_prefix }}
         DISABLE_INSTALL_DEV_DEPS: ${{ inputs.disable_install_dev_deps }}

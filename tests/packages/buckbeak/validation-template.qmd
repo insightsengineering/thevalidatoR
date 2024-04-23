@@ -1,44 +1,43 @@
 ---
 title: "Buckbeak Validation Report"
-output:
-  - "md_document"
-params:
-  pkg_dir: "."
+date: "`r Sys.time()`"
+date-format: "ddd MMM DD hh:mm:ss A YYYY"
+format:
+  typst:
+    toc: true
+    section-numbering: 1.1.1
+    df-print: default
+    margin:
+      x: 2cm
+      y: 2cm
 ---
-
 
 ```{r, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
 
 remotes::install_local(
-  params$pkg_dir,
+  Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'),
   force = TRUE,
   quiet = TRUE,
   INSTALL_opts = "--with-keep.source"
 )
 
 library(magrittr)
-library(knitr)
-knitr::opts_chunk$set(
-  width = 80L,
-  comment = ""
-)
 ```
-
 
 # Execution Info
 
 ## System Info
 
 ```{r execution_info, echo = FALSE}
-kable(data.frame(
+data.frame(
   Field = c("OS", "Platform", "System", "Execution Time"),
   Value = c(
     sessionInfo()$running,
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  )))
+  ))
 ```
 
 ## Session Info
