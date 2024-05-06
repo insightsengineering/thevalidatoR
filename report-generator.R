@@ -61,9 +61,9 @@ if (report_output_prefix == "") {
 # )
 
 library(quarto)
-quarto_render("template.qmd", output_format = "pdf")
+quarto_render("template.qmd", output_format = "pdf", output_file = "validation_report.pdf")
 
 # Create a tmp file which contains the final report filename
-writeLines(report_file_path, "/tmp/report_file_path.txt")
+# writeLines(report_file_path, "/tmp/report_file_path.txt")
 
-cat(sprintf("Created report at: '%s'\n\n", report_file_path))
+# cat(sprintf("Created report at: '%s'\n\n", report_file_path))
