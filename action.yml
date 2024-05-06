@@ -76,6 +76,7 @@ runs:
     - name: Install dependencies
       run: |
         ${GITHUB_ACTION_PATH}/dependencies.R
+        [ ! -f "./template.Rmd" ] && cp ${GITHUB_ACTION_PATH}/template.Rmd . || echo "./template.Rmd Already exists"
       shell: bash
 
     - name: Run report generator
