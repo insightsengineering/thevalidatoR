@@ -1,6 +1,6 @@
 ---
 title: "Validation Report"
-subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
+subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'), 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
 date: "`r format(Sys.time(), '%a %b %d %X %Y')`"
 author:
   - "`r paste0('**Server**: ',Sys.getenv('GITHUB_SERVER_URL'))`"
@@ -27,7 +27,7 @@ header-includes:
 ```{r setup, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
 remotes::install_local(
-  params$pkg_dir,
+  Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'),
   force = TRUE,
   quiet = TRUE,
   INSTALL_opts = "--with-keep.source",
@@ -92,12 +92,12 @@ data.frame(
 ```{r version_control, echo = FALSE}
 # find .git dir containing the package directory
 gd <- system(
-  sprintf("cd '%s' && git rev-parse --absolute-git-dir", params$pkg_dir),
+  sprintf("cd '%s' && git rev-parse --absolute-git-dir", Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.')),
   intern = TRUE
 )
 # define reused git args to be sure we're picking up the right git info
 gd <- sprintf("--git-dir='%s'", gd)
-wt <- sprintf("--work-tree='%s'", params$pkg_dir)
+wt <- sprintf("--work-tree='%s'", Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))
 data.frame(
   Field = c("branch", "commit `SHA1`", "commit date"),
   Value = c(
@@ -127,7 +127,7 @@ capabilities()
 The following metrics are derived from the `riskmetric` R package. Metrics overlapping with `covr` and `R CMD Check` are removed.
 
 ```{r riskmetric, echo = FALSE, eval = TRUE}
-d_riskmetric <- params$pkg_dir %>%
+d_riskmetric <- Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.') %>%
   riskmetric::pkg_ref() %>%
   riskmetric::pkg_assess() %>%
   purrr::map(1) %>%
@@ -161,7 +161,7 @@ d_riskmetric %>%
 
 ```{r r_cmd_check, echo = FALSE, eval = TRUE}
 rcmdcheck_results <- rcmdcheck::rcmdcheck(
-  params$pkg_dir,
+  Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'),
   args = c(
     "--timings",             # include execution times in output
     "--no-build-vignettes",  # run vignette code, but disable pdf rendering
@@ -177,7 +177,7 @@ cat(rcmdcheck_results$stderr)
 ## Testing Coverage
 
 ```{r coverage, echo = FALSE, eval = TRUE}
-covr_results <- covr::package_coverage(params$pkg_dir)
+covr_results <- covr::package_coverage(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))
 covr_results
 ```
 
