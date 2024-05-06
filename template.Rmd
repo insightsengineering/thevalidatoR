@@ -7,8 +7,6 @@ author:
   - "`r paste0('**Repository**: ',Sys.getenv('GITHUB_REPOSITORY'))`"
   - "`r paste0('**Reference**: ',Sys.getenv('GITHUB_REF'))`"
   - "`r paste0('**Commit SHA**: ',Sys.getenv('GITHUB_SHA'))`"
-params:
-  pkg_dir: "`r normalizePath(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))`"
 format:
   typst:
     toc: true
@@ -23,7 +21,7 @@ header-includes:
 - \fancyfoot[RE,RO]{\thepage}
 ---
 
-\fancyhead[LO,LE]{`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`}
+\fancyhead[LO,LE]{`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'), 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`}
 \fancyfoot[CO,CE]{`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`}
 
 ```{r setup, include = FALSE}
