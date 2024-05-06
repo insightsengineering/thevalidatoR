@@ -61,8 +61,7 @@ if (report_output_prefix == "") {
 # )
 
 library(quarto)
-quarto_render("document.qmd") # all formats
-quarto_render("document.qmd", output_format = "pdf")
+quarto_render("template.qmd", output_format = "pdf")
 
 # Create a tmp file which contains the final report filename
 writeLines(report_file_path, "/tmp/report_file_path.txt")
