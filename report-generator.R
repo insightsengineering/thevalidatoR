@@ -52,13 +52,17 @@ if (report_output_prefix == "") {
 }
 
 # allow rmarkdown to choose appropriate file extension for output format
-report_file_path <- rmarkdown::render(
-  template_path,
-  output_dir = getwd(),  # create report wherever R script was called
-  output_file = report_output_prefix,
-  output_format = report_format,
-  params = list(pkg_dir = pkg_dir)
-)
+# report_file_path <- rmarkdown::render(
+#   template_path,
+#   output_dir = getwd(),  # create report wherever R script was called
+#   output_file = report_output_prefix,
+#   output_format = report_format,
+#   params = list(pkg_dir = pkg_dir)
+# )
+
+library(quarto)
+quarto_render("document.qmd") # all formats
+quarto_render("document.qmd", output_format = "pdf")
 
 # Create a tmp file which contains the final report filename
 writeLines(report_file_path, "/tmp/report_file_path.txt")
