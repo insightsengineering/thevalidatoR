@@ -31,28 +31,11 @@ remotes::install_local(
   upgrade = "never"
 )
 library(magrittr)
-library(knitr)
-library(kableExtra)
-knitr::opts_chunk$set(
-  error = TRUE,
-  width = 80L,
-  comment = ""
-)
-helper_tabulate <- function(x, caption = "", col_widths = c("10cm", "5cm")) {
-  x %>%
-    kbl(
-      caption = caption,
-      booktabs = TRUE, longtable = TRUE
-    ) %>%
-    kable_styling(
-      latex_options = c("striped", "repeat_header")
-    ) %>%
-    column_spec(
-      1, width = col_widths[1]
-    ) %>%
-    column_spec(
-      2, width = col_widths[2]
-    )
+
+library(rtables)
+helper_tabulate <- function(x) {
+  y <- basic_table() |>
+    build_table(x)
 }
 ```
 
