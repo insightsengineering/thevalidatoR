@@ -10,7 +10,7 @@ git_safe_dir <- system(
 
 # Get the action inputs from preset env vars
 pkg_dir <- normalizePath(Sys.getenv("INPUT_REPORT_PKG_DIR", "."))
-template_path <- Sys.getenv("INPUT_REPORT_TEMPLATE_PATH", "/template.Rmd")
+template_path <- Sys.getenv("INPUT_REPORT_TEMPLATE_PATH", "/template.qmd")
 report_format <- Sys.getenv("INPUT_REPORT_RMARKDOWN_FORMAT", "all")
 report_output_prefix <- Sys.getenv("INPUT_REPORT_OUTPUT_PREFIX", "")
 disable_install_dev_deps <- tolower(

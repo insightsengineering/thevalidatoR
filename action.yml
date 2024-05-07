@@ -10,9 +10,9 @@ inputs:
   report_template_path:
     description: |
       File path of the R markdown template to use for the report.
-      The default template is available [here.](./template.Rmd)
+      The default template is available [here.](./template.qmd)
     required: false
-    default: "./template.Rmd"
+    default: "./template.qmd"
   report_rmarkdown_format:
     description: |
       The file format of the validation report. See `rmarkdown::render`'s
@@ -26,11 +26,6 @@ inputs:
       `<package name>-<package version>-validation-report`.
     required: false
     default: ""
-  additional_tlmgr_packages:
-    description: |
-      Additional tex packages to install with tlmgr.
-    required: false
-    default: "courier ec"
   no_cache:
     description: "Disable github action R dependency caching"
     required: false
@@ -76,15 +71,14 @@ runs:
     - name: Install dependencies
       run: |
         ${GITHUB_ACTION_PATH}/dependencies.R
-        [ ! -f "./template.Rmd" ] && cp ${GITHUB_ACTION_PATH}/template.Rmd ./template.qmd || echo "./template.qmd Already exists"
       shell: bash
 
     - name: Run report generator
       id: report-generator
       run: |
         ${GITHUB_ACTION_PATH}/report-generator.R
-        filename=$(basename $(cat /tmp/report_file_path.txt))
-        echo "output-filename=${filename}" >> $GITHUB_OUTPUT
+        #filename=$(basename $(cat /tmp/report_file_path.txt))
+        #echo "output-filename=${filename}" >> $GITHUB_OUTPUT
       shell: bash
       env:
         # Composite action doesn't set inputs as env vars.

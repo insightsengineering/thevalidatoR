@@ -6,6 +6,7 @@
 [![SuperLinter](https://github.com/insightsengineering/thevalidatoR/actions/workflows/lint.yaml/badge.svg)](https://github.com/insightsengineering/thevalidatoR/actions/workflows/lint.yaml)
 [![Test This Action](https://github.com/insightsengineering/thevalidatoR/actions/workflows/test.yaml/badge.svg)](https://github.com/insightsengineering/thevalidatoR/actions/workflows/test.yaml)
 
+- [thevalidatoR](#thevalidator)
 - [An R Package Validation Report](#an-r-package-validation-report)
     - [Description](#description)
     - [Action Type](#action-type)
@@ -52,11 +53,11 @@ Roche
 
 - `report_template_path`:
 
-  _Description_: File path of the R markdown template to use for the report. The default template is available [here.](./template.Rmd)
+  _Description_: File path of the R markdown template to use for the report. The default template is available [here.](./template.qmd)
 
   _Required_: `false`
 
-  _Default_: `template.Rmd`
+  _Default_: `template.qmd`
 
 - `report_rmarkdown_format`:
 
@@ -73,14 +74,6 @@ Roche
   _Required_: `false`
 
   _Default_: `""`
-
-- `additional_tlmgr_packages`:
-
-  _Description_: Additional tex packages to install with tlmgr.
-
-  _Required_: `false`
-
-  _Default_: `courier ec`
 
 - `no_cache`:
 
