@@ -61,7 +61,7 @@ if (report_output_prefix == "") {
 # )
 
 library(quarto)
-quarto_render("template.qmd")
+quarto_render("template.qmd", output_file = "validation_report.pdf")
 
 # Create a tmp file which contains the final report filename
 # writeLines(report_file_path, "/tmp/report_file_path.txt")
