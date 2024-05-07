@@ -45,6 +45,7 @@ helper_tabulate <- function(x, caption = "", col_widths = c("10cm", "5cm")) {
     column_spec(
       2, width = col_widths[2]
     )
+}
 ```
 
 # Context
