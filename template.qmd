@@ -31,28 +31,11 @@ remotes::install_local(
   upgrade = "never"
 )
 library(magrittr)
-library(knitr)
-library(kableExtra)
-knitr::opts_chunk$set(
-  error = TRUE,
-  width = 80L,
-  comment = ""
-)
-helper_tabulate <- function(x, caption = "", col_widths = c("10cm", "5cm")) {
-  x %>%
-    kbl(
-      caption = caption,
-      booktabs = TRUE, longtable = TRUE
-    ) %>%
-    kable_styling(
-      latex_options = c("striped", "repeat_header")
-    ) %>%
-    column_spec(
-      1, width = col_widths[1]
-    ) %>%
-    column_spec(
-      2, width = col_widths[2]
-    )
+
+library(rtables)
+helper_tabulate <- function(x) {
+  y <- basic_table() |>
+    build_table(x)
 }
 ```
 
@@ -80,7 +63,7 @@ data.frame(
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  )) %>% helper_tabulate("System info", col_widths = c("6cm", "6cm"))
+  )) %>% helper_tabulate("System info")
 ```
 
 ## Package installed
@@ -108,7 +91,7 @@ data.frame(
       list(gd, wt, "show", "-s", "--format=%ci", "HEAD"),
       stdout = TRUE
     )
-  )) %>% helper_tabulate("Git information", col_widths = c("5cm", "8cm"))
+  )) %>% helper_tabulate("Git information")
 ```
 
 ## R Session Info
