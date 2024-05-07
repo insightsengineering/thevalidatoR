@@ -63,7 +63,7 @@ data.frame(
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  )) %>% helper_tabulate("System info")
+  )) %>% helper_tabulate()
 ```
 
 ## Package installed
@@ -91,7 +91,7 @@ data.frame(
       list(gd, wt, "show", "-s", "--format=%ci", "HEAD"),
       stdout = TRUE
     )
-  )) %>% helper_tabulate("Git information")
+  )) %>% helper_tabulate()
 ```
 
 ## R Session Info
@@ -129,9 +129,7 @@ d_riskmetric %>%
   ) %>%
   dplyr::select(Metric = label, Status = value) %>%
   #table
-  helper_tabulate(
-    caption = "Package info assessed by the R package riskmetric"
-  )
+  helper_tabulate()
 ```
 
 # Installation documentation
@@ -193,9 +191,7 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::filter(!is.na(file)) %>% # unexported?
     dplyr::arrange(file) %>%
     dplyr::select(`Test Description` = test_name, Documentation = file) %>%
-    helper_tabulate(
-      caption = "Tracebility matrix mapping unit tests to documented behaviours."
-    )
+    helper_tabulate()
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
@@ -209,9 +205,7 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::filter(is.na(test_name)) %>%
     dplyr::arrange(alias) %>%
     dplyr::select(`Exported package object` = alias,  Documentation = file) %>%
-    helper_tabulate(
-      caption = "Untested behaviours: documentation that is not covered by any test."
-    )
+    helper_tabulate()
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
@@ -228,9 +222,7 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::summarize(any_direct_tests = any(direct, na.rm = TRUE)) %>%
     dplyr::arrange(alias) %>%
     dplyr::select(`Exported package object` = alias,  `Tested Directly` = any_direct_tests) %>%
-    helper_tabulate(
-        caption = "Granularity of unit tests: directly tested exported functions."
-    )
+    helper_tabulate()
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
