@@ -14,4 +14,4 @@ lapply(github_packages, remotes::install_github)
 options(repos = c("https://cloud.r-project.org/"))
 ncores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
 if (!require("git2r")) install.packages("git2r", upgrade = "never", Ncpus = ncores)
-if (!require("kableExtra")) install.packages("kableExtra", upgrade = "never", Ncpus = ncores)
+

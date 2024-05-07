@@ -11,6 +11,7 @@ format:
   typst:
     toc: true
     section-numbering: 1.1.a
+    df-print: tibble
 output:
   pdf_document:
     toc: true
@@ -34,30 +35,6 @@ remotes::install_local(
   upgrade = "never"
 )
 library(magrittr)
-library(knitr)
-library(kableExtra)
-knitr::opts_chunk$set(
-  error = TRUE,
-  width = 80L,
-  comment = ""
-)
-
-helper_tabulate <- function(x, caption = "", col_widths = c("10cm", "5cm")) {
-  x %>%
-    kbl(
-      caption = caption,
-      booktabs = TRUE, longtable = TRUE
-    ) %>%
-    kable_styling(
-      latex_options = c("striped", "repeat_header")
-    ) %>%
-    column_spec(
-      1, width = col_widths[1]
-    ) %>%
-    column_spec(
-      2, width = col_widths[2]
-    )
-}
 ```
 
 # Context
@@ -84,7 +61,7 @@ data.frame(
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  )) %>% helper_tabulate("System info", col_widths = c("6cm", "6cm"))
+  ))
 ```
 
 ## Package installed
@@ -112,7 +89,7 @@ data.frame(
       list(gd, wt, "show", "-s", "--format=%ci", "HEAD"),
       stdout = TRUE
     )
-  )) %>% helper_tabulate("Git information", col_widths = c("5cm", "8cm"))
+  ))
 ```
 
 ## R Session Info
@@ -148,11 +125,7 @@ d_riskmetric %>%
       "license", "downloads_1yr"
     )
   ) %>%
-  dplyr::select(Metric = label, Status = value) %>%
-  #table
-  helper_tabulate(
-    caption = "Package info assessed by the R package riskmetric"
-  )
+  dplyr::select(Metric = label, Status = value)
 ```
 
 # Installation documentation
@@ -213,10 +186,7 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::filter(!is.na(test_name)) %>%
     dplyr::filter(!is.na(file)) %>% # unexported?
     dplyr::arrange(file) %>%
-    dplyr::select(`Test Description` = test_name, Documentation = file) %>%
-    helper_tabulate(
-      caption = "Tracebility matrix mapping unit tests to documented behaviours."
-    )
+    dplyr::select(`Test Description` = test_name, Documentation = file)
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
@@ -229,10 +199,7 @@ if (require("covtracer", quietly = TRUE)) {
   covtracer_df_clean %>%
     dplyr::filter(is.na(test_name)) %>%
     dplyr::arrange(alias) %>%
-    dplyr::select(`Exported package object` = alias,  Documentation = file) %>%
-    helper_tabulate(
-      caption = "Untested behaviours: documentation that is not covered by any test."
-    )
+    dplyr::select(`Exported package object` = alias,  Documentation = file)
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
@@ -248,10 +215,7 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::group_by(alias) %>%
     dplyr::summarize(any_direct_tests = any(direct, na.rm = TRUE)) %>%
     dplyr::arrange(alias) %>%
-    dplyr::select(`Exported package object` = alias,  `Tested Directly` = any_direct_tests) %>%
-    helper_tabulate(
-        caption = "Granularity of unit tests: directly tested exported functions."
-    )
+    dplyr::select(`Exported package object` = alias,  `Tested Directly` = any_direct_tests)
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
