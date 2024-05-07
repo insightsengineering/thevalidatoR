@@ -12,14 +12,7 @@ format:
     toc: true
     section-numbering: 1.1.a
     df-print: tibble
-header-includes:
-- \usepackage{fancyhdr}
-- \pagestyle{fancy}
-- \fancyfoot[RE,RO]{\thepage}
 ---
-
-\fancyhead[LO,LE]{`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'), 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`}
-\fancyfoot[CO,CE]{`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`}
 
 ```{r setup, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
