@@ -12,7 +12,14 @@ format:
     toc: true
     section-numbering: 1.1.a
     df-print: tibble
+header-includes:
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+- \fancyfoot[RE,RO]{\thepage}
 ---
+
+\fancyhead[LO,LE]{`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'), 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`}
+\fancyfoot[CO,CE]{`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`}
 
 ```{r setup, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
@@ -24,6 +31,29 @@ remotes::install_local(
   upgrade = "never"
 )
 library(magrittr)
+library(knitr)
+library(kableExtra)
+knitr::opts_chunk$set(
+  error = TRUE,
+  width = 80L,
+  comment = ""
+)
+helper_tabulate <- function(x, caption = "", col_widths = c("10cm", "5cm")) {
+  x %>%
+    kbl(
+      caption = caption,
+      booktabs = TRUE, longtable = TRUE
+    ) %>%
+    kable_styling(
+      latex_options = c("striped", "repeat_header")
+    ) %>%
+    column_spec(
+      1, width = col_widths[1]
+    ) %>%
+    column_spec(
+      2, width = col_widths[2]
+    )
+}
 ```
 
 # Context
@@ -50,7 +80,7 @@ data.frame(
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  ))
+  )) %>% helper_tabulate("System info", col_widths = c("6cm", "6cm"))
 ```
 
 ## Package installed
@@ -78,7 +108,7 @@ data.frame(
       list(gd, wt, "show", "-s", "--format=%ci", "HEAD"),
       stdout = TRUE
     )
-  ))
+  )) %>% helper_tabulate("Git information", col_widths = c("5cm", "8cm"))
 ```
 
 ## R Session Info
@@ -114,7 +144,11 @@ d_riskmetric %>%
       "license", "downloads_1yr"
     )
   ) %>%
-  dplyr::select(Metric = label, Status = value)
+  dplyr::select(Metric = label, Status = value) %>%
+  #table
+  helper_tabulate(
+    caption = "Package info assessed by the R package riskmetric"
+  )
 ```
 
 # Installation documentation
@@ -175,7 +209,10 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::filter(!is.na(test_name)) %>%
     dplyr::filter(!is.na(file)) %>% # unexported?
     dplyr::arrange(file) %>%
-    dplyr::select(`Test Description` = test_name, Documentation = file)
+    dplyr::select(`Test Description` = test_name, Documentation = file) %>%
+    helper_tabulate(
+      caption = "Tracebility matrix mapping unit tests to documented behaviours."
+    )
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
@@ -188,7 +225,10 @@ if (require("covtracer", quietly = TRUE)) {
   covtracer_df_clean %>%
     dplyr::filter(is.na(test_name)) %>%
     dplyr::arrange(alias) %>%
-    dplyr::select(`Exported package object` = alias,  Documentation = file)
+    dplyr::select(`Exported package object` = alias,  Documentation = file) %>%
+    helper_tabulate(
+      caption = "Untested behaviours: documentation that is not covered by any test."
+    )
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
@@ -204,7 +244,10 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::group_by(alias) %>%
     dplyr::summarize(any_direct_tests = any(direct, na.rm = TRUE)) %>%
     dplyr::arrange(alias) %>%
-    dplyr::select(`Exported package object` = alias,  `Tested Directly` = any_direct_tests)
+    dplyr::select(`Exported package object` = alias,  `Tested Directly` = any_direct_tests) %>%
+    helper_tabulate(
+        caption = "Granularity of unit tests: directly tested exported functions."
+    )
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
