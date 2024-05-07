@@ -12,10 +12,6 @@ format:
     toc: true
     section-numbering: 1.1.a
     df-print: tibble
-output:
-  pdf_document:
-    toc: true
-    number_sections: true
 header-includes:
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
