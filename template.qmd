@@ -38,7 +38,7 @@ knitr::opts_chunk$set(
   width = 80L,
   comment = ""
 )
-helper_tabulate <- function(x) {
+helper_tabulate <- function(x, caption = "", col_widths = c("10cm", "5cm")) {
   x %>%
     kbl(
       caption = caption,
