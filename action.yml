@@ -68,6 +68,10 @@ runs:
     #     key: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}-${{ hashFiles(inputs.report_template_path) }}
     #     restore-keys: ${{ inputs.cache_version }}-${{ runner.os }}-${{ steps.texlive_version.outputs.TEX_LIVE_VERSION }}
 
+    - name: Install system dependencies
+      run: |
+        apt install -yq cmake
+
     - name: Install dependencies
       run: |
         ${GITHUB_ACTION_PATH}/dependencies.R
