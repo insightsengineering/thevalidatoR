@@ -70,7 +70,9 @@ runs:
 
     - name: Install system dependencies
       run: |
-        apt install -yq cmake
+        apt-get update
+        apt-get install -yq cmake
+      shell: bash
 
     - name: Install dependencies
       run: |
