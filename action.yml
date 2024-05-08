@@ -74,7 +74,7 @@ runs:
     - name: Install dependencies
       run: |
         ${GITHUB_ACTION_PATH}/dependencies.R
-        cp ${GITHUB_ACTION_PATH}/template.qmd ./template.qmd
+        cp ${GITHUB_ACTION_PATH}/template.qmd ./template.qmd || true
       shell: bash
 
     - name: Run report generator
