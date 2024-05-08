@@ -1,20 +1,15 @@
 ---
-title: "Validation Report"
-subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'), 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
-date: "`r format(Sys.time(), '%a %b %d %X %Y')`"
-author:
-  - "`r paste0('**Server**: ',Sys.getenv('GITHUB_SERVER_URL'))`"
-  - "`r paste0('**Repository**: ',Sys.getenv('GITHUB_REPOSITORY'))`"
-  - "`r paste0('**Reference**: ',Sys.getenv('GITHUB_REF'))`"
-  - "`r paste0('**Commit SHA**: ',Sys.getenv('GITHUB_SHA'))`"
+title: "Validation Report - `r sprintf('%s (v%s)',(dcf <- read.dcf(file.path(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'), 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`
+date: "`r Sys.time()`"
+date-format: "ddd MMM DD hh:mm:ss A YYYY"
 format:
   typst:
     toc: true
     section-numbering: 1.1.1
     df-print: kable
     margin:
-      x: 1cm
-      y: 1cm
+      x: 2cm
+      y: 2cm
 ---
 
 ```{r setup, include = FALSE}
@@ -68,8 +63,11 @@ gd <- system(
 gd <- sprintf("--git-dir='%s'", gd)
 wt <- sprintf("--work-tree='%s'", Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))
 data.frame(
-  Field = c("branch", "commit `SHA1`", "commit date"),
+  Field = c("server", "repository", "git ref", "branch", "commit `SHA1`", "commit date"),
   Value = c(
+    Sys.getenv('GITHUB_SERVER_URL'),
+    Sys.getenv('GITHUB_REPOSITORY'),
+    Sys.getenv('GITHUB_REF'),
     system2(
       "git",
       list(gd, wt, "rev-parse", "--abbrev-ref", "HEAD"),
