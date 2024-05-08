@@ -174,7 +174,7 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::mutate(alias = paste0(alias, "()")) %>%
     dplyr::mutate(file = paste0("man/", file)) %>%
     dplyr::mutate(test_name = paste0("`", test_name, "`")) %>%
-    dplyr::mutate(file = paste0("`", file, "`"))
+    dplyr::mutate(file = paste0("``` ", file, " ```"))
 
   covtracer_df_clean %>%
     dplyr::filter(!duplicated(.)) %>%
