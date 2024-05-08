@@ -1,5 +1,5 @@
 ---
-title: "Validation Report - `r sprintf('%s (v%s)',(dcf <- read.dcf(file.path(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'), 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`
+title: "Validation Report - `r sprintf('%s (v%s)',(dcf <- read.dcf(file.path(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'), 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
 date: "`r Sys.time()`"
 date-format: "ddd MMM DD hh:mm:ss A YYYY"
 format:
