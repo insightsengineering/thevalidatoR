@@ -14,12 +14,6 @@ format:
     df-print: kable
 ---
 
-```{=typst}
-#set page(
-  flipped: true,
-)
-```
-
 ```{r setup, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
 remotes::install_local(
@@ -154,9 +148,13 @@ covr_results
 Tracebility matrix that maps each unit test to the corresponding documentation, creating a link
 between intended use and testing.
 
-### Testing matrix
-
+```{=typst}
+#set page(
+  flipped: true,
+)
 ```
+
+### Testing matrix
 
 ```{r traceability, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
@@ -176,7 +174,9 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::filter(is_exported == TRUE) %>% # Only exported
     dplyr::filter(!duplicated(.)) %>%
     dplyr::mutate(alias = paste0(alias, "()")) %>%
-    dplyr::mutate(file = paste0("man/", file))
+    dplyr::mutate(file = paste0("man/", file)) %>%
+    dplyr::mutate(test_name = paste0("`", test_name, "`")) %>%
+    dplyr::mutate(file = paste0("`", file, "`"))
 
   covtracer_df_clean %>%
     dplyr::filter(!duplicated(.)) %>%
@@ -187,8 +187,6 @@ if (require("covtracer", quietly = TRUE)) {
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
-```
-
 ```
 
 ### Untested
