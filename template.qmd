@@ -172,15 +172,15 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::filter(is_exported == TRUE) %>% # Only exported
     dplyr::filter(!duplicated(.)) %>%
     dplyr::mutate(alias = paste0(alias, "()")) %>%
-    dplyr::mutate(file = paste0("man/", file)) %>%
-    dplyr::mutate(test_name = paste0("``` ", test_name, " ```")) %>%
-    dplyr::mutate(file = paste0("``` ", file, " ```"))
+    dplyr::mutate(file = paste0("man/", file))
 
   covtracer_df_clean %>%
     dplyr::filter(!duplicated(.)) %>%
     dplyr::filter(!is.na(test_name)) %>%
     dplyr::filter(!is.na(file)) %>% # unexported?
     dplyr::arrange(file) %>%
+    dplyr::mutate(test_name = paste0("``` ", test_name, " ```")) %>%
+    dplyr::mutate(file = paste0("``` ", file, " ```")) %>%
     dplyr::select(`Test Description` = test_name, Documentation = file)
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
