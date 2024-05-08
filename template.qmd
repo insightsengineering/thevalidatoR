@@ -10,7 +10,7 @@ author:
 format:
   typst:
     toc: true
-    section-numbering: 1.1.a
+    section-numbering: 1.1.1
     df-print: kable
 ---
 
@@ -150,6 +150,8 @@ between intended use and testing.
 
 ### Testing matrix
 
+```
+
 ```{r traceability, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
@@ -179,6 +181,8 @@ if (require("covtracer", quietly = TRUE)) {
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
+```
+
 ```
 
 ### Untested
