@@ -148,12 +148,6 @@ covr_results
 Tracebility matrix that maps each unit test to the corresponding documentation, creating a link
 between intended use and testing.
 
-```{=typst}
-#set page(
-  flipped: true,
-)
-```
-
 ### Testing matrix
 
 ```{r traceability, echo = FALSE, eval = TRUE}
