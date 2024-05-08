@@ -14,6 +14,12 @@ format:
     df-print: kable
 ---
 
+```{=typst}
+#set page(
+  flipped: true,
+)
+```
+
 ```{r setup, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
 remotes::install_local(
@@ -150,7 +156,7 @@ between intended use and testing.
 
 ### Testing matrix
 
-TODO surrounding the below code block with ``` is also working fine.
+```
 
 ```{r traceability, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
@@ -172,17 +178,17 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::mutate(alias = paste0(alias, "()")) %>%
     dplyr::mutate(file = paste0("man/", file))
 
-  df_to_be_printed <- covtracer_df_clean %>%
+  covtracer_df_clean %>%
     dplyr::filter(!duplicated(.)) %>%
     dplyr::filter(!is.na(test_name)) %>%
     dplyr::filter(!is.na(file)) %>% # unexported?
     dplyr::arrange(file) %>%
     dplyr::select(`Test Description` = test_name, Documentation = file)
-
-  print(df_to_be_printed)
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
+```
+
 ```
 
 ### Untested
