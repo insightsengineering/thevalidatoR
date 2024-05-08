@@ -41,29 +41,5 @@ if (!disable_install_dev_deps) {
     devtools::install_dev_deps(pkg_dir, upgrade = "never")
 }
 
-# Set the output file name
-if (report_output_prefix == "") {
-  desc <- read.dcf(desc_file)
-  pkg_name <- toString(desc[, "Package"])
-  pkg_version <- toString(desc[, "Version"])
-  report_output_prefix <- paste0(
-    pkg_name, "-", pkg_version, "-validation-report"
-  )
-}
-
-# allow rmarkdown to choose appropriate file extension for output format
-# report_file_path <- rmarkdown::render(
-#   template_path,
-#   output_dir = getwd(),  # create report wherever R script was called
-#   output_file = report_output_prefix,
-#   output_format = report_format,
-#   params = list(pkg_dir = pkg_dir)
-# )
-
 library(quarto)
 quarto_render("template.qmd", output_file = "validation_report.pdf")
-
-# Create a tmp file which contains the final report filename
-# writeLines(report_file_path, "/tmp/report_file_path.txt")
-
-# cat(sprintf("Created report at: '%s'\n\n", report_file_path))
