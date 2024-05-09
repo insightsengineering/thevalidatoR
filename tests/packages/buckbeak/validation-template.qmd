@@ -4,7 +4,12 @@ date: "`r Sys.time()`"
 date-format: "ddd MMM DD hh:mm:ss A YYYY"
 format:
   typst:
+    toc: true
+    section-numbering: 1.1.1
     df-print: default
+    margin:
+      x: 2cm
+      y: 2cm
 ---
 
 ```{r, include = FALSE}

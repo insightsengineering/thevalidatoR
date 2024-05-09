@@ -42,14 +42,21 @@ This report is fully automated, so is limited to assess whether unit tests and d
 ## System Info
 
 ```{r execution_info, echo = FALSE}
-data.frame(
+tt_sys_info_df <- data.frame(
   Field = c("OS", "Platform", "System", "Execution Time"),
   Value = c(
     sessionInfo()$running,
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  ))
+  )) %>%
+  dplyr::mutate(Value = paste0("``` ", Value, " ```"))
+
+tt(
+  tt_sys_info_df,
+  caption = "System information",
+  theme = "striped"
+)
 ```
 
 ## Package installed
@@ -80,7 +87,8 @@ tt_git_df <- data.frame(
       list(gd, wt, "show", "-s", "--format=%ci", "HEAD"),
       stdout = TRUE
     )
-  ))
+  )) %>%
+  dplyr::mutate(Value = paste0("``` ", Value, " ```"))
 
 tt(
   tt_git_df,
@@ -207,6 +215,10 @@ if (require("covtracer", quietly = TRUE)) {
 }
 ```
 
+```{=typst}
+#show figure: set block(breakable: false)
+```
+
 ### Untested
 
 ```{r traceability2, echo = FALSE, eval = TRUE}
@@ -214,7 +226,10 @@ if (require("covtracer", quietly = TRUE)) {
   tt_untested_df <- covtracer_df_clean %>%
     dplyr::filter(is.na(test_name)) %>%
     dplyr::arrange(alias) %>%
+    dplyr::mutate(alias = paste0("``` ", alias, " ```")) %>%
+    dplyr::mutate(file = paste0("``` ", file, " ```")) %>%
     dplyr::select(`Exported package object` = alias,  Documentation = file)
+
 
   tt(
     tt_untested_df,
@@ -236,6 +251,8 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::group_by(alias) %>%
     dplyr::summarize(any_direct_tests = any(direct, na.rm = TRUE)) %>%
     dplyr::arrange(alias) %>%
+    dplyr::mutate(alias = paste0("``` ", alias, " ```")) %>%
+    dplyr::mutate(any_direct_tests = paste0("``` ", any_direct_tests, " ```")) %>%
     dplyr::select(`Exported package object` = alias,  `Tested Directly` = any_direct_tests)
 
   tt(

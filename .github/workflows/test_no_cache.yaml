@@ -40,5 +40,5 @@ jobs:
         if: success()
         with:
           name: ${{ matrix.package.name }} validation report
-          path: ${{ steps.validation.outputs.report_output_filename }}
+          path: validation_report.pdf
           if-no-files-found: error
