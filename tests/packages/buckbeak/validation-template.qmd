@@ -1,9 +1,8 @@
 ---
 title: "Buckbeak Validation Report"
-output:
-  - "md_document"
-params:
-  pkg_dir: "."
+format:
+  typst:
+    toc: true
 ---
 
 
