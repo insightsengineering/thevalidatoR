@@ -1,5 +1,5 @@
 ---
-title: "Validation Report - `r sprintf('%s (v%s)',(dcf <- read.dcf(file.path(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'), 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
+title: "Validation Report - `r sprintf('%s (v%s)',(dcf <- read.dcf(file.path(Sys.getenv('INPUT_REPORT_PKG_DIR', '.'), 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
 date: "`r Sys.time()`"
 date-format: "ddd MMM DD hh:mm:ss A YYYY"
 format:
@@ -15,7 +15,7 @@ format:
 ```{r setup, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
 remotes::install_local(
-  Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'),
+  Sys.getenv('INPUT_REPORT_PKG_DIR', '.'),
   force = TRUE,
   quiet = TRUE,
   INSTALL_opts = "--with-keep.source",
@@ -64,12 +64,12 @@ tt(
 ```{r version_control, echo = FALSE}
 # find .git dir containing the package directory
 gd <- system(
-  sprintf("cd '%s' && git rev-parse --absolute-git-dir", Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.')),
+  sprintf("cd '%s' && git rev-parse --absolute-git-dir", Sys.getenv('INPUT_REPORT_PKG_DIR', '.')),
   intern = TRUE
 )
 # define reused git args to be sure we're picking up the right git info
 gd <- sprintf("--git-dir='%s'", gd)
-wt <- sprintf("--work-tree='%s'", Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))
+wt <- sprintf("--work-tree='%s'", Sys.getenv('INPUT_REPORT_PKG_DIR', '.'))
 tt_git_df <- data.frame(
   Field = c("server", "repository", "git ref", "branch", "commit `SHA1`", "commit date"),
   Value = c(
@@ -109,7 +109,7 @@ capabilities()
 The following metrics are derived from the `riskmetric` R package. Metrics overlapping with `covr` and `R CMD Check` are removed.
 
 ```{r riskmetric, echo = FALSE, eval = TRUE}
-d_riskmetric <- Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.') %>%
+d_riskmetric <- Sys.getenv('INPUT_REPORT_PKG_DIR', '.') %>%
   riskmetric::pkg_ref() %>%
   riskmetric::pkg_assess() %>%
   purrr::map(1) %>%
@@ -145,7 +145,7 @@ tt(
 
 ```{r r_cmd_check, echo = FALSE, eval = TRUE}
 rcmdcheck_results <- rcmdcheck::rcmdcheck(
-  Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'),
+  Sys.getenv('INPUT_REPORT_PKG_DIR', '.'),
   args = c(
     "--timings",             # include execution times in output
     "--no-build-vignettes",  # run vignette code, but disable pdf rendering
@@ -161,7 +161,7 @@ cat(rcmdcheck_results$stderr)
 ## Testing Coverage
 
 ```{r coverage, echo = FALSE, eval = TRUE}
-covr_results <- covr::package_coverage(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))
+covr_results <- covr::package_coverage(Sys.getenv('INPUT_REPORT_PKG_DIR', '.'))
 covr_results
 ```
 
