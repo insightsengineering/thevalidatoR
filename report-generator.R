@@ -11,8 +11,6 @@ git_safe_dir <- system(
 # Get the action inputs from preset env vars
 pkg_dir <- normalizePath(Sys.getenv("INPUT_REPORT_PKG_DIR", "."))
 template_path <- Sys.getenv("INPUT_REPORT_TEMPLATE_PATH", "/template.qmd")
-report_format <- Sys.getenv("INPUT_REPORT_RMARKDOWN_FORMAT", "all")
-report_output_prefix <- Sys.getenv("INPUT_REPORT_OUTPUT_PREFIX", "")
 disable_install_dev_deps <- tolower(
   Sys.getenv("DISABLE_INSTALL_DEV_DEPS")
 ) %in% c("yes", "y", "t", "true")
@@ -42,4 +40,4 @@ if (!disable_install_dev_deps) {
 }
 
 library(quarto)
-quarto_render("template.qmd", output_file = "validation_report.pdf")
+quarto_render(paste0(pkg_dir, template_path), output_file = "validation_report.pdf")

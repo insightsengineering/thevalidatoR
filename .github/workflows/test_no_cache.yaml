@@ -21,8 +21,7 @@ jobs:
         package:
           - name: buckbeak
             report_pkg_dir: ./tests/packages/buckbeak
-            report_template_path: ./tests/packages/buckbeak/validation-template.Rmd
-            report_rmarkdown_format: html_document
+            report_template_path: ./tests/packages/buckbeak/validation-template.qmd
 
     steps:
       - name: Checkout ${{ matrix.package.name }}
@@ -34,8 +33,6 @@ jobs:
         with:
           report_pkg_dir: ${{ matrix.package.report_pkg_dir }}
           report_template_path: ${{ matrix.package.report_template_path }}
-          report_output_prefix: validation_report
-          report_rmarkdown_format: ${{ matrix.package.report_rmarkdown_format }}
           no_cache: true
 
       - name: Upload ${{ matrix.package.name }} validation report

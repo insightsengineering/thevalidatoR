@@ -22,11 +22,9 @@ jobs:
           - name: aragog
             report_pkg_dir: ./tests/packages/aragog
             report_template_path: ./template.qmd
-            report_rmarkdown_format: pdf_document
           - name: buckbeak
             report_pkg_dir: ./tests/packages/buckbeak
             report_template_path: ./tests/packages/buckbeak/validation-template.qmd
-            report_rmarkdown_format: html_document
 
     steps:
       - name: Checkout ${{ matrix.package.name }}
@@ -38,8 +36,6 @@ jobs:
         with:
           report_pkg_dir: ${{ matrix.package.report_pkg_dir }}
           report_template_path: ${{ matrix.package.report_template_path }}
-          report_output_prefix: validation_report
-          report_rmarkdown_format: ${{ matrix.package.report_rmarkdown_format }}
 
       - name: Upload ${{ matrix.package.name }} validation report
         uses: actions/upload-artifact@v4
