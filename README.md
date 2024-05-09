@@ -6,6 +6,7 @@
 [![SuperLinter](https://github.com/insightsengineering/thevalidatoR/actions/workflows/lint.yaml/badge.svg)](https://github.com/insightsengineering/thevalidatoR/actions/workflows/lint.yaml)
 [![Test This Action](https://github.com/insightsengineering/thevalidatoR/actions/workflows/test.yaml/badge.svg)](https://github.com/insightsengineering/thevalidatoR/actions/workflows/test.yaml)
 
+- [thevalidatoR](#thevalidator)
 - [An R Package Validation Report](#an-r-package-validation-report)
     - [Description](#description)
     - [Action Type](#action-type)
@@ -19,78 +20,51 @@
       - [admiral](#admiral)
 
 <!-- BEGIN_ACTION_DOC -->
-# An R Package Validation Report
+# R Package Validation Report
 
 ### Description
-
-A Github Action that generates a validation report for an R package. The four main steps are:
-
+A Github Action that generates a validation report for an R package.
+The four main steps are:
 - Run `R CMD check` (check installation)
 - Run `covr::package_coverage()` (check unit test coverage)
 - Run `covtracer` (link documentation to unit tests)
 - Place results into report
-- _If valtools present - run valtools and also publish report?_ (to discuss)
 - Attach report as object to release
 
 ### Action Type
-
 Composite
 
 ### Author
-
 Roche
 
 ### Inputs
+* `report_pkg_dir`:
 
-- `report_pkg_dir`:
-
-  _Description_: Path to package's root
+  _Description_: Path to package's root.
 
   _Required_: `false`
 
   _Default_: `.`
 
-- `report_template_path`:
+* `report_template_path`:
 
-  _Description_: File path of the R markdown template to use for the report. The default template is available [here.](./template.Rmd)
+  _Description_: File path of the R markdown template to use for the report.
+The default template is available [here.](./template.qmd)
 
-  _Required_: `false`
-
-  _Default_: `template.Rmd`
-
-- `report_rmarkdown_format`:
-
-  _Description_: The output format to use when rendering the report. Value is used by `rmarkdown::render`'s `output_format` parameter.
 
   _Required_: `false`
 
-  _Default_: `pdf_document`
+  _Default_: `./template.qmd`
 
-- `report_output_prefix`:
+* `no_cache`:
 
-  _Description_: The output filename prefix for the validation report. If left blank, it defaults to the following convention: `<package name>-<package version>-validation-report`.
-
-  _Required_: `false`
-
-  _Default_: `""`
-
-- `additional_tlmgr_packages`:
-
-  _Description_: Additional tex packages to install with tlmgr.
-
-  _Required_: `false`
-
-  _Default_: `courier ec`
-
-- `no_cache`:
-
-  _Description_: Disable github action R dependency caching.
+  _Description_: Disable github action R dependency caching
 
   _Required_: `false`
 
   _Default_: `false`
 
-- `cache_version`:
+* `cache_version`:
 
   _Description_: Version of the cache. To clean cache bump this version.
 
@@ -98,20 +72,18 @@ Roche
 
   _Default_: `v1`
 
-- `disable_install_dev_deps`:
+* `disable_install_dev_deps`:
 
-  _Description_: Disable installation of dev dependencies while building the report.
+  _Description_: Disable installation of dev dependencies while
+building the report.
+
 
   _Required_: `false`
 
   _Default_: `false`
 
 ### Outputs
-
-- `report_output_filename`:
-
-  _Description_: Filename of the generated report.
-
+None
 <!-- END_ACTION_DOC -->
 
 ## How to use

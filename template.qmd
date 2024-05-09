@@ -1,61 +1,28 @@
 ---
-title: "Validation Report"
-subtitle: "`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
-date: "`r format(Sys.time(), '%a %b %d %X %Y')`"
-author: 
-  - "`r paste0('**Server**: ',Sys.getenv('GITHUB_SERVER_URL'))`"
-  - "`r paste0('**Repository**: ',Sys.getenv('GITHUB_REPOSITORY'))`"
-  - "`r paste0('**Reference**: ',Sys.getenv('GITHUB_REF'))`"
-  - "`r paste0('**Commit SHA**: ',Sys.getenv('GITHUB_SHA'))`"
-params:
-  pkg_dir: "`r normalizePath(Sys.getenv('INPUT_REPORT_PACKAGE_DIR', '.'))`"
-output:
-  pdf_document:
+title: "Validation Report - `r sprintf('%s (v%s)',(dcf <- read.dcf(file.path(Sys.getenv('INPUT_REPORT_PKG_DIR', '.'), 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`"
+date: "`r Sys.time()`"
+date-format: "ddd MMM DD hh:mm:ss A YYYY"
+format:
+  typst:
     toc: true
-    number_sections: true
-header-includes:
-- \usepackage{fancyhdr}
-- \pagestyle{fancy}
-- \fancyfoot[RE,RO]{\thepage}
+    section-numbering: 1.1.1
+    df-print: default
+    margin:
+      x: 2cm
+      y: 2cm
 ---
-
-\fancyhead[LO,LE]{`r sprintf('%s (v%s)', (dcf <- read.dcf(file.path(params$pkg_dir, 'DESCRIPTION')))[,'Package'], dcf[,'Version'])`}
-\fancyfoot[CO,CE]{`r paste0('Commit SHA: ',Sys.getenv('GITHUB_SHA'))`}  
 
 ```{r setup, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
 remotes::install_local(
-  params$pkg_dir,
+  Sys.getenv('INPUT_REPORT_PKG_DIR', '.'),
   force = TRUE,
   quiet = TRUE,
   INSTALL_opts = "--with-keep.source",
   upgrade = "never"
 )
 library(magrittr)
-library(knitr)
-library(kableExtra)
-knitr::opts_chunk$set(
-  error = TRUE,
-  width = 80L,
-  comment = ""
-)
-
-helper_tabulate <- function(x, caption = "", col_widths = c("10cm", "5cm")) {
-  x %>%
-    kbl(
-      caption = caption,
-      booktabs = TRUE, longtable = TRUE
-    ) %>%
-    kable_styling(
-      latex_options = c("striped", "repeat_header")
-    ) %>%
-    column_spec(
-      1, width = col_widths[1]
-    ) %>%
-    column_spec(
-      2, width = col_widths[2]
-    )
-}
+library(tinytable)
 ```
 
 # Context
@@ -75,14 +42,21 @@ This report is fully automated, so is limited to assess whether unit tests and d
 ## System Info
 
 ```{r execution_info, echo = FALSE}
-data.frame(
+tt_sys_info_df <- data.frame(
   Field = c("OS", "Platform", "System", "Execution Time"),
   Value = c(
     sessionInfo()$running,
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  )) %>% helper_tabulate("System info", col_widths = c("6cm", "6cm"))
+  )) %>%
+  dplyr::mutate(Value = paste0("``` ", Value, " ```"))
+
+tt(
+  tt_sys_info_df,
+  caption = "System information",
+  theme = "striped"
+)
 ```
 
 ## Package installed
@@ -90,15 +64,18 @@ data.frame(
 ```{r version_control, echo = FALSE}
 # find .git dir containing the package directory
 gd <- system(
-  sprintf("cd '%s' && git rev-parse --absolute-git-dir", params$pkg_dir),
+  sprintf("cd '%s' && git rev-parse --absolute-git-dir", Sys.getenv('INPUT_REPORT_PKG_DIR', '.')),
   intern = TRUE
 )
 # define reused git args to be sure we're picking up the right git info
 gd <- sprintf("--git-dir='%s'", gd)
-wt <- sprintf("--work-tree='%s'", params$pkg_dir)
-data.frame(
-  Field = c("branch", "commit `SHA1`", "commit date"),
+wt <- sprintf("--work-tree='%s'", Sys.getenv('INPUT_REPORT_PKG_DIR', '.'))
+tt_git_df <- data.frame(
+  Field = c("server", "repository", "git ref", "branch", "commit `SHA1`", "commit date"),
   Value = c(
+    Sys.getenv('GITHUB_SERVER_URL'),
+    Sys.getenv('GITHUB_REPOSITORY'),
+    Sys.getenv('GITHUB_REF'),
     system2(
       "git",
       list(gd, wt, "rev-parse", "--abbrev-ref", "HEAD"),
@@ -110,7 +87,14 @@ data.frame(
       list(gd, wt, "show", "-s", "--format=%ci", "HEAD"),
       stdout = TRUE
     )
-  )) %>% helper_tabulate("Git information", col_widths = c("5cm", "8cm"))
+  )) %>%
+  dplyr::mutate(Value = paste0("``` ", Value, " ```"))
+
+tt(
+  tt_git_df,
+  caption = "Git information",
+  theme = "striped"
+)
 ```
 
 ## R Session Info
@@ -125,7 +109,7 @@ capabilities()
 The following metrics are derived from the `riskmetric` R package. Metrics overlapping with `covr` and `R CMD Check` are removed.
 
 ```{r riskmetric, echo = FALSE, eval = TRUE}
-d_riskmetric <- params$pkg_dir %>%
+d_riskmetric <- Sys.getenv('INPUT_REPORT_PKG_DIR', '.') %>%
   riskmetric::pkg_ref() %>%
   riskmetric::pkg_assess() %>%
   purrr::map(1) %>%
@@ -139,18 +123,20 @@ d_riskmetric <- params$pkg_dir %>%
     by = c("name" = "column_name")
   )
 
-d_riskmetric %>%
+tt_riskmetric_df <- d_riskmetric %>%
   dplyr::filter(
     name %in% c(
       "news_current", "has_vignettes",
       "license", "downloads_1yr"
     )
   ) %>%
-  dplyr::select(Metric = label, Status = value) %>%
-  #table
-  helper_tabulate(
-    caption = "Package info assessed by the R package riskmetric"
-  )
+  dplyr::select(Metric = label, Status = value)
+
+tt(
+  tt_riskmetric_df,
+  caption = "Package info assessed by the R package riskmetric",
+  theme = "striped"
+)
 ```
 
 # Installation documentation
@@ -159,7 +145,7 @@ d_riskmetric %>%
 
 ```{r r_cmd_check, echo = FALSE, eval = TRUE}
 rcmdcheck_results <- rcmdcheck::rcmdcheck(
-  params$pkg_dir,
+  Sys.getenv('INPUT_REPORT_PKG_DIR', '.'),
   args = c(
     "--timings",             # include execution times in output
     "--no-build-vignettes",  # run vignette code, but disable pdf rendering
@@ -175,14 +161,18 @@ cat(rcmdcheck_results$stderr)
 ## Testing Coverage
 
 ```{r coverage, echo = FALSE, eval = TRUE}
-covr_results <- covr::package_coverage(params$pkg_dir)
+covr_results <- covr::package_coverage(Sys.getenv('INPUT_REPORT_PKG_DIR', '.'))
 covr_results
 ```
 
 ## Traceability
 
-Tracebility matrix that maps each unit test to the corresponding documentation, creating a link 
+Tracebility matrix that maps each unit test to the corresponding documentation, creating a link
 between intended use and testing.
+
+```{=typst}
+#show figure: set block(breakable: true)
+```
 
 ### Testing matrix
 
@@ -206,31 +196,47 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::mutate(alias = paste0(alias, "()")) %>%
     dplyr::mutate(file = paste0("man/", file))
 
-  covtracer_df_clean %>%
+  tt_covtracer_df <- covtracer_df_clean %>%
     dplyr::filter(!duplicated(.)) %>%
     dplyr::filter(!is.na(test_name)) %>%
     dplyr::filter(!is.na(file)) %>% # unexported?
     dplyr::arrange(file) %>%
-    dplyr::select(`Test Description` = test_name, Documentation = file) %>%
-    helper_tabulate(
-      caption = "Tracebility matrix mapping unit tests to documented behaviours."
-    )
+    dplyr::mutate(test_name = paste0("``` ", test_name, " ```")) %>%
+    dplyr::mutate(file = paste0("``` ", file, " ```")) %>%
+    dplyr::select(`Test Description` = test_name, Documentation = file)
+
+  tt(
+    tt_covtracer_df,
+    caption = "Tracebility matrix mapping unit tests to documented behaviours.",
+    theme = "striped"
+  )
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
+```
+
+```{=typst}
+#show figure: set block(breakable: false)
 ```
 
 ### Untested
 
 ```{r traceability2, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
-  covtracer_df_clean %>%
+  tt_untested_df <- covtracer_df_clean %>%
     dplyr::filter(is.na(test_name)) %>%
     dplyr::arrange(alias) %>%
-    dplyr::select(`Exported package object` = alias,  Documentation = file) %>%
-    helper_tabulate(
-      caption = "Untested behaviours: documentation that is not covered by any test."
+    dplyr::mutate(alias = paste0("``` ", alias, " ```")) %>%
+    dplyr::mutate(file = paste0("``` ", file, " ```")) %>%
+    dplyr::select(`Exported package object` = alias,  Documentation = file)
+
+  if (nrow(tt_untested_df) > 0) {
+    tt(
+      tt_untested_df,
+      caption = "Untested behaviours: documentation that is not covered by any test.",
+      theme = "striped"
     )
+  }
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
@@ -242,14 +248,19 @@ An indicator of test granularity by whether the function is directly tested.
 
 ```{r traceability3, echo = FALSE, eval = TRUE}
 if (require("covtracer", quietly = TRUE)) {
-  covtracer_df_clean %>%
+  tt_granularity_df <- covtracer_df_clean %>%
     dplyr::group_by(alias) %>%
     dplyr::summarize(any_direct_tests = any(direct, na.rm = TRUE)) %>%
     dplyr::arrange(alias) %>%
-    dplyr::select(`Exported package object` = alias,  `Tested Directly` = any_direct_tests) %>%
-    helper_tabulate(
-        caption = "Granularity of unit tests: directly tested exported functions."
-    )
+    dplyr::mutate(alias = paste0("``` ", alias, " ```")) %>%
+    dplyr::mutate(any_direct_tests = paste0("``` ", any_direct_tests, " ```")) %>%
+    dplyr::select(`Exported package object` = alias,  `Tested Directly` = any_direct_tests)
+
+  tt(
+    tt_granularity_df,
+    caption = "Granularity of unit tests: directly tested exported functions.",
+    theme = "striped"
+  )
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
