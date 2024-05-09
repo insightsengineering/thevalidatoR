@@ -29,7 +29,6 @@ The four main steps are:
 - Run `covr::package_coverage()` (check unit test coverage)
 - Run `covtracer` (link documentation to unit tests)
 - Place results into report
-- _If valtools present - run valtools and also publish report?_ (to discuss)
 - Attach report as object to release
 
 ### Action Type
