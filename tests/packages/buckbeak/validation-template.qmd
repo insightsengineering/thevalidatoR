@@ -22,14 +22,14 @@ library(magrittr)
 ## System Info
 
 ```{r execution_info, echo = FALSE}
-kable(data.frame(
+data.frame(
   Field = c("OS", "Platform", "System", "Execution Time"),
   Value = c(
     sessionInfo()$running,
     R.version$platform,
     R.version$system,
     format(Sys.time(), tz = "UTC", usetz = TRUE)
-  )))
+  ))
 ```
 
 ## Session Info
