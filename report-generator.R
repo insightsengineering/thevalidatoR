@@ -8,6 +8,8 @@ git_safe_dir <- system(
   sprintf("git config --global --add safe.directory '%s'", getwd())
 )
 
+cat(paste0("INPUT_REPORT_PKG_DIR = ", Sys.getenv("INPUT_REPORT_PKG_DIR", ".")))
+
 # Get the action inputs from preset env vars
 pkg_dir <- normalizePath(Sys.getenv("INPUT_REPORT_PKG_DIR", "."))
 template_path <- Sys.getenv("INPUT_REPORT_TEMPLATE_PATH", "./template.qmd")

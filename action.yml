@@ -56,6 +56,7 @@ runs:
 
     - name: Install dependencies
       run: |
+        echo "INPUT_REPORT_PKG_DIR: ${{ inputs.report_pkg_dir }}"
         ${GITHUB_ACTION_PATH}/dependencies.R
         [ ! -f "./template.qmd" ] && cp ${GITHUB_ACTION_PATH}/template.qmd . || echo "./template.qmd already exists"
       shell: bash
