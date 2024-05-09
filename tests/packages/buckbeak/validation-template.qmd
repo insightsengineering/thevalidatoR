@@ -1,10 +1,8 @@
 ---
 title: "Buckbeak Validation Report"
-format:
-  typst:
-    section-numbering: "1.1.1"
+date: "`r Sys.time()`"
+date-format: "ddd MMM DD hh:mm:ss A YYYY"
 ---
-
 
 ```{r, include = FALSE}
 options(width = 80L, covr.record_tests = TRUE)
