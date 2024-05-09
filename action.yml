@@ -60,6 +60,7 @@ runs:
         [ ! -f "./template.qmd" ] && cp ${GITHUB_ACTION_PATH}/template.qmd . || echo "./template.qmd already exists"
         if [[ "$(echo -e "$(quarto --version)\n1.4.0" | sort -V | head -1)" == "1.4.0" ]]; then
           echo "✅ Quarto CLI version sufficient (>= 1.4.0)"
+          echo "Quarto CLI version: $(quarto --version)"
         else
           echo "❌ Quarto CLI version insufficient (< 1.4.0)"
           echo "Downloading Quarto CLI..."
