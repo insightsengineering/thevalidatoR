@@ -2,6 +2,9 @@
 title: "Buckbeak Validation Report"
 date: "`r Sys.time()`"
 date-format: "ddd MMM DD hh:mm:ss A YYYY"
+format:
+  typst:
+    df-print: default
 ---
 
 ```{r, include = FALSE}
