@@ -185,7 +185,7 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::mutate(file = paste0("``` ", file, " ```")) %>%
     dplyr::select(`Test Description` = test_name, Documentation = file)
 
-  tt(tt_df, caption = "Some table caption")
+  tt(tt_df, caption = "Some table caption", theme = "striped")
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
