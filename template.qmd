@@ -6,7 +6,7 @@ format:
   typst:
     toc: true
     section-numbering: 1.1.1
-    df-print: kable
+    df-print: default
     margin:
       x: 2cm
       y: 2cm
@@ -156,6 +156,7 @@ between intended use and testing.
 ### Testing matrix
 
 ```{r traceability, echo = FALSE, eval = TRUE}
+library(tinytable)
 if (require("covtracer", quietly = TRUE)) {
   covtracer_df <- test_trace_df(covr_results)
   covtracer_df$filename <- basename(covtracer_df$filepath)
@@ -175,7 +176,7 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::mutate(alias = paste0(alias, "()")) %>%
     dplyr::mutate(file = paste0("man/", file))
 
-  covtracer_df_clean %>%
+  tt_df <- covtracer_df_clean %>%
     dplyr::filter(!duplicated(.)) %>%
     dplyr::filter(!is.na(test_name)) %>%
     dplyr::filter(!is.na(file)) %>% # unexported?
@@ -183,6 +184,8 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::mutate(test_name = paste0("``` ", test_name, " ```")) %>%
     dplyr::mutate(file = paste0("``` ", file, " ```")) %>%
     dplyr::select(`Test Description` = test_name, Documentation = file)
+
+  tt(tt_df, caption = "Some table caption")
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }

@@ -17,3 +17,4 @@ if (!require("git2r")) install.packages("git2r", upgrade = "never", Ncpus = ncor
 if (!require("quarto")) install.packages("quarto", upgrade = "never", Ncpus = ncores)
 if (!require("kableExtra")) install.packages("kableExtra", upgrade = "never", Ncpus = ncores)
 if (!require("knitr")) install.packages("knitr", upgrade = "never", Ncpus = ncores)
+if (!require("tinytable")) install.packages("tinytable", upgrade = "never", Ncpus = ncores)
