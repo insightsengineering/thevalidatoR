@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     name: ${{ matrix.package.name }}
     container:
-      image: rocker/verse:4.3.3
+      image: rocker/verse:4.4.0
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     strategy:
