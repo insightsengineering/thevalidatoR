@@ -230,12 +230,13 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::mutate(file = paste0("``` ", file, " ```")) %>%
     dplyr::select(`Exported package object` = alias,  Documentation = file)
 
-
-  tt(
-    tt_untested_df,
-    caption = "Untested behaviours: documentation that is not covered by any test.",
-    theme = "striped"
-  )
+  if (nrow(tt_untested_df) > 0) {
+    tt(
+      tt_untested_df,
+      caption = "Untested behaviours: documentation that is not covered by any test.",
+      theme = "striped"
+    )
+  }
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
