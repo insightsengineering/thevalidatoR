@@ -64,8 +64,10 @@ runs:
           echo "Quarto CLI version: $(quarto --version)"
         else
           echo "❌ Quarto CLI version insufficient (< 1.5.29)"
-          echo "Downloading Quarto CLI..."
+          apt-get update
+          apt-get install -qy wget jq
 
+          echo "Downloading Quarto CLI..."
           # Install newer version of Quarto CLI.
           # This gets the latest version number (v1.5 or higher) of Quarto from GitHub releases.
           # It assumes that such version number (v1.5 or higher) exists within the last 100 released Quarto versions.
@@ -77,8 +79,6 @@ runs:
             head -1 | \
             cut -c2-)"
           echo "Downloading Quarto version = $QUARTO_VERSION"
-          apt-get update
-          apt-get install -qy wget
           wget https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.deb
           dpkg -i quarto-${QUARTO_VERSION}-linux-amd64.deb
           echo "New Quarto CLI version: $(quarto --version)"
