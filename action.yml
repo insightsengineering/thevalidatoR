@@ -59,14 +59,14 @@ runs:
       run: |
         ${GITHUB_ACTION_PATH}/dependencies.R
         [ ! -f "./template.qmd" ] && cp ${GITHUB_ACTION_PATH}/template.qmd . || echo "./template.qmd already exists"
-        if [[ "$(echo -e "$(quarto --version)\n1.4.0" | sort -V | head -1)" == "1.4.0" ]]; then
-          echo "✅ Quarto CLI version sufficient (>= 1.4.0)"
+        if [[ "$(echo -e "$(quarto --version)\n1.5.0" | sort -V | head -1)" == "1.5.0" ]]; then
+          echo "✅ Quarto CLI version sufficient (>= 1.5.0)"
           echo "Quarto CLI version: $(quarto --version)"
         else
-          echo "❌ Quarto CLI version insufficient (< 1.4.0)"
+          echo "❌ Quarto CLI version insufficient (< 1.5.0)"
           echo "Downloading Quarto CLI..."
           # Install newer version of Quarto CLI.
-          export QUARTO_VERSION="1.4.554"
+          export QUARTO_VERSION="1.5.37"
           apt-get update
           apt-get install -qy wget
           wget https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.deb
