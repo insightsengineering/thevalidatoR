@@ -59,14 +59,24 @@ runs:
       run: |
         ${GITHUB_ACTION_PATH}/dependencies.R
         [ ! -f "./template.qmd" ] && cp ${GITHUB_ACTION_PATH}/template.qmd . || echo "./template.qmd already exists"
-        if [[ "$(echo -e "$(quarto --version)\n1.5.0" | sort -V | head -1)" == "1.5.0" ]]; then
-          echo "✅ Quarto CLI version sufficient (>= 1.5.0)"
+        if [[ "$(echo -e "$(quarto --version)\n1.5.29" | sort -V | head -1)" == "1.5.29" ]]; then
+          echo "✅ Quarto CLI version sufficient (>= 1.5.29)"
           echo "Quarto CLI version: $(quarto --version)"
         else
-          echo "❌ Quarto CLI version insufficient (< 1.5.0)"
+          echo "❌ Quarto CLI version insufficient (< 1.5.29)"
           echo "Downloading Quarto CLI..."
+
           # Install newer version of Quarto CLI.
-          export QUARTO_VERSION="1.5.37"
+          # This gets the latest version number (v1.5 or higher) of Quarto from GitHub releases.
+          # It assumes that such version number (v1.5 or higher) exists within the last 100 released Quarto versions.
+          export QUARTO_VERSION="$(curl -L -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/quarto-dev/quarto-cli/releases?per_page=100 \
+            2>/dev/null | \
+            jq -r '.[] | select(.tag_name | test("^v1.[5-9]")) | .tag_name' | \
+            head -1 | \
+            cut -c2-)"
+          echo "Downloading Quarto version = $QUARTO_VERSION"
           apt-get update
           apt-get install -qy wget
           wget https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.deb
