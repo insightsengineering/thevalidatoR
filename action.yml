@@ -59,26 +59,23 @@ runs:
       run: |
         ${GITHUB_ACTION_PATH}/dependencies.R
         [ ! -f "./template.qmd" ] && cp ${GITHUB_ACTION_PATH}/template.qmd . || echo "./template.qmd already exists"
-        if [[ "$(echo -e "$(quarto --version)\n1.5.29" | sort -V | head -1)" == "1.5.29" ]]; then
-          echo "✅ Quarto CLI version sufficient (>= 1.5.29)"
+        MIN_QUARTO_VERSION="1.5.29"
+        if [[ "$(echo -e "$(quarto --version)\n${MIN_QUARTO_VERSION}" | sort -V | head -1)" == "${MIN_QUARTO_VERSION}" ]]; then
+          echo "✅ Quarto CLI version sufficient (>= ${MIN_QUARTO_VERSION})"
           echo "Quarto CLI version: $(quarto --version)"
         else
-          echo "❌ Quarto CLI version insufficient (< 1.5.29)"
+          echo "❌ Quarto CLI version insufficient (< ${MIN_QUARTO_VERSION})"
           apt-get update
           apt-get install -qy wget jq
-
-          echo "Downloading Quarto CLI..."
           # Install newer version of Quarto CLI.
-          # This gets the latest version number (v1.5 or higher) of Quarto from GitHub releases.
-          # It assumes that such version number (v1.5 or higher) exists within the last 100 released Quarto versions.
+          # This gets the latest version number (v1.5 up to v1.9) of Quarto from GitHub releases.
+          # It assumes that such version number (v1.5 up to v1.9) exists within the last 100 released Quarto versions.
           export QUARTO_VERSION="$(curl -L -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/quarto-dev/quarto-cli/releases?per_page=100 \
             2>/dev/null | \
-            jq -r '.[] | select(.tag_name | test("^v1.[5-9]")) | .tag_name' | \
-            head -1 | \
-            cut -c2-)"
-          echo "Downloading Quarto version = $QUARTO_VERSION"
+            jq -r 'map(select(.tag_name | test("^v1.[5-9]"))) | .[0].name[1:]')"
+          echo "Downloading and installing Quarto CLI version ${QUARTO_VERSION}"
           wget https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.deb
           dpkg -i quarto-${QUARTO_VERSION}-linux-amd64.deb
           echo "New Quarto CLI version: $(quarto --version)"
