@@ -211,6 +211,8 @@ if (require("covtracer", quietly = TRUE)) {
       caption = "Tracebility matrix mapping unit tests to documented behaviours.",
       theme = "striped"
     )
+  } else {
+    cat("No test suites.")
   }
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
