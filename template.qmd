@@ -205,11 +205,15 @@ if (require("covtracer", quietly = TRUE)) {
     dplyr::mutate(file = paste0("``` ", file, " ```")) %>%
     dplyr::select(`Test Description` = test_name, Documentation = file)
 
-  tt(
-    tt_covtracer_df,
-    caption = "Tracebility matrix mapping unit tests to documented behaviours.",
-    theme = "striped"
-  )
+  if (nrow(tt_covtracer_df) > 0) {
+    tt(
+      tt_covtracer_df,
+      caption = "Tracebility matrix mapping unit tests to documented behaviours.",
+      theme = "striped"
+    )
+  } else {
+    cat("No test suites.")
+  }
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
 }
