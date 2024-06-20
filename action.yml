@@ -75,7 +75,7 @@ runs:
             https://api.github.com/repos/quarto-dev/quarto-cli/releases?per_page=100 \
             2>/dev/null | \
             jq -r 'map(select(.tag_name | test("^v1.[5-9]"))) | .[0].name[1:]')"
-          export QUARTO_VERSION="1.5.37"
+          export QUARTO_VERSION="1.5.29"
           echo "Downloading and installing latest Quarto CLI version ${QUARTO_VERSION}"
           wget -q https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.deb
           dpkg -i quarto-${QUARTO_VERSION}-linux-amd64.deb
