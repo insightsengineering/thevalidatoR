@@ -55,7 +55,7 @@ tt_sys_info_df <- data.frame(
 tt(
   tt_sys_info_df,
   caption = "System information",
-  theme = "striped"
+  theme = "bootstrap"
 )
 ```
 
@@ -93,7 +93,7 @@ tt_git_df <- data.frame(
 tt(
   tt_git_df,
   caption = "Git information",
-  theme = "grid"
+  theme = "bootstrap"
 )
 ```
 
@@ -135,7 +135,7 @@ tt_riskmetric_df <- d_riskmetric %>%
 tt(
   tt_riskmetric_df,
   caption = "Package info assessed by the R package riskmetric",
-  theme = "grid"
+  theme = "bootstrap"
 )
 ```
 
@@ -209,7 +209,7 @@ if (require("covtracer", quietly = TRUE)) {
     tt(
       tt_covtracer_df,
       caption = "Tracebility matrix mapping unit tests to documented behaviours.",
-      theme = "grid"
+      theme = "bootstrap"
     )
   } else {
     cat("No test suites.")
@@ -238,7 +238,7 @@ if (require("covtracer", quietly = TRUE)) {
     tt(
       tt_untested_df,
       caption = "Untested behaviours: documentation that is not covered by any test.",
-      theme = "grid"
+      theme = "bootstrap"
     )
   }
 } else {
@@ -263,7 +263,7 @@ if (require("covtracer", quietly = TRUE)) {
   tt(
     tt_granularity_df,
     caption = "Granularity of unit tests: directly tested exported functions.",
-    theme = "grid"
+    theme = "bootstrap"
   )
 } else {
   cat("{covtracer} not available to produce a traceability matrix")
