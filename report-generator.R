@@ -43,4 +43,4 @@ if (!disable_install_dev_deps) {
 
 library(quarto)
 cat(paste0("Running Quarto render for template: ", template_path))
-quarto_render(template_path, output_file = "validation_report.pdf")
+quarto_render(template_path, output_file = "validation_report.pdf", debug = TRUE)
