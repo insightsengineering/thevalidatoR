@@ -124,7 +124,7 @@ jobs:
 
       - name: Build report 🏗
         id: validation
-        uses: insightsengineering/thevalidatoR@main
+        uses: insightsengineering/thevalidatoR@v2
         # see parameters above for custom templates and other formats
 
       # Upload the validation report to the release
