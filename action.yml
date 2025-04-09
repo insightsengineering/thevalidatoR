@@ -104,7 +104,7 @@ runs:
 
     - name: Upload artifacts
       if: always() # This ensures that the upload step runs regardless of previous success/failure
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: report-files
         path: |
