@@ -93,3 +93,20 @@ runs:
         INPUT_REPORT_PKG_DIR: ${{ inputs.report_pkg_dir }}
         INPUT_REPORT_TEMPLATE_PATH: ${{ inputs.report_template_path }}
         DISABLE_INSTALL_DEV_DEPS: ${{ inputs.disable_install_dev_deps }}
+      continue-on-error: true
+
+    - name: Show artifacts
+      run: |
+        ls -la
+        ls -la ${GITHUB_ACTION_PATH}
+      shell: bash
+      continue-on-error: true
+
+    - name: Upload artifacts
+      if: always() # This ensures that the upload step runs regardless of previous success/failure
+      uses: actions/upload-artifact@v2
+      with:
+        name: report-files
+        path: |
+          template.knit.md
+          template.typ
