@@ -22,6 +22,7 @@ jobs:
           - name: buckbeak
             report_pkg_dir: ./tests/packages/buckbeak
             report_template_path: ./tests/packages/buckbeak/validation-template.qmd
+            report_path: ./tests/packages/buckbeak/validation_report.pdf
 
     steps:
       - name: Checkout ${{ matrix.package.name }}
@@ -40,5 +41,5 @@ jobs:
         if: success()
         with:
           name: ${{ matrix.package.name }} validation report
-          path: validation_report.pdf
+          path: ${{ matrix.package.report_path }}
           if-no-files-found: error
